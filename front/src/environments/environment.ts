@@ -1,4 +1,4 @@
 export const environment = {
-  urlApi : 'http://localhost:3000/',
-  production : false
+  urlApi : process.env["API_URL"],
+  production : process.env["NODE_ENV"] === 'production'
 };

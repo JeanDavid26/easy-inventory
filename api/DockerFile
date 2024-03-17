@@ -9,4 +9,4 @@ RUN npm i
 COPY . /usr/src/app/
 RUN npm run build
 
-CMD [ "node", "dist/main" ]
+CMD [ "node", "dist/src/main" ]
