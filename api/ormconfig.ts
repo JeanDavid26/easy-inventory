@@ -1,7 +1,10 @@
 import { DataSource, DataSourceOptions } from 'typeorm';
 import * as dotenv from 'dotenv';
 
-dotenv.config();
+if (process.env.NODE_ENV !== 'production') {
+  dotenv.config();
+}
+
 const host = process.env.TYPEORM_HOST;
 const username = process.env.TYPEORM_USERNAME;
 const password = process.env.TYPEORM_PASSWORD;
