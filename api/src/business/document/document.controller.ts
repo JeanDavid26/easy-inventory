@@ -1,7 +1,6 @@
 import {
   Body,
   Controller,
-  NotImplementedException,
   Post,
   UploadedFile,
   UseInterceptors,
@@ -21,7 +20,6 @@ export class DocumentController {
     @UploadedFile() file: Express.Multer.File,
     @Body() body: UploadDocumentDto,
   ): Promise<Document> {
-    console.log(file, body);
-    throw new NotImplementedException();
+    return this._documentService.uploadDocument(file, body);
   }
 }

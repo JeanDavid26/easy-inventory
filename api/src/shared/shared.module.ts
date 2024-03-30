@@ -4,7 +4,7 @@ import { FileService } from './services/file/file.service';
 
 @Module({
   imports: [DbManagerModule],
-  exports: [DbManagerModule],
+  exports: [DbManagerModule, FileService],
   providers: [FileService],
 })
 export class SharedModule {}

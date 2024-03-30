@@ -25,8 +25,8 @@ export class TransactionDetailComponent {
   public form : FormGroup
   public tArticle : Article[] = []
   public tArticleSelectable : Article[] = []
-  faPlus = faPlus
-  faTrash = faTrash
+  // faPlus = faPlus
+  // faTrash = faTrash
   public tButtonTransactionType : ToggleButton[] = [
     { label : 'Import', value : TransactionTypeEnum.IMPORT},
     { label : 'Vente', value : TransactionTypeEnum.VENTE}

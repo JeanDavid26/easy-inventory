@@ -12,6 +12,7 @@ import { InventoryContentComponent } from './inventory/components/inventory-cont
 import { TransactionListComponent } from './inventory/components/transaction-list/transaction-list.component';
 import { TransactionDetailComponent } from './inventory/components/transaction-detail/transaction-detail.component';
 import { InventoryResolver } from './inventory/inventory.resolver';
+import { DocumentsComponent } from './inventory/components/documents/documents.component';
 
 const routes: Routes = [
   { path: '', component: NavBarComponent, children: [
@@ -24,7 +25,8 @@ const routes: Routes = [
     { path : 'inventory/:id', component : InventoryDetailComponent, resolve :{ inventory : InventoryResolver}, children : [
       { path : 'content', component : InventoryContentComponent},
       { path : 'transaction', component : TransactionListComponent },
-      { path : 'transaction/:idTransaction', component : TransactionDetailComponent }
+      { path : 'transaction/:idTransaction', component : TransactionDetailComponent },
+      { path : 'documents', component : DocumentsComponent }
 
     ] }
   ] }

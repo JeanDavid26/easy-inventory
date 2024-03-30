@@ -6,6 +6,7 @@ import { InventoryDetailComponent } from './pages/inventory-detail/inventory-det
 import { TransactionListComponent } from './components/transaction-list/transaction-list.component';
 import { InventoryContentComponent } from './components/inventory-content/inventory-content.component';
 import { TransactionDetailComponent } from './components/transaction-detail/transaction-detail.component';
+import { DocumentsComponent } from './components/documents/documents.component';
 
 
 
@@ -15,7 +16,8 @@ import { TransactionDetailComponent } from './components/transaction-detail/tran
     InventoryDetailComponent,
     TransactionListComponent,
     InventoryContentComponent,
-    TransactionDetailComponent
+    TransactionDetailComponent,
+    DocumentsComponent
   ],
   imports: [
     CommonModule,

@@ -32,8 +32,10 @@ export class FileService {
   }
 
   private async _writeFile(file: Express.Multer.File): Promise<string> {
+    const folderPath = process.env.VOLUME_URL || 'uploads';
+    this._createFolderVolumeIfNotExist(folderPath);
     const uniqueFilename = uuidv4() + '_' + file.originalname; // Generate a unique filename
-    const filePath = `./uploads/${uniqueFilename}`; // Define the file path
+    const filePath = `./${folderPath}/${uniqueFilename}`; // Define the file path
 
     try {
       await fs.promises.writeFile(filePath, file.buffer); // Write the file to disk asynchronously
@@ -42,5 +44,43 @@ export class FileService {
       console.error('Error saving file:', error);
       throw new Error('Failed to save file');
     }
+  }
+
+  private async _createFolderVolumeIfNotExist(
+    folderPath: string,
+  ): Promise<void> {
+    const isFolderCreated = await this._isFolderCreated(folderPath);
+    if (isFolderCreated) {
+      return;
+    }
+    await this._createFolder(folderPath);
+  }
+
+  private async _createFolder(folderPath: string): Promise<void> {
+    return new Promise((resolve, reject) => {
+      fs.mkdir(folderPath, (err) => {
+        if (err) {
+          if (err.code && err.code === 'EEXIST') {
+            resolve();
+          } else {
+            reject(err);
+          }
+        } else {
+          resolve();
+        }
+      });
+    });
+  }
+
+  private _isFolderCreated(folderPath: string): Promise<boolean> {
+    return new Promise((resolve) => {
+      fs.stat(folderPath, (err, stat) => {
+        if (err || !stat.isDirectory()) {
+          resolve(false);
+        } else {
+          resolve(true);
+        }
+      });
+    });
   }
 }

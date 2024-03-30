@@ -19,6 +19,11 @@
                   <span class="flex-1 ms-3 whitespace-nowrap">Transaction</span>
                </a>
             </li>
+            <li>
+              <a routerLink="documents" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
+                 <span class="flex-1 ms-3 whitespace-nowrap">Documents</span>
+              </a>
+           </li>
          </ul>
       </div>
     </aside>
@@ -34,7 +39,6 @@
   <div class="flex flex-col grow p-10 gap-5">
     <div class="flex justify-end">
       <app-button *ngIf="!id" (click)="enregistrer()">Ajouter</app-button>
-
     </div>
     <form class="flex flex-col gap-3 grow-0" [formGroup]="form" *ngIf="form">
 

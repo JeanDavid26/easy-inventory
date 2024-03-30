@@ -6,7 +6,7 @@ services:
       dockerfile: DockerFile
     restart: always
     ports:
-      - "4200:4200"
+      - "80:80"
     environment:
       - NODE_ENV=production
       - API_URL
@@ -19,7 +19,7 @@ services:
       context: ./api/
       dockerfile: DockerFile
     restart: always
-    expose:
+    ports:
       - 3000:4000
     environment:
       - NODE_ENV=production
@@ -38,7 +38,7 @@ services:
   postgres:
     image: postgres:14-alpine
     ports:
-      - 5455:5432
+      - 5433:5432
     volumes:
       - ~/apps/postgres:/var/lib/postgresql/data
     environment:
