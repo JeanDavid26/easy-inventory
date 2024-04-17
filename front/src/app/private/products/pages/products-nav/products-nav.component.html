@@ -1,0 +1,22 @@
+
+
+<div class="text-sm font-medium text-center text-gray-500 border-b border-gray-200">
+  <ul class="flex flex-wrap -mb-px">
+      <li class="me-2" *ngFor="let linkData of linksData">
+          <a
+          (click)="activeLink = linkData.label; navigate(linkData.link)"
+          routerLinkActive="active"
+          class="inline-block p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 cursor-pointer"
+          [ngClass]="linkData.label !== activeLink ? 'border-transparent' : ''"
+          [ngClass]="linkData.label === activeLink ? 'text-blue-600 border-b-2 border-blue-600' : ''"
+          >
+            {{linkData.label}}
+          </a>
+      </li>
+
+
+  </ul>
+</div>
+<div>
+  <router-outlet></router-outlet>
+</div>

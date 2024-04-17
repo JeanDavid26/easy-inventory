@@ -2,23 +2,27 @@ import { Module } from '@nestjs/common';
 import { CategoryManagerService } from './category-manager/category-manager.service';
 import { ArticleManagerService } from './article-manager/article-manager.service';
 import { InventoryManagerService } from './inventory-manager/inventory-manager.service';
-import { TransactionManagerService } from './transaction-manager/transaction-manager.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import datasource from 'ormconfig';
 import { Article } from '../entities/Article.entity';
 import { Category } from '../entities/Category.entity';
 import { Inventory } from '../entities/Inventory.entity';
-import { Transaction } from '../entities/Transaction.entity';
-import { ArticleQuantity } from '../entities/ArticleQuantity.entity';
-import { ArticleQuantityManagerService } from './article-quantity-manager/article-quantity-manager.service';
-import { ArticleQuantityTransaction } from '../entities/ArticleQuantityTransaction.entity';
-import { ArticleQuantityTransactionManagerService } from './article-quantity-transaction-manager/article-quantity-transaction-manager.service';
 import { UserManagerService } from './user-manager/user-manager.service';
 import { User } from '../entities/User.entity';
 import { AppFileManagerService } from './app-file-manager/app-file-manager.service';
 import { AppFile } from '../entities/AppFile.entity';
 import { DocumentManagerService } from './document-manager/document-manager.service';
 import { Document } from '../entities/Document.entity';
+import { InventoryLine } from '../entities/InventoryLine.entity';
+import { MovementLine } from '../entities/MovementLine.entity';
+import { InventoryMovement } from '../entities/InventoryMovement.entity';
+import { Sale } from '../entities/Sale.entity';
+import { SaleLine } from '../entities/SaleLine.entity';
+import { SaleManagerService } from './sale-manager/sale-manager.service';
+import { SaleLineManagerService } from './sale-line-manager/sale-line-manager.service';
+import { InventoryLineManagerService } from './inventory-line-manager/inventory-line-manager.service';
+import { InventoryMovementManagerService } from './inventory-movement-manager/inventory-movement-manager.service';
+import { MovementLineManagerService } from './movement-line-manager/movement-line-manager.service';
 
 @Module({
   imports: [
@@ -32,9 +36,11 @@ import { Document } from '../entities/Document.entity';
       Article,
       Category,
       Inventory,
-      Transaction,
-      ArticleQuantity,
-      ArticleQuantityTransaction,
+      InventoryLine,
+      InventoryMovement,
+      MovementLine,
+      Sale,
+      SaleLine,
       User,
       AppFile,
       Document,
@@ -44,23 +50,27 @@ import { Document } from '../entities/Document.entity';
     CategoryManagerService,
     ArticleManagerService,
     InventoryManagerService,
-    TransactionManagerService,
-    ArticleQuantityManagerService,
-    ArticleQuantityTransactionManagerService,
     UserManagerService,
     AppFileManagerService,
     DocumentManagerService,
+    SaleManagerService,
+    SaleLineManagerService,
+    InventoryLineManagerService,
+    InventoryMovementManagerService,
+    MovementLineManagerService,
   ],
   exports: [
     CategoryManagerService,
     ArticleManagerService,
     InventoryManagerService,
-    TransactionManagerService,
-    ArticleQuantityManagerService,
-    ArticleQuantityTransactionManagerService,
     UserManagerService,
     AppFileManagerService,
     DocumentManagerService,
+    SaleManagerService,
+    SaleLineManagerService,
+    InventoryLineManagerService,
+    InventoryMovementManagerService,
+    MovementLineManagerService,
   ],
 })
 export class DbManagerModule {}

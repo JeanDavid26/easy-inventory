@@ -1,4 +1,3 @@
-import { ArticleQuantity } from "./ArticleQuantity.interface";
 import { BaseTable } from "./BaseTable.interface";
 import { Category } from "./Category.interface";
 
@@ -9,5 +8,4 @@ export interface Article extends BaseTable {
   unitPrice: number;
   categoryId: number;
   oCategory?: Category;
-  tArticleQuantity?: ArticleQuantity[];
 }

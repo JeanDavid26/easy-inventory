@@ -1,21 +1,21 @@
-import { Column, Entity, OneToMany } from 'typeorm';
-import { BaseTable } from './BaseTable';
-import { Document } from './Document.entity';
+import { Column, Entity, OneToMany } from 'typeorm'
+import { BaseTable } from './BaseTable'
+import { Document } from './Document.entity'
 
-@Entity({ schema: 'easyinventory', name: 'app_file' })
+@Entity({ schema: 'easyinventory', name: 'appfile' })
 export class AppFile extends BaseTable {
   @Column({ name: 'originalname' })
-  originalName: string;
+  originalName: string
 
   @Column({ name: 'path' })
-  path: string;
+  path: string
 
-  @Column({ name: 'content_type' })
-  contentType: string;
+  @Column({ name: 'contenttype' })
+  contentType: string
 
   @Column({ name: 'size' })
-  size: number;
+  size: number
 
   @OneToMany(() => Document, (document) => document.appFileId)
-  tDocument: Document[];
+  tDocument: Document[]
 }

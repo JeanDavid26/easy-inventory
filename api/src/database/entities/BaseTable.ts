@@ -2,19 +2,19 @@ import {
   CreateDateColumn,
   DeleteDateColumn,
   PrimaryGeneratedColumn,
-  UpdateDateColumn,
-} from 'typeorm';
+  UpdateDateColumn
+} from 'typeorm'
 
 export class BaseTable {
   @PrimaryGeneratedColumn()
-  id: number;
+  id: number
 
-  @CreateDateColumn({ name: 'creation_date' })
-  creationDate: Date;
+  @CreateDateColumn({ name: 'creationdate' })
+  creationDate: Date
 
-  @UpdateDateColumn({ name: 'update_date' })
-  updateDate: Date;
+  @UpdateDateColumn({ name: 'updatedate' })
+  updateDate: Date
 
-  @DeleteDateColumn({ name: 'delete_date' })
-  deleteDate: Date;
+  @DeleteDateColumn({ name: 'deletedate' })
+  deleteDate: Date
 }

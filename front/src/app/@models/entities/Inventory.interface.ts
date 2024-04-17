@@ -1,13 +1,16 @@
-import { InventoryTypeEnum } from "../enum/inventory-type.enum";
-import { ArticleQuantity } from "./ArticleQuantity.interface";
 import { BaseTable } from "./BaseTable.interface";
-import { Transaction } from "./Transaction.interface";
+import { InventoryLine } from "./InventoryLine.interface";
+import { InventoryMovement } from "./InventoryMovement.interface";
+import { InventoryType } from "./InventoryType.interface";
 
 export interface Inventory extends BaseTable {
-  label: string;
-  type: InventoryTypeEnum;
-  value?: number;
-  quantity?: number;
-  tTransaction?: Transaction[];
-  tArticleQuantity?: ArticleQuantity[];
+  label?: string
+  inventoryTypeId?: number
+  oInventoryType?: InventoryType
+  tDocument?: Document[]
+  tInventoryLine?: InventoryLine[]
+  tInventoryMovementSource?: InventoryMovement[]
+  tInventoryMovementDestination?: InventoryMovement[]
+  value?: number
+  quantity?: number
 }

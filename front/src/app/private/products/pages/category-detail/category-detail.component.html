@@ -1,0 +1,57 @@
+<div class="flex flex-col grow p-10 gap-5">
+  <div class="flex justify-end">
+    <app-button *ngIf="!id" (click)="enregistrer()">Ajouter</app-button>
+    <app-button *ngIf="id" (click)="enregistrer()">Enregister</app-button>
+
+  </div>
+  <form class="flex flex-col gap-3 grow-0" [formGroup]="form" *ngIf="form">
+
+    <app-input appInputError class="w-1/4" label="Désignation" formControlName="label" [required]="true"></app-input>
+  </form>
+
+  <div class="flex flex-col gap-5" *ngIf="category">
+    <span class="font-medium text-gray-800">Articles associés</span>
+
+    <div class="relative overflow-x-auto sm:rounded-lg ">
+      <table class="w-full text-sm text-left rtl:text-right text-gray-500">
+          <thead class="text-xs text-white uppercase bg-blue-500">
+              <tr>
+                  <th scope="col" class="px-6 py-3">
+                      Désignation
+                  </th>
+                  <th scope="col" class="px-6 py-3">
+                      Code de référence
+                  </th>
+                  <th scope="col" class="px-6 py-3">
+                      Prix unitaire
+                  </th>
+              </tr>
+          </thead>
+          <tbody>
+              <tr *ngFor="let article of category.tArticle" class="even:bg-blue-300 odd:bg-blue-200 hover:bg-blue-300 cursor-pointer  text-gray-900">
+                  <th scope="row" class="px-6 py-4 font-medium whitespace-nowrap">
+                      {{article.label}}
+                  </th>
+                  <td class="px-6 py-4">
+                    {{article.referenceCode}}
+                </td>
+                  <td class="px-6 py-4">
+                      {{article.unitPrice}} €
+                  </td>
+              </tr>
+              <ng-container *ngIf="category.tArticle.length === 0">
+                <tr
+                class="even:bg-blue-300 odd:bg-blue-200 hover:bg-blue-300 cursor-pointer  text-gray-900">
+                    <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                        Pas de d'articles associés à cette catégorie
+                    </th>
+                    <td></td>
+                    <td></td>
+                </tr>
+              </ng-container>
+          </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+

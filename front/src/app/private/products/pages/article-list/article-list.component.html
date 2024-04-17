@@ -1,0 +1,66 @@
+
+<div class="flex flex-col grow p-10">
+  <div class="flex py-3 justify-end">
+    <app-button (click)="goToArticleDetail(0)">Ajouter un article</app-button>
+  </div>
+  <div class="relative overflow-x-auto shadow-md sm:rounded-lg ">
+    <table class="w-full text-sm text-left rtl:text-right text-gray-500">
+        <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+            <tr>
+                <th scope="col" class="px-6 py-3">
+                    Référence
+                </th>
+                <th scope="col" class="px-6 py-3">
+                  Code barre
+                </th>
+                <th scope="col" class="px-6 py-3">
+                    Désignation
+                </th>
+                <th scope="col" class="px-6 py-3">
+                    Catégorie
+                </th>
+                <th scope="col" class="px-6 py-3">
+                    Prix unitaire
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr (click)="goToArticleDetail(article.id)" *ngFor="let article of tArticle"
+            class="odd:bg-white even:bg-gray-50 hover:bg-gray-100 border-b">
+                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+                  {{article.referenceCode}}
+                </th>
+                <td class="px-6 py-4">
+                  {{article.barCode}}
+                </td>
+                <td class="px-6 py-4">
+                  {{article.label}}
+                </td>
+                <td class="px-6 py-4">
+                  {{article.oCategory.label}}
+                </td>
+                <td class="px-6 py-4">
+                  {{article.unitPrice}} €
+                </td>
+            </tr>
+            <ng-container *ngIf="tArticle.length === 0">
+              <tr
+              class="odd:bg-white even:bg-gray-50 border-b">
+                  <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+                      Pas d'article enregistrer
+                  </td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                </tr>
+            </ng-container>
+
+
+
+        </tbody>
+    </table>
+  </div>
+</div>
+
+

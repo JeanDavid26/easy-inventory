@@ -1,11 +1,10 @@
-import { IsEnum, IsNotEmpty } from 'class-validator';
-import { InventoryTypeEnum } from 'src/database/@models/inventory-type.enum';
+import { IsNotEmpty, IsNumber } from 'class-validator'
 
 export class UpsertInventoryDto {
   @IsNotEmpty()
-  label: string;
+  label: string
 
   @IsNotEmpty()
-  @IsEnum(InventoryTypeEnum)
-  type: InventoryTypeEnum;
+  @IsNumber()
+  inventoryTypeId: number
 }

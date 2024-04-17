@@ -1,30 +1,35 @@
-import { Column, Entity, OneToMany } from 'typeorm';
-import { BaseTable } from './BaseTable';
-import { InventoryTypeEnum } from '../@models/inventory-type.enum';
-import { ArticleQuantity } from './ArticleQuantity.entity';
-import { Transaction } from './Transaction.entity';
-import { Document } from './Document.entity';
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm'
+import { BaseTable } from './BaseTable'
+import { InventoryTypeEnum } from '../@models/inventory-type.enum'
+import { Document } from './Document.entity'
+import { InventoryLine } from './InventoryLine.entity'
+import { InventoryMovement } from './InventoryMovement.entity'
+import { InventoryType } from './InventoryType.entity'
 
 @Entity({ schema: 'easyinventory', name: 'inventory' })
 export class Inventory extends BaseTable {
   @Column()
-  label: string;
+  label: string
 
-  @Column({ type: 'enum', enum: InventoryTypeEnum })
-  type: InventoryTypeEnum;
+  @Column({ name : 'inventorytypeid' })
+  inventoryTypeId: number
 
-  @OneToMany(() => Transaction, (transaction) => transaction.oInventory)
-  tTransaction: Transaction[];
-
-  @OneToMany(
-    () => ArticleQuantity,
-    (articleQuantity) => articleQuantity.oInventory,
-  )
-  tArticleQuantity: ArticleQuantity[];
-
+  @ManyToOne(()=> InventoryType, (inventoryType) => inventoryType.id)
+  @JoinColumn({ name : 'inventorytypeid' })
+  oInventoryType : InventoryType
+  
   @OneToMany(() => Document, (document) => document.oInventory)
-  tDocument: Document[];
+  tDocument: Document[]
 
-  value?: number;
-  quantity?: number;
+  @OneToMany(() => InventoryLine, (inventoryLine) => inventoryLine.oInventory)
+  tInventoryLine: InventoryLine[]
+
+  @OneToMany(() => InventoryMovement, (inventoryMovement) => inventoryMovement.oSourceInventory)
+  tInventoryMovementSource: InventoryMovement[]
+
+  @OneToMany(() => InventoryMovement, (inventoryMovement) => inventoryMovement.oDestinationInventory)
+  tInventoryMovementDestination: InventoryMovement[]
+
+  value?: number
+  quantity?: number
 }
