@@ -1,18 +1,18 @@
-import { Test, TestingModule } from '@nestjs/testing';
-import { InventoryMovementManagerService } from './inventory-movement-manager.service';
+import { Test, TestingModule } from '@nestjs/testing'
+import { InventoryMovementManagerService } from './inventory-movement-manager.service'
 
 describe('InventoryMovementManagerService', () => {
-  let service: InventoryMovementManagerService;
+  let service: InventoryMovementManagerService
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [InventoryMovementManagerService],
-    }).compile();
+      providers: [ InventoryMovementManagerService ]
+    }).compile()
 
-    service = module.get<InventoryMovementManagerService>(InventoryMovementManagerService);
-  });
+    service = module.get<InventoryMovementManagerService>(InventoryMovementManagerService)
+  })
 
   it('should be defined', () => {
-    expect(service).toBeDefined();
-  });
-});
+    expect(service).toBeDefined()
+  })
+})

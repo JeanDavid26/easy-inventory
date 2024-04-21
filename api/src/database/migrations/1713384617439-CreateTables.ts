@@ -1,13 +1,13 @@
 import { MigrationInterface, QueryRunner } from 'typeorm'
 
-export class CreateTables1713380355348 implements MigrationInterface {
-  name = 'CreateTables1713380355348'
+export class CreateTables1713384617439 implements MigrationInterface {
+  name = 'CreateTables1713384617439'
 
   public async up (queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.query(`CREATE TABLE "easyinventory"."user" ("id" SERIAL NOT NULL, "creationdate" TIMESTAMP NOT NULL DEFAULT now(), "updatedate" TIMESTAMP NOT NULL DEFAULT now(), "deletedate" TIMESTAMP, "email" character varying NOT NULL, "firstname" character varying NOT NULL, "lastname" character varying NOT NULL, "password" character varying NOT NULL, CONSTRAINT "PK_cace4a159ff9f2512dd42373760" PRIMARY KEY ("id"))`)
     await queryRunner.query(`CREATE TABLE "easyinventory"."sale" ("id" SERIAL NOT NULL, "creationdate" TIMESTAMP NOT NULL DEFAULT now(), "updatedate" TIMESTAMP NOT NULL DEFAULT now(), "deletedate" TIMESTAMP, "saleDate" TIMESTAMP NOT NULL, "status" character varying NOT NULL, CONSTRAINT "PK_d03891c457cbcd22974732b5de2" PRIMARY KEY ("id"))`)
     await queryRunner.query(`CREATE TABLE "easyinventory"."saleline" ("id" SERIAL NOT NULL, "creationdate" TIMESTAMP NOT NULL DEFAULT now(), "updatedate" TIMESTAMP NOT NULL DEFAULT now(), "deletedate" TIMESTAMP, "saleid" integer NOT NULL, "quantity" integer NOT NULL, "saleprice" numeric(10,2) NOT NULL, CONSTRAINT "PK_a1ce7fada72dbc025aa35fb3be1" PRIMARY KEY ("id"))`)
     await queryRunner.query(`CREATE TABLE "easyinventory"."movementtype" ("id" SERIAL NOT NULL, "label" character varying NOT NULL, CONSTRAINT "PK_c01495a41425fe7dba9ec0d0d16" PRIMARY KEY ("id"))`)
+    await queryRunner.query(`CREATE TABLE "easyinventory"."user" ("id" SERIAL NOT NULL, "creationdate" TIMESTAMP NOT NULL DEFAULT now(), "updatedate" TIMESTAMP NOT NULL DEFAULT now(), "deletedate" TIMESTAMP, "email" character varying NOT NULL, "firstname" character varying NOT NULL, "lastname" character varying NOT NULL, "password" character varying NOT NULL, CONSTRAINT "PK_cace4a159ff9f2512dd42373760" PRIMARY KEY ("id"))`)
     await queryRunner.query(`CREATE TABLE "easyinventory"."invenotrytype" ("id" SERIAL NOT NULL, "label" character varying NOT NULL, CONSTRAINT "PK_48f660aa16abfc3f0ea84aec968" PRIMARY KEY ("id"))`)
     await queryRunner.query(`CREATE TABLE "easyinventory"."appfile" ("id" SERIAL NOT NULL, "creationdate" TIMESTAMP NOT NULL DEFAULT now(), "updatedate" TIMESTAMP NOT NULL DEFAULT now(), "deletedate" TIMESTAMP, "originalname" character varying NOT NULL, "path" character varying NOT NULL, "contenttype" character varying NOT NULL, "size" integer NOT NULL, CONSTRAINT "PK_78c4d91c302a887d1197453e21b" PRIMARY KEY ("id"))`)
     await queryRunner.query(`CREATE TABLE "easyinventory"."document" ("id" SERIAL NOT NULL, "creationdate" TIMESTAMP NOT NULL DEFAULT now(), "updatedate" TIMESTAMP NOT NULL DEFAULT now(), "deletedate" TIMESTAMP, "label" character varying NOT NULL, "appfileid" integer NOT NULL, "inventoryid" integer NOT NULL, CONSTRAINT "PK_e57d3357f83f3cdc0acffc3d777" PRIMARY KEY ("id"))`)
@@ -53,10 +53,10 @@ export class CreateTables1713380355348 implements MigrationInterface {
     await queryRunner.query(`DROP TABLE "easyinventory"."document"`)
     await queryRunner.query(`DROP TABLE "easyinventory"."appfile"`)
     await queryRunner.query(`DROP TABLE "easyinventory"."invenotrytype"`)
+    await queryRunner.query(`DROP TABLE "easyinventory"."user"`)
     await queryRunner.query(`DROP TABLE "easyinventory"."movementtype"`)
     await queryRunner.query(`DROP TABLE "easyinventory"."saleline"`)
     await queryRunner.query(`DROP TABLE "easyinventory"."sale"`)
-    await queryRunner.query(`DROP TABLE "easyinventory"."user"`)
   }
 
 }
