@@ -3,8 +3,9 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { InventoryService } from '../../../../core/services/inventory.service';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Inventory } from '../../../../@models/entities/Inventory.interface';
-import { InventoryTypeEnum } from '../../../../@models/enum/inventory-type.enum';
 import { BreadcrumbService } from '../../../../core/services/breadcrumb.service';
+import { InventoryType } from '../../../../@models/entities/InventoryType.interface';
+import { InventoryTypeService } from '../../../../core/services/inventory-type.service';
 
 @Component({
   selector: 'app-inventory-detail',
@@ -15,13 +16,14 @@ export class InventoryDetailComponent {
   public id :number
   public inventory : Inventory
   public form : FormGroup
-  public inventoryEnumType = InventoryTypeEnum
+  public tInventoryType : InventoryType[]
   constructor(
     private _activatedRoute : ActivatedRoute,
     private _inventoryService : InventoryService,
     private _fb : FormBuilder,
     private _router : Router,
-    private _bcService : BreadcrumbService
+    private _bcService : BreadcrumbService,
+    private _inventoryTypeService : InventoryTypeService
   ){
     this.id = Number(this._activatedRoute.snapshot.params['id'])
     this._inventoryService.inventory.subscribe((inventory)=>{
@@ -46,15 +48,20 @@ export class InventoryDetailComponent {
 
   }
 
-  public initForm() {
+  public async initForm() {
+    this.tInventoryType = await this._inventoryTypeService.list()
     const inventory = this._inventoryService.inventory.value
     this.form = this._fb.group({
       label : inventory?.label,
-      type : inventory?.type
+      inventoryTypeId : inventory?.inventoryTypeId
+    })
+    this.form.valueChanges.subscribe((obj)=> {
+      console.log(obj)
     })
   }
   public async enregistrer() : Promise<void> {
-    const inventory = this.form.getRawValue()
+    const inventory = this.form.value
+    console.log('invenotry', inventory)
     await this._inventoryService.insert(inventory)
     this._router.navigateByUrl(`private/inventory/${this.id}/content`)
   }

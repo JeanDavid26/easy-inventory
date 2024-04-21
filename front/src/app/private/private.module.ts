@@ -6,6 +6,7 @@ import { InventoryModule } from './inventory/inventory.module';
 import { DashboardModule } from './dashboard/dashboard.module';
 import { SharedModule } from '../shared/shared.module';
 import { ProductsModule } from './products/products.module';
+import { AdministrationModule } from './administration/administration.module';
 
 
 
@@ -19,7 +20,8 @@ import { ProductsModule } from './products/products.module';
     InventoryModule,
     DashboardModule,
     ProductsModule,
-    SharedModule
+    SharedModule,
+    AdministrationModule
   ]
 })
 export class PrivateModule { }

@@ -5,12 +5,16 @@ import { SharedModule } from '../../shared/shared.module';
 import { InventoryDetailComponent } from './pages/inventory-detail/inventory-detail.component';
 import { InventoryContentComponent } from './components/inventory-content/inventory-content.component';
 import { DocumentsComponent } from './components/documents/documents.component';
+import { MovementListComponent } from './components/movement-list/movement-list.component';
+import { MovementDetailComponent } from './components/movement-detail/movement-detail.component';
 @NgModule({
   declarations: [
     InventoryListComponent,
     InventoryDetailComponent,
     InventoryContentComponent,
-    DocumentsComponent
+    DocumentsComponent,
+    MovementListComponent,
+    MovementDetailComponent
   ],
   imports: [
     CommonModule,

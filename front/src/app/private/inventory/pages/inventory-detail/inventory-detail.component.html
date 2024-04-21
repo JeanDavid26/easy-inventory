@@ -15,7 +15,7 @@
                </a>
             </li>
             <li>
-               <a routerLink="transaction" class="flex items-center p-2 text-gray-900 rounded-lg hover:bg-gray-100  group">
+               <a routerLink="movement" class="flex items-center p-2 text-gray-900 rounded-lg hover:bg-gray-100  group">
                   <span class="flex-1 ms-3 whitespace-nowrap">Mouvement de stock</span>
                </a>
             </li>
@@ -46,9 +46,9 @@
 
       <div class="w-1/4">
         <label for="type" class="block mb-1 text-sm font-medium text-gray-800">Type de stock</label>
-        <select id="type" formControlName="type" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
-          <option [value]="inventoryEnumType.ACHATFERME">Achat ferme</option>
-          <option [value]="inventoryEnumType.DEPOT">Dépôt</option>
+        <select id="type" formControlName="inventoryTypeId" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+          <option *ngFor="let oInventoryType of tInventoryType"[value]="oInventoryType.id">{{oInventoryType.label}}</option>
+
         </select>
       </div>
     </form>

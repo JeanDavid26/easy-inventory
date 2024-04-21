@@ -12,6 +12,13 @@ import { InventoryContentComponent } from './inventory/components/inventory-cont
 import { InventoryResolver } from './inventory/inventory.resolver';
 import { DocumentsComponent } from './inventory/components/documents/documents.component';
 import { ProductsNavComponent } from './products/pages/products-nav/products-nav.component';
+import { AdministrationComponent } from './administration/pages/administration/administration.component';
+import { MovementTypeListComponent } from './administration/pages/movement-type-list/movement-type-list.component';
+import { MovementTypeDetailComponent } from './administration/pages/movement-type-detail/movement-type-detail.component';
+import { InventoryTypeListComponent } from './administration/pages/inventory-type-list/inventory-type-list.component';
+import { InventoryTypeDetailComponent } from './administration/pages/inventory-type-detail/inventory-type-detail.component';
+import { MovementListComponent } from './inventory/components/movement-list/movement-list.component';
+import { MovementDetailComponent } from './inventory/components/movement-detail/movement-detail.component';
 
 const routes: Routes = [
   { path: '', component: NavBarComponent, children: [
@@ -25,8 +32,15 @@ const routes: Routes = [
     { path : 'inventory', component : InventoryListComponent},
     { path : 'inventory/:id', component : InventoryDetailComponent, resolve :{ inventory : InventoryResolver}, children : [
       { path : 'content', component : InventoryContentComponent},
+      { path : 'movement', component : MovementListComponent},
+      { path : 'movement/:idMovement', component : MovementDetailComponent},
       { path : 'documents', component : DocumentsComponent }
-    ] }
+    ] },
+    { path : 'administration', component : AdministrationComponent},
+    { path : 'administration/movement-type', component : MovementTypeListComponent},
+    { path : 'administration/movement-type/:id', component : MovementTypeDetailComponent},
+    { path : 'administration/inventory-type', component : InventoryTypeListComponent},
+    { path : 'administration/inventory-type/:id', component : InventoryTypeDetailComponent},
   ] }
 ]
 
