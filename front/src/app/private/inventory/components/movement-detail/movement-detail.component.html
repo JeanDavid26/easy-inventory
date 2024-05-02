@@ -1,12 +1,19 @@
 <ol class="items-center w-full space-y-4 sm:flex sm:space-x-8 sm:space-y-0 rtl:space-x-reverse">
   <ng-container *ngFor="let step of steps">
-    <li class="flex items-center  text-gray-500  space-x-2.5 rtl:space-x-reverse"
-      [ngClass]="step.onGoing === true ? 'text-blue-600' : ''"
-      [ngClass]="step.isValidated === true ? 'text-green-400' : ''"
+    <li class="flex items-center    space-x-2.5 rtl:space-x-reverse"
+      [ngClass]="{
+        'text-gray-500': step.onGoing === false && step.isValidated === false,
+        'text-blue-600': step.onGoing === true,
+        'text-green-600': step.isValidated === true
+      }"
     >
-      <span class="flex items-center justify-center w-8 h-8 border border-gray-500 rounded-full shrink-0"
-      [ngClass]="step.onGoing === true ? 'border-blue-600' : ''"
-      [ngClass]="step.isValidated === true ? 'border-green-400' : ''"
+      <span class="flex items-center justify-center w-8 h-8 shrink-0 rounded-full"
+      [ngClass]="{
+        'border-gray-500': !step.onGoing && !step.isValidated,
+        'border-blue-600': step.onGoing,
+        'border-green-600': step.isValidated
+      }"
+      [ngStyle]="{'border-style': 'solid', 'border-width': '1px'}"
       >
           {{step.id}}
       </span>
@@ -14,12 +21,44 @@
           <h3 class="font-medium leading-tight">{{step.label}}</h3>
           <p class="text-sm">{{step.description}}</p>
       </span>
-  </li>
+    </li>
 
 
   </ng-container>
 </ol>
-
+<hr class="h-px my-8 bg-gray-200 border-0">
 <div>
-  <ng-container></ng-container>
+  <ng-container *ngIf="stepDisplayed === 1">
+    <div class="w-full flex flex-row justify-end gap-5">
+      <app-button (click)="validateStep1()">Suivant</app-button>
+    </div>
+    <form class="flex flex-col gap-3 grow-0" [formGroup]="formMovementInformation" *ngIf="formMovementInformation">
+      <span>{{formMovementInformation.get('reference').value}}</span>
+
+      <div class="w-1/4" appInputError>
+        <label for="movementtype" class="block mb-1 text-sm font-medium text-gray-800 ">Type de mouvement</label>
+        <select id="movementtype" formControlName="movementTypeId" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+          <option [value]="mouvementType.id" *ngFor="let mouvementType of toMovementType">{{mouvementType.label}}</option>
+        </select>
+      </div>
+
+      <div class="w-1/4">
+        <label for="movementtype" class="block mb-1 text-sm font-medium text-gray-800 ">Date du mouvement</label>
+        <app-date-picker formControlName="dateTime">
+
+        </app-date-picker>
+      </div>
+    </form>
+  </ng-container>
+
+  <ng-container *ngIf="stepDisplayed === 2">
+    <div class="w-full flex flex-row justify-between gap-5">
+      <app-button (click)="retourStep1()">Retour</app-button>
+      <app-button (click)="validateStep2()">Suivant</app-button>
+    </div>
+  </ng-container>
+
+  <ng-container *ngIf="stepDisplayed === 3">
+
+  </ng-container>
 </div>

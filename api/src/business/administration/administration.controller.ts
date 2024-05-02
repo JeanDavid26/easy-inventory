@@ -3,6 +3,8 @@ import { InventoryTypeManagerService } from 'src/database/db-manager/inventory-t
 import { MovementTypeManagerService } from 'src/database/db-manager/movement-type-manager/movement-type-manager.service'
 import { InventoryType } from 'src/database/entities/InventoryType.entity'
 import { MovementType } from 'src/database/entities/MovementType.entity'
+import { UpsertInventoryTypeDto } from './dto/upsert-Inventory-type.dto'
+import { UpsertMovmentTypeDto } from './dto/upsert-movment-type.dto'
 
 @Controller('administration')
 export class AdministrationController {
@@ -13,19 +15,24 @@ export class AdministrationController {
   ) {}
 
   // Movement Type
-
   @Get('movementtype')
   public listMovementType () : Promise<MovementType[]> {
     return this._movementTypeManagerService.list()
   }
 
+  @Get('movementtype/:id')
+  public getMovementType (@Param('id') id : number) : Promise<MovementType> {
+    id = Number(id)
+    return this._movementTypeManagerService.get(id)
+  }
+
   @Post('movementtype')
-  public insertMovementType (@Body() oData : any) : Promise<MovementType> {
+  public insertMovementType (@Body() oData : UpsertMovmentTypeDto) : Promise<MovementType> {
     return this._movementTypeManagerService.insert(oData)
   }
 
   @Put('movementtype/:id')
-  public updateMovementType (@Param('id') id : number, @Body() oData : any) : Promise<MovementType> {
+  public updateMovementType (@Param('id') id : number, @Body() oData : UpsertMovmentTypeDto) : Promise<MovementType> {
     return this._movementTypeManagerService.update(id, oData)
   }
 
@@ -40,13 +47,19 @@ export class AdministrationController {
     return this._inventoryTypeManagerService.list()
   }
 
+  @Get('inventorytype/:id')
+  public getInventoryType (@Param('id') id : number) : Promise<InventoryType> {
+    id = Number(id)
+    return this._inventoryTypeManagerService.get(id)
+  }
+
   @Post('inventorytype')
-  public insertInventoryType (@Body() oData : any) : Promise<InventoryType> {
+  public insertInventoryType (@Body() oData : UpsertInventoryTypeDto) : Promise<InventoryType> {
     return this._inventoryTypeManagerService.insert(oData)
   }
 
   @Put('inventorytype/:id')
-  public updateInventoryType (@Param('id') id : number, @Body() oData : any) : Promise<InventoryType> {
+  public updateInventoryType (@Param('id') id : number, @Body() oData : UpsertInventoryTypeDto) : Promise<InventoryType> {
     return this._inventoryTypeManagerService.update(id, oData)
   }
 

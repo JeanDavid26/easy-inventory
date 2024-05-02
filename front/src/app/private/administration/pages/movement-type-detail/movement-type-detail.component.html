@@ -7,6 +7,12 @@
   </div>
   <form class="flex flex-col gap-3 grow-0" [formGroup]="form" *ngIf="form">
     <app-input appInputError class="w-1/4" label="Désignation" formControlName="label" [required]="true"></app-input>
+
+    <label class="inline-flex items-center cursor-pointer">
+      <input type="checkbox" formControlName="isInternal" class="sr-only peer">
+      <div class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+      <span class="ms-3 text-sm font-medium text-gray-900">Mouvement inter-stock</span>
+    </label>
   </form>
 
 </div>

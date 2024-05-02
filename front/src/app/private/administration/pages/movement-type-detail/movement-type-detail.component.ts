@@ -52,7 +52,7 @@ export class MovementTypeDetailComponent {
 
     this.form = this._fb.group({
       label : [this.movementType?.label, Validators.required],
-
+      isInternal : this.movementType?.isInternal ?? false
     })
   }
 

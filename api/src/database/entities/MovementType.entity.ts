@@ -8,4 +8,7 @@ export class MovementType {
 
   @Column()
   label : string
+
+  @Column({ name : 'isinternal', default : false })
+  isInternal : boolean
 }
