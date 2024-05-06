@@ -29,9 +29,10 @@
 <hr class="h-px my-8 bg-gray-200 border-0">
 <div>
   <ng-container *ngIf="stepDisplayed === 1">
-    <div class="w-full flex flex-row justify-end gap-5">
+    <div class="w-full flex flex-row justify-end gap-5 mb-5">
       <app-button (click)="validateStep1()">Suivant</app-button>
     </div>
+
     <form class="flex flex-col gap-3 grow-0" [formGroup]="formMovementInformation" *ngIf="formMovementInformation">
       <span>{{formMovementInformation.get('reference').value}}</span>
 
@@ -48,14 +49,136 @@
 
         </app-date-picker>
       </div>
+
+      <div>
+
+        <ng-container *ngIf="movmentTypeSelected">
+          <ng-container *ngIf="movmentTypeSelected.isInternal === true">
+            <div class="w-1/4" appInputError>
+              <label for="sourceinventory" class="block mb-1 text-sm font-medium text-gray-800 ">Source</label>
+              <select id="sourceinventory" formControlName="sourceInventoryId" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+                <option [value]="invenotry.id" *ngFor="let invenotry of toInventory">{{invenotry.label}}</option>
+              </select>
+            </div>
+            <div class="w-1/4" appInputError>
+              <label for="destinationinventory" class="block mb-1 text-sm font-medium text-gray-800 ">Destination</label>
+              <select id="destinationinventory" formControlName="destinationInventoryId" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+                <option [value]="inventory.id" *ngFor="let inventory of toInventory">{{inventory.label}}</option>
+              </select>
+            </div>
+          </ng-container>
+
+          <ng-container *ngIf="!movmentTypeSelected.isInternal">
+            <div class="w-1/4" appInputError>
+              <label for="destinationinventory" class="block mb-1 text-sm font-medium text-gray-800 ">Destination</label>
+              <select id="destinationinventory" formControlName="destinationInventoryId" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+                <option [value]="inventory.id" *ngFor="let inventory of toInventory">{{inventory.label}}</option>
+              </select>
+            </div>
+          </ng-container>
+
+        </ng-container>
+      </div>
+
     </form>
   </ng-container>
 
   <ng-container *ngIf="stepDisplayed === 2">
-    <div class="w-full flex flex-row justify-between gap-5">
+    <div class="w-full flex flex-row justify-between gap-5 mb-5">
       <app-button (click)="retourStep1()">Retour</app-button>
       <app-button (click)="validateStep2()">Suivant</app-button>
     </div>
+    <ng-container *ngIf="movmentTypeSelected.isInternal === true">
+      <div class="flex flex-col gap-5">
+        <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+          <table class="w-full text-sm text-left rtl:text-right text-gray-500">
+              <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+                  <tr>
+                    <th scope="col" class="px-6 py-3">
+                        Code de référence
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        Désignation
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        Quantité
+                    </th>
+                  </tr>
+              </thead>
+              <tbody>
+                  <tr
+                  class="odd:bg-white even:bg-gray-50 border-b">
+                      <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap ">
+
+                      </th>
+                      <td class="px-6 py-4">
+
+                      </td>
+                      <td class="px-6 py-4">
+
+                      </td>
+                  </tr>
+                  <ng-container >
+                    <tr
+                    class="odd:bg-white even:bg-gray-50 border-b">
+                        <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap ">
+                            Pas de d'articles présent dans le stock
+                        </th>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                  </ng-container>
+              </tbody>
+          </table>
+        </div>
+    </div>
+    </ng-container>
+
+    <ng-container *ngIf="!movmentTypeSelected.isInternal">
+      <div class="flex flex-col gap-5">
+        <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+          <table class="w-full text-sm text-left rtl:text-right text-gray-500">
+              <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+                  <tr>
+                    <th scope="col" class="px-6 py-3">
+                        Code de référence
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        Désignation
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        Quantité
+                    </th>
+                  </tr>
+              </thead>
+              <tbody>
+                  <tr
+                  class="odd:bg-white even:bg-gray-50 border-b">
+                      <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap ">
+
+                      </th>
+                      <td class="px-6 py-4">
+
+                      </td>
+                      <td class="px-6 py-4">
+
+                      </td>
+                  </tr>
+                  <ng-container >
+                    <tr
+                    class="odd:bg-white even:bg-gray-50 border-b">
+                        <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap ">
+
+                        </th>
+                        <td><app-button>Ajouter une ligne</app-button></td>
+                        <td></td>
+                    </tr>
+                  </ng-container>
+              </tbody>
+          </table>
+        </div>
+    </div>
+    </ng-container>
   </ng-container>
 
   <ng-container *ngIf="stepDisplayed === 3">

@@ -4,6 +4,10 @@ import { InventoryMovementService } from '../../../../core/services/inventory-mo
 import { MovementType } from '../../../../@models/entities/MovementType.interface';
 import { MovementTypeService } from '../../../../core/services/movement-type.service';
 import { ToastService } from '../../../../shared/toast/toast.service';
+import { InventoryService } from '../../../../core/services/inventory.service';
+import { Inventory } from '../../../../@models/entities/Inventory.interface';
+import { Article } from '../../../../@models/entities/Article.interface';
+import { ArticleService } from '../../../../core/services/article.service';
 
 @Component({
   selector: 'app-movement-detail',
@@ -22,10 +26,17 @@ export class MovementDetailComponent {
   public formMovementInformation : FormGroup
 
   public toMovementType : MovementType[]
+  public movmentTypeSelected : MovementType
+
+  public toInventory : Inventory[] = []
+
+  public toArticle : Article[] = []
   constructor(
     private _fb : FormBuilder,
     private _inventoryMovementService : InventoryMovementService,
+    private _inventoryService : InventoryService,
     private _movementTypeService : MovementTypeService,
+    private _articleService : ArticleService,
     private _toastService : ToastService
   ){
     this.initList().then(()=>{
@@ -34,6 +45,8 @@ export class MovementDetailComponent {
   }
   private async  initList () : Promise<void> {
     this.toMovementType = await this._movementTypeService.list()
+    this.toInventory = await this._inventoryService.list()
+    this.toArticle = await this._articleService.list()
   }
   private _initForm () : void {
     const reference = this._createReference()
@@ -41,9 +54,29 @@ export class MovementDetailComponent {
       reference : reference,
       movementTypeId : null,
       dateTime : null,
-      sourceInventoryid : null,
+      sourceInventoryId : null,
       destinationInventoryId : null,
       description : null
+    })
+
+    this.formMovementInformation.get('movementTypeId').valueChanges.subscribe((id)=> {
+      console.log('ici', id)
+      if(id){
+        this.movmentTypeSelected = this.toMovementType.find((obj)=> obj.id === Number(id))
+        if(this.movmentTypeSelected.isInternal){
+          this.formMovementInformation.get('sourceInventoryId').setValue(this._inventoryService.inventory.getValue().id)
+          this.formMovementInformation.get('sourceInventoryId').disable()
+          this.formMovementInformation.get('destinationInventoryId').setValue(null)
+          this.formMovementInformation.get('destinationInventoryId').enable()
+        } else {
+          this.formMovementInformation.get('sourceInventoryId').setValue(null)
+          this.formMovementInformation.get('sourceInventoryId').enable()
+          this.formMovementInformation.get('destinationInventoryId').disable()
+          this.formMovementInformation.get('destinationInventoryId').setValue(this._inventoryService.inventory.getValue().id)
+        }
+        console.log(this.movmentTypeSelected)
+      }
+
     })
   }
 

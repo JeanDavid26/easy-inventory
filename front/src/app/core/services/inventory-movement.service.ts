@@ -15,7 +15,7 @@ export class InventoryMovementService {
 
 
   public async listByInventoryId (inventoryId : number) : Promise<InventoryMovement[]> {
-    const route = environment.urlApi + `list-inventory/${inventoryId}`
+    const route = environment.urlApi + `inventory-movement/list-inventory/${inventoryId}`
     return lastValueFrom(this._httpClient.get<InventoryMovement[]>(route))
   }
 
