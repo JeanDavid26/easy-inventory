@@ -196,6 +196,7 @@
     <div class="p-4 bg-white shadow-md rounded-lg">
       <h3 class="text-lg font-semibold text-gray-800">Résumé du Mouvement</h3>
       <div class="mt-4">
+        <p><strong>Référence :</strong> {{ formMovementInformation.get('reference').value }}</p>
         <p><strong>Type de mouvement :</strong> {{ movmentTypeSelected?.label }}</p>
         <p><strong>Date et Heure du mouvement :</strong> {{ formMovementInformation.get('dateTime').value | date:'medium' }}</p>
         <p><strong>Source :</strong> {{ getSourceInventoryLabel() }}</p>

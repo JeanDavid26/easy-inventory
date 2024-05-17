@@ -1,4 +1,4 @@
-import { IsDate, IsNotEmpty, IsNumber, IsOptional } from 'class-validator'
+import { IsDate, IsNotEmpty, IsNumber, IsOptional, Length, ValidateNested } from 'class-validator'
 import { TransformNumber } from 'src/shared/decorator/transform.number.decorator'
 
 export class InsertInventoryMovementDto {
@@ -25,6 +25,10 @@ export class InsertInventoryMovementDto {
   @IsNumber()
   destinationInventoryId: number
 
+  @IsNotEmpty()
+  @ValidateNested()
+  @Length(1)
+  movementLines : MovementLineDto[]
 }
 
 export class MovementLineDto {
