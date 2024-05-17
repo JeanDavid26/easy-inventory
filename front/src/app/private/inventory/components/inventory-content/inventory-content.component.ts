@@ -3,6 +3,7 @@ import { Inventory } from '../../../../@models/entities/Inventory.interface';
 import { InventoryService } from '../../../../core/services/inventory.service';
 import { BreadcrumbService } from '../../../../core/services/breadcrumb.service';
 import { filter, first } from 'rxjs';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-inventory-content',
@@ -14,7 +15,8 @@ export class InventoryContentComponent {
 
   constructor(
     private _inventoryService : InventoryService,
-    private _bcService : BreadcrumbService
+    private _bcService : BreadcrumbService,
+    private _router : Router
   ){
 
     this.inventory = this._inventoryService.inventory.value
@@ -37,5 +39,11 @@ export class InventoryContentComponent {
         },
       ])
     })
+
+
+  }
+
+  public addMovementStock() : void {
+    this._router.navigateByUrl(`private/inventory/${this.inventory?.id}/movement/0`)
   }
 }

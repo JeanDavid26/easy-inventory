@@ -37,7 +37,8 @@
               "src/assets"
             ],
             "styles": [
-              "src/styles.scss"
+              "src/styles.scss",
+              "node_modules/@fortawesome/fontawesome-svg-core/styles.css"
             ],
             "scripts": []
           },
@@ -103,7 +104,8 @@
               "src/assets"
             ],
             "styles": [
-              "src/styles.scss"
+              "src/styles.scss",
+              "node_modules/@fortawesome/fontawesome-svg-core/styles.css"
             ],
             "scripts": []
           }

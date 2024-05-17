@@ -28,7 +28,6 @@ import { InputComponent } from './components/input/input.component';
     ReactiveFormsModule,
     FormsModule,
     RouterModule,
-    FontAwesomeModule
   ],
   exports : [
     ReactiveFormsModule,
@@ -39,7 +38,8 @@ import { InputComponent } from './components/input/input.component';
     DatePickerComponent,
     ToastComponent,
     InputErrorDirective,
-    InputComponent
+    InputComponent,
+    FontAwesomeModule
   ]
 })
 export class SharedModule { }

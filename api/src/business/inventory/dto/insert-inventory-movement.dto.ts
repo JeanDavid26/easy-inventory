@@ -26,3 +26,14 @@ export class InsertInventoryMovementDto {
   destinationInventoryId: number
 
 }
+
+export class MovementLineDto {
+
+  @IsNotEmpty()
+  @IsNumber()
+  articleId : number
+
+  @IsNotEmpty()
+  @IsNumber()
+  quantity : number
+}

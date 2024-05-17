@@ -58,6 +58,7 @@ export class AuthenticationService {
     if (this.isAuthenticated()) {
       this._router.navigateByUrl('/private')
     } else {
+      console.log('ici')
       this._router.navigateByUrl('/public')
     }
   }

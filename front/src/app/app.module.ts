@@ -8,6 +8,7 @@ import { CommonModule } from '@angular/common';
 import { SharedModule } from './shared/shared.module';
 import { IconLibraryService } from './core/services/iconsLibrary.service';
 import { CoreModule } from './core/core.module';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 @NgModule({
   declarations: [
     AppComponent
@@ -18,7 +19,8 @@ import { CoreModule } from './core/core.module';
     HttpClientModule,
     CommonModule,
     SharedModule,
-    CoreModule
+    CoreModule,
+    FontAwesomeModule
   ],
   providers: [ IconLibraryService ],
   bootstrap: [AppComponent]

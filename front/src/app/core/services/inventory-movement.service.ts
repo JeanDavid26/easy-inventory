@@ -3,6 +3,7 @@ import { Injectable } from "@angular/core"
 import { InventoryMovement } from "../../@models/entities/InventoryMovement.interface"
 import { lastValueFrom } from "rxjs"
 import { environment } from "../../../environments/environment"
+import { MovementDto } from "../../@models/interfaces/movement-dto.interface"
 
 @Injectable({
   providedIn: 'root'
@@ -24,7 +25,7 @@ export class InventoryMovementService {
     return lastValueFrom(this._httpClient.get<InventoryMovement>(route))
   }
 
-  public insert (data : InventoryMovement) : Promise<InventoryMovement> {
+  public insert (data : MovementDto) : Promise<InventoryMovement> {
     const route = environment.urlApi + `inventory-movement`
     return lastValueFrom(this._httpClient.post<InventoryMovement>(route, data))
   }

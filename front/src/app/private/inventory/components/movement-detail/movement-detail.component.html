@@ -1,4 +1,4 @@
-<ol class="items-center w-full space-y-4 sm:flex sm:space-x-8 sm:space-y-0 rtl:space-x-reverse">
+<ol class="items-center w-full space-y-4 sm:flex sm:space-x-8 sm:space-y-0 rtl:space-x-reverse" *ngIf="formMovementInformation">
   <ng-container *ngFor="let step of steps">
     <li class="flex items-center    space-x-2.5 rtl:space-x-reverse"
       [ngClass]="{
@@ -88,100 +88,149 @@
       <app-button (click)="retourStep1()">Retour</app-button>
       <app-button (click)="validateStep2()">Suivant</app-button>
     </div>
-    <ng-container *ngIf="movmentTypeSelected.isInternal === true">
-      <div class="flex flex-col gap-5">
-        <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
-          <table class="w-full text-sm text-left rtl:text-right text-gray-500">
-              <thead class="text-xs text-gray-700 uppercase bg-gray-50">
-                  <tr>
-                    <th scope="col" class="px-6 py-3">
-                        Code de référence
-                    </th>
-                    <th scope="col" class="px-6 py-3">
-                        Désignation
-                    </th>
-                    <th scope="col" class="px-6 py-3">
-                        Quantité
-                    </th>
-                  </tr>
-              </thead>
-              <tbody>
-                  <tr
-                  class="odd:bg-white even:bg-gray-50 border-b">
-                      <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap ">
-
+    <form [formGroup]="formMovementInformation">
+      <ng-container *ngIf="movmentTypeSelected.isInternal === true">
+        <div class="flex flex-col gap-5">
+          <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+            <table class="w-full text-sm text-left rtl:text-right text-gray-500">
+                <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+                    <tr>
+                      <th scope="col" class="px-6 py-3">
+                          Code de référence
                       </th>
-                      <td class="px-6 py-4">
-
-                      </td>
-                      <td class="px-6 py-4">
-
-                      </td>
-                  </tr>
-                  <ng-container >
-                    <tr
-                    class="odd:bg-white even:bg-gray-50 border-b">
-                        <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap ">
-                            Pas de d'articles présent dans le stock
-                        </th>
-                        <td></td>
-                        <td></td>
+                      <th scope="col" class="px-6 py-3">
+                          Désignation
+                      </th>
+                      <th scope="col" class="px-6 py-3">
+                          Quantité
+                      </th>
                     </tr>
-                  </ng-container>
-              </tbody>
-          </table>
-        </div>
-    </div>
-    </ng-container>
-
-    <ng-container *ngIf="!movmentTypeSelected.isInternal">
-      <div class="flex flex-col gap-5">
-        <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
-          <table class="w-full text-sm text-left rtl:text-right text-gray-500">
-              <thead class="text-xs text-gray-700 uppercase bg-gray-50">
-                  <tr>
-                    <th scope="col" class="px-6 py-3">
-                        Code de référence
-                    </th>
-                    <th scope="col" class="px-6 py-3">
-                        Désignation
-                    </th>
-                    <th scope="col" class="px-6 py-3">
-                        Quantité
-                    </th>
-                  </tr>
-              </thead>
-              <tbody>
-                  <tr
-                  class="odd:bg-white even:bg-gray-50 border-b">
-                      <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap ">
-
-                      </th>
-                      <td class="px-6 py-4">
-
-                      </td>
-                      <td class="px-6 py-4">
-
-                      </td>
-                  </tr>
-                  <ng-container >
+                </thead>
+                <tbody>
                     <tr
                     class="odd:bg-white even:bg-gray-50 border-b">
                         <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap ">
 
                         </th>
-                        <td><app-button>Ajouter une ligne</app-button></td>
-                        <td></td>
+                        <td class="px-6 py-4">
+
+                        </td>
+                        <td class="px-6 py-4">
+
+                        </td>
+                    </tr>
+                    <ng-container >
+                      <tr
+                      class="odd:bg-white even:bg-gray-50 border-b">
+                          <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap ">
+                              Pas de d'articles présent dans le stock
+                          </th>
+                          <td></td>
+                          <td></td>
+                      </tr>
+                    </ng-container>
+                </tbody>
+            </table>
+          </div>
+      </div>
+      </ng-container>
+
+      <ng-container *ngIf="!movmentTypeSelected.isInternal">
+        <div class="flex flex-col gap-5">
+          <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+            <table class="w-full text-sm text-left rtl:text-right text-gray-500">
+                <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+                    <tr>
+                      <th scope="col" class="px-6 py-3">
+                          Article
+                      </th>
+                      <th scope="col" class="px-6 py-3">
+                          Quantité
+                      </th>
+                      <th scope="col"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                  <ng-container formArrayName="movementLines">
+                    <tr
+                    class="odd:bg-white even:bg-gray-50 border-b" *ngFor="let movementLine of movementLines.controls; let i = index" [formGroupName]="i">
+                        <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap ">
+                          <div appInputError>
+                          <label for="articleid" class="block mb-1 text-sm font-medium text-gray-800 ">Article</label>
+                            <select id="articleid" formControlName="articleId" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+                              <option [value]="article.id" *ngFor="let article of toArticle">{{article.referenceCode}} - {{article.label}}</option>
+                            </select>
+                          </div>
+                        </th>
+                        <td class="px-6 py-4">
+                          <app-input type="number" formControlName="quantity" label="Quatité"></app-input>
+                        </td>
+                        <td class="text-center">
+                          <fa-icon class=" w-10 h-10 flex justify-center items-center text-black rounded-full hover:bg-gray-300 cursor-pointer transition-colors duration-300" [icon]="faXmark" (click)="removeMovementLine(i)"></fa-icon>
+
+                        </td>
                     </tr>
                   </ng-container>
-              </tbody>
-          </table>
-        </div>
-    </div>
-    </ng-container>
+
+                    <ng-container >
+                      <tr
+                      class="odd:bg-white even:bg-gray-50 border-b">
+
+                          <td colspan="2" class="text-center"><app-button (click)="addMovementLine()">Ajouter une ligne</app-button></td>
+                      </tr>
+                    </ng-container>
+                </tbody>
+            </table>
+          </div>
+      </div>
+      </ng-container>
+    </form>
+
   </ng-container>
 
   <ng-container *ngIf="stepDisplayed === 3">
+    <div class="w-full flex flex-row justify-between gap-5 mb-5">
+      <app-button (click)="retourStep1()">Retour</app-button>
+      <app-button (click)="enregistrer()">Finaliser le mouvement</app-button>
+    </div>
+    <div class="p-4 bg-white shadow-md rounded-lg">
+      <h3 class="text-lg font-semibold text-gray-800">Résumé du Mouvement</h3>
+      <div class="mt-4">
+        <p><strong>Type de mouvement :</strong> {{ movmentTypeSelected?.label }}</p>
+        <p><strong>Date et Heure du mouvement :</strong> {{ formMovementInformation.get('dateTime').value | date:'medium' }}</p>
+        <p><strong>Source :</strong> {{ getSourceInventoryLabel() }}</p>
+        <p><strong>Destination :</strong> {{ getDestinationInventoryLabel() }}</p>
+        <p><strong>Description :</strong> {{ formMovementInformation.get('description').value }}</p>
+      </div>
+      <div class="mt-4">
+        <div class="overflow-x-auto">
+          <table class="min-w-full divide-y divide-gray-200">
+            <thead class="bg-gray-50">
+              <tr>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Article
+                </th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Quantité
+                </th>
+              </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-gray-200">
+              <ng-container *ngFor="let line of movementLines.controls">
+                <tr *ngIf="line.valid">
+                  <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                    {{ getArticleLabel(line.get('articleId').value) }}
+                  </td>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                    {{ line.get('quantity').value }}
+                  </td>
+                </tr>
+              </ng-container>
+            </tbody>
+          </table>
+        </div>
+      </div>
 
+    </div>
   </ng-container>
 </div>
