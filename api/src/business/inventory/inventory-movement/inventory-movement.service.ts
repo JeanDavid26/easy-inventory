@@ -30,18 +30,46 @@ export class InventoryMovementService {
       reference : oData.reference,
       dateTime : oData.dateTime
     }
-    
+
     const inventoryMovementInserted = await this._inventoryMovementManagerService.insert(partialMovement)
 
     for (const oMovementLineDto of oData.movementLines) {
+      if (oMovementType.isInternal === true) {
+        const oInventoryLineSource = await this._inventoryLineManagerService.getByInventoryIdAndArticleId(inventoryMovementInserted.sourceInventoryId, oMovementLineDto.articleId)
+        if (!oInventoryLineSource || oInventoryLineSource.quantity > oMovementLineDto.quantity) {
+          throw new BadRequestException('La quanité est supérieur à la valuer en stock')
+        }
+        if (oInventoryLineSource.quantity - oMovementLineDto.quantity === 0) {
+          await this._inventoryLineManagerService.delete(oInventoryLineSource.id)
+        } else {
+          const newQuantity = oInventoryLineSource.quantity - oMovementLineDto.quantity
+          console.log(oInventoryLineSource)
+          await this._inventoryLineManagerService.update(oInventoryLineSource.id, { quantity : newQuantity })
+        }
+      }
+      
+      const oInventoryLineDestination = await this._inventoryLineManagerService.getByInventoryIdAndArticleId(inventoryMovementInserted.destinationInventoryId, oMovementLineDto.articleId)
+      if (!oInventoryLineDestination) {
+        await this._inventoryLineManagerService.insert({
+          inventoryId : inventoryMovementInserted.destinationInventoryId,
+          articleId : oMovementLineDto.articleId,
+          quantity : oMovementLineDto.quantity
+        })
+      } else {
+        await this._inventoryLineManagerService.update(oInventoryLineDestination.id, {
+          quantity : oInventoryLineDestination.quantity + oMovementLineDto.quantity
+        })
+      }
+
       const partialMovementLine : Partial<MovementLine> = {
         articleId : oMovementLineDto.articleId,
         quantity : oMovementLineDto.quantity,
         movementId : inventoryMovementInserted.id
       }
 
-      const movementLineInserted = await this._movementLineManagerService.insert(partialMovementLine)
+      await this._movementLineManagerService.insert(partialMovementLine)
+
     }
-    return
+    return inventoryMovementInserted
   }
 }

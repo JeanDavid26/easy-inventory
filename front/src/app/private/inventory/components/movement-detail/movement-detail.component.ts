@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
+import { AbstractControl, FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { InventoryMovementService } from '../../../../core/services/inventory-movement.service';
 import { MovementType } from '../../../../@models/entities/MovementType.interface';
 import { MovementTypeService } from '../../../../core/services/movement-type.service';
@@ -13,8 +13,9 @@ import { MovementLineDto } from '../../../../@models/interfaces/movement-line-dt
 import { faXmark } from '@fortawesome/free-solid-svg-icons';
 import { MovementDto } from '../../../../@models/interfaces/movement-dto.interface';
 import { Router } from '@angular/router';
-import { filter, first } from 'rxjs';
+import { Subscription, filter, first } from 'rxjs';
 import { BreadcrumbService } from '../../../../core/services/breadcrumb.service';
+import { InventoryLine } from '../../../../@models/entities/InventoryLine.interface';
 
 @Component({
   selector: 'app-movement-detail',
@@ -38,10 +39,15 @@ export class MovementDetailComponent {
   public movmentTypeSelected : MovementType
 
   public toInventory : Inventory[] = []
-  public toArticle : Article[] = []
 
+  public toArticle : Article[] = []
   public toArticleSource : Article[] =[]
+  public toArticleToSelect : Article[] = []
+
+  public mapArticleQuantitySource : Record<number,number> = {}
   public toMovementLine : FormArray
+
+  private _tSubsciption : Subscription[] = []
   constructor(
     private _fb : FormBuilder,
     private _inventoryMovementService : InventoryMovementService,
@@ -53,33 +59,36 @@ export class MovementDetailComponent {
     private _bcService : BreadcrumbService
   ){
     this.inventory = this._inventoryService.inventory.value
-    this._inventoryService.inventory.subscribe((inventory)=>{
+    this._tSubsciption.push( this._inventoryService.inventory.subscribe((inventory)=>{
       this.inventory = inventory
-    })
+    }))
 
-    this._inventoryService.inventory.pipe(
-      filter(value => value !== null),
-      first()
-    ).subscribe((inventory)=>{
-      this._bcService.setBreadCrumb([
-        {
-          label : 'Stock',
-          link : 'inventory'
-        },
-        {
-          label : `${inventory.id ? inventory.label : 'Nouveau stock'}`,
-          link : `inventory/${this.inventory.id}/content`
-        },
-        {
-          label : `Mouvements de stock`,
-          link : `inventory/${this.inventory.id}/movement`
-        },
-        {
-          label : `Nouveau mouvement`,
-          link : `inventory/${this.inventory.id}/movement/0`
-        },
-      ])
-    })
+    this._tSubsciption.push(
+      this._inventoryService.inventory.pipe(
+        filter(value => value !== null),
+        first()
+      ).subscribe((inventory)=>{
+        this._bcService.setBreadCrumb([
+          {
+            label : 'Stock',
+            link : 'inventory'
+          },
+          {
+            label : `${inventory.id ? inventory.label : 'Nouveau stock'}`,
+            link : `inventory/${this.inventory.id}/content`
+          },
+          {
+            label : `Mouvements de stock`,
+            link : `inventory/${this.inventory.id}/movement`
+          },
+          {
+            label : `Nouveau mouvement`,
+            link : `inventory/${this.inventory.id}/movement/0`
+          },
+        ])
+      })
+    )
+
 
     this.initList().then(()=>{
       this._initForm()
@@ -107,25 +116,35 @@ export class MovementDetailComponent {
       movementLines: this._fb.array([])
     })
 
-    this.formMovementInformation.get('movementTypeId').valueChanges.subscribe((id)=> {
-      console.log('ici', id)
-      if(id){
-        this.movmentTypeSelected = this.toMovementType.find((obj)=> obj.id === Number(id))
-        if(this.movmentTypeSelected.isInternal){
-          this.formMovementInformation.get('sourceInventoryId').setValue(this._inventoryService.inventory.getValue().id)
-          this.formMovementInformation.get('sourceInventoryId').disable()
-          this.formMovementInformation.get('destinationInventoryId').setValue(null)
-          this.formMovementInformation.get('destinationInventoryId').enable()
-        } else {
-          this.formMovementInformation.get('sourceInventoryId').setValue(null)
-          this.formMovementInformation.get('sourceInventoryId').enable()
-          this.formMovementInformation.get('destinationInventoryId').disable()
-          this.formMovementInformation.get('destinationInventoryId').setValue(this._inventoryService.inventory.getValue().id)
+    this._tSubsciption.push(
+      this.formMovementInformation.get('movementTypeId').valueChanges.subscribe((id)=> {
+        if(id){
+          this.movmentTypeSelected = this.toMovementType.find((obj)=> obj.id === Number(id))
+          if(this.movmentTypeSelected.isInternal){
+            this.formMovementInformation.get('sourceInventoryId').setValue(this._inventoryService.inventory.getValue().id)
+            this.formMovementInformation.get('sourceInventoryId').disable()
+            this.formMovementInformation.get('destinationInventoryId').setValue(null)
+            this.formMovementInformation.get('destinationInventoryId').enable()
+            const tInventoryLineSource = this.inventory.tInventoryLine;
+            for (const oInventoryLine of tInventoryLineSource) {
+              this.mapArticleQuantitySource[oInventoryLine.articleId] = oInventoryLine.quantity;
+              const oArticle = this.toArticle.find((obj) => obj.id === oInventoryLine.articleId);
+              if (oArticle) {
+                this.toArticleSource.push(oArticle);
+              }
+            }
+          } else {
+            this.formMovementInformation.get('sourceInventoryId').setValue(null)
+            this.formMovementInformation.get('sourceInventoryId').enable()
+            this.formMovementInformation.get('destinationInventoryId').disable()
+            this.formMovementInformation.get('destinationInventoryId').setValue(this._inventoryService.inventory.getValue().id)
+            this.toArticleSource = []
+            this.mapArticleQuantitySource = {}
+          }
         }
-        console.log(this.movmentTypeSelected)
-      }
+      })
+    )
 
-    })
   }
 
   private _createReference() : string {
@@ -139,12 +158,11 @@ export class MovementDetailComponent {
 
   public validateStep1() : void {
     const formValue = this.formMovementInformation.getRawValue()
-    console.log(formValue)
     if(!formValue.reference || !formValue.dateTime || !formValue.movementTypeId) {
-      console.log('ICI')
       this._toastService.displayToast('warning', 'Veuillez renseigner tous les champs')
       return
     }
+
     this.steps[0].onGoing = false
     this.steps[0].isValidated = true
     this.steps[1].onGoing = true
@@ -170,11 +188,22 @@ export class MovementDetailComponent {
   // Méthode pour initialiser un FormGroup représentant un MovementLineDto
   createMovementLine(): FormGroup {
     return this._fb.group({
-      articleId: [null],  // Initialiser avec une valeur par défaut si nécessaire
-      quantity: [null]
+      articleId:[null, [Validators.required]],  // Initialiser avec une valeur par défaut si nécessaire
+      quantity: [null, [Validators.required, this.quantityValidator.bind(this)]]
     });
   }
 
+  quantityValidator(control: AbstractControl): { [key: string]: boolean } | null {
+    const articleId = control.parent?.get('articleId')?.value;
+    if (articleId && this.mapArticleQuantitySource[articleId] !== undefined) {
+      const maxQuantity = this.mapArticleQuantitySource[articleId];
+      if (control.value > maxQuantity) {
+        control.setValue(maxQuantity)
+        return { 'maxQuantity': true };
+      }
+    }
+    return null;
+  }
   removeMovementLine(index : number) : void {
     this.movementLines.removeAt(index)
   }
@@ -186,9 +215,10 @@ export class MovementDetailComponent {
 
   async enregistrer () : Promise<void> {
     const movementDto : MovementDto = {
-      ... this.formMovementInformation.getRawValue()
+      ... this.formMovementInformation.getRawValue(),
+      movementLines : this.movementLines.getRawValue()
     }
-
+    movementDto.movementTypeId = Number(movementDto.movementTypeId)
     this._inventoryMovementService.insert(movementDto).then((res)=> {
       if(res){
         this._toastService.displayToast('sucess')

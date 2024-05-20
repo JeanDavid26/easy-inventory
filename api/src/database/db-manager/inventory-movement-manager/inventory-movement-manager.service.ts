@@ -25,7 +25,9 @@ export class InventoryMovementManagerService {
     return this._repo.findOne({
       where: {
         id
-      }
+      },
+      relations : [ 'oSourceInventory', 'oDestinationInventory', 'oMovementType', 'tMovementLine', 'tMovementLine.oArticle' ]
+
     })
   }
 

@@ -1,5 +1,5 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { LOCALE_ID, NgModule } from '@angular/core';
+import { CommonModule, registerLocaleData } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ButtonComponent } from './components/button/button.component';
 import { RouterModule } from '@angular/router';
@@ -12,6 +12,9 @@ import { InputErrorDirective } from './form-validation/input-error.directive';
 import { InputComponent } from './components/input/input.component';
 
 
+import localeFr from '@angular/common/locales/fr';
+
+registerLocaleData(localeFr);
 
 @NgModule({
   declarations: [
@@ -40,6 +43,9 @@ import { InputComponent } from './components/input/input.component';
     InputErrorDirective,
     InputComponent,
     FontAwesomeModule
+  ],
+  providers :[
+    { provide: LOCALE_ID, useValue: 'fr-FR' }
   ]
 })
 export class SharedModule { }

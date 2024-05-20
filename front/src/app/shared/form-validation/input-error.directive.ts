@@ -13,8 +13,8 @@ export class InputErrorDirective implements OnInit {
     private _validateForm : ValidateFormService
   ) {
 
-
   }
+
   ngOnInit(): void {
     this._getInputLabel()
     if(this.inputLabel){

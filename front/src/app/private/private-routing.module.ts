@@ -19,6 +19,7 @@ import { InventoryTypeListComponent } from './administration/pages/inventory-typ
 import { InventoryTypeDetailComponent } from './administration/pages/inventory-type-detail/inventory-type-detail.component';
 import { MovementListComponent } from './inventory/components/movement-list/movement-list.component';
 import { MovementDetailComponent } from './inventory/components/movement-detail/movement-detail.component';
+import { MovementDetailOverviewComponent } from './inventory/components/movement-detail-overview/movement-detail-overview.component';
 
 const routes: Routes = [
   { path: '', component: NavBarComponent, children: [
@@ -33,7 +34,8 @@ const routes: Routes = [
     { path : 'inventory/:id', component : InventoryDetailComponent, resolve :{ inventory : InventoryResolver}, children : [
       { path : 'content', component : InventoryContentComponent},
       { path : 'movement', component : MovementListComponent},
-      { path : 'movement/:idMovement', component : MovementDetailComponent},
+      { path : 'movement/0', component : MovementDetailComponent},
+      { path : 'movement/:idMovement', component : MovementDetailOverviewComponent},
       { path : 'documents', component : DocumentsComponent }
     ] },
     { path : 'administration', component : AdministrationComponent},

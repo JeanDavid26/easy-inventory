@@ -12,7 +12,7 @@ export class InventoryService {
       return {
         ... inventory,
         value : resValueQuantity.value,
-        quantity : resValueQuantity.value
+        quantity : resValueQuantity.quantity
       }
     })
 

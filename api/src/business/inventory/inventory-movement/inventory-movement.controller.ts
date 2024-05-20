@@ -17,8 +17,15 @@ export class InventoryMovementController {
     return this._inventoryMovementService.insertInventoryMovement(oData)
   }
 
+  @Get(':id')
+  public getInventoryMovementById (@Param('id') id : number) : Promise<InventoryMovement> {
+    id = Number(id)
+    return this._inventoryMovementManagerService.get(id)
+  }
+
   @Get('list-inventory/:inventoryId')
   public listInventoryMovementByInventoryId (@Param('inventoryId') inventoryId : number) : Promise<InventoryMovement[]> {
     return this._inventoryMovementManagerService.listByInventoryId(inventoryId)
   }
+
 }

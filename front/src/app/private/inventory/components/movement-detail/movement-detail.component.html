@@ -1,3 +1,4 @@
+<ng-container *ngIf=""></ng-container>
 <ol class="items-center w-full space-y-4 sm:flex sm:space-x-8 sm:space-y-0 rtl:space-x-reverse" *ngIf="formMovementInformation">
   <ng-container *ngFor="let step of steps">
     <li class="flex items-center    space-x-2.5 rtl:space-x-reverse"
@@ -34,7 +35,7 @@
     </div>
 
     <form class="flex flex-col gap-3 grow-0" [formGroup]="formMovementInformation" *ngIf="formMovementInformation">
-      <span>{{formMovementInformation.get('reference').value}}</span>
+      <span><strong>Référence :</strong> {{formMovementInformation.get('reference').value}}</span>
 
       <div class="w-1/4" appInputError>
         <label for="movementtype" class="block mb-1 text-sm font-medium text-gray-800 ">Type de mouvement</label>
@@ -96,42 +97,49 @@
                 <thead class="text-xs text-gray-700 uppercase bg-gray-50">
                     <tr>
                       <th scope="col" class="px-6 py-3">
-                          Code de référence
-                      </th>
-                      <th scope="col" class="px-6 py-3">
-                          Désignation
+                          Article
                       </th>
                       <th scope="col" class="px-6 py-3">
                           Quantité
                       </th>
+                      <th scope="col"></th>
                     </tr>
                 </thead>
                 <tbody>
+                  <ng-container formArrayName="movementLines">
                     <tr
-                    class="odd:bg-white even:bg-gray-50 border-b">
-                        <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap ">
-
-                        </th>
-                        <td class="px-6 py-4">
-
-                        </td>
-                        <td class="px-6 py-4">
-
-                        </td>
+                    class="odd:bg-white even:bg-gray-50 border-b" *ngFor="let movementLine of movementLines.controls; let i = index" [formGroupName]="i">
+                      <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap ">
+                        <div appInputError>
+                          <label for="articleid" class="block mb-1 text-sm font-medium text-gray-800">Article</label>
+                          <select id="articleid" formControlName="articleId" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+                            <option [value]="article.id" *ngFor="let article of toArticleSource">{{article.referenceCode}} - {{article.label}}</option>
+                          </select>
+                        </div>
+                      </th>
+                      <td class="px-6 py-4">
+                        <app-input type="number" formControlName="quantity" label="Quantité"></app-input>
+                        <div *ngIf="movementLine.get('quantity').hasError('maxQuantity')" class="text-red-500 text-sm">
+                          Quantité maximale disponible: {{ mapArticleQuantitySource[movementLine.get('articleId').value] }}
+                        </div>
+                      </td>
+                      <td class="text-center">
+                        <fa-icon class="w-10 h-10 flex justify-center items-center text-black rounded-full hover:bg-gray-300 cursor-pointer transition-colors duration-300" [icon]="faXmark" (click)="removeMovementLine(i)"></fa-icon>
+                      </td>
                     </tr>
+                  </ng-container>
+
                     <ng-container >
                       <tr
                       class="odd:bg-white even:bg-gray-50 border-b">
-                          <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap ">
-                              Pas de d'articles présent dans le stock
-                          </th>
-                          <td></td>
-                          <td></td>
+
+                          <td colspan="2" class="text-center"><app-button (click)="addMovementLine()">Ajouter une ligne</app-button></td>
                       </tr>
                     </ng-container>
                 </tbody>
             </table>
           </div>
+
       </div>
       </ng-container>
 

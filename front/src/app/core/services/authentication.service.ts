@@ -29,7 +29,6 @@ export class AuthenticationService {
   public signIn(email : string, password : string) : Promise<{access_token: string}> {
     const route = environment.urlApi + `auth/signin`
     return lastValueFrom(this._httpClient.post<{access_token: string}>(route, { email, password })).then((res)=> {
-      console.log(res.access_token)
       this._localStorageService.setItem(this._keyAccessToken, res.access_token)
       this.redirectionConnexion()
       return res
@@ -58,7 +57,6 @@ export class AuthenticationService {
     if (this.isAuthenticated()) {
       this._router.navigateByUrl('/private')
     } else {
-      console.log('ici')
       this._router.navigateByUrl('/public')
     }
   }

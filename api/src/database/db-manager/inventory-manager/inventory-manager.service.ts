@@ -14,6 +14,7 @@ export class InventoryManagerService {
       .createQueryBuilder('inventory')
       .leftJoinAndSelect('inventory.tInventoryLine', 'tinventoryline')
       .leftJoinAndSelect('tinventoryline.oArticle', 'tinventoryline_oarticle')
+      .leftJoinAndSelect('tinventoryline_oarticle.oCategory', 'tinventoryline_oarticle_category')
       .where('inventory.id = :id', { id })
 
     return qb.getOne()
@@ -24,6 +25,7 @@ export class InventoryManagerService {
       .createQueryBuilder('inventory')
       .leftJoinAndSelect('inventory.tInventoryLine', 'tinventoryline')
       .leftJoinAndSelect('tinventoryline.oArticle', 'tinventoryline_oarticle')
+      .leftJoinAndSelect('tinventoryline_oarticle.oCategory', 'tinventoryline_oarticle_category')
     return qb.getMany()
   }
 

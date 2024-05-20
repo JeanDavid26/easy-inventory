@@ -1,5 +1,6 @@
 import { BaseTable } from "./BaseTable.interface";
 import { Inventory } from "./Inventory.interface";
+import { MovementLine } from "./MovementLine.interface";
 import { MovementType } from "./MovementType.interface";
 
 export interface InventoryMovement extends BaseTable {
@@ -12,4 +13,6 @@ export interface InventoryMovement extends BaseTable {
   description?: string
   oSourceInventory?: Inventory
   oDestinationInventory?: Inventory
+  tMovementLine? : MovementLine[]
+
 }

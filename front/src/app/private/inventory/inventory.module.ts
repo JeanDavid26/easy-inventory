@@ -7,6 +7,7 @@ import { InventoryContentComponent } from './components/inventory-content/invent
 import { DocumentsComponent } from './components/documents/documents.component';
 import { MovementListComponent } from './components/movement-list/movement-list.component';
 import { MovementDetailComponent } from './components/movement-detail/movement-detail.component';
+import { MovementDetailOverviewComponent } from './components/movement-detail-overview/movement-detail-overview.component';
 @NgModule({
   declarations: [
     InventoryListComponent,
@@ -14,7 +15,8 @@ import { MovementDetailComponent } from './components/movement-detail/movement-d
     InventoryContentComponent,
     DocumentsComponent,
     MovementListComponent,
-    MovementDetailComponent
+    MovementDetailComponent,
+    MovementDetailOverviewComponent
   ],
   imports: [
     CommonModule,

@@ -17,6 +17,15 @@ export class InventoryLineManagerService {
     })
   }
 
+  public async getByInventoryIdAndArticleId (inventoryId : number, articleId : number) : Promise<InventoryLine> {
+    return this._repo.findOne({
+      where : {
+        articleId,
+        inventoryId
+      }
+    })
+  }
+
   public async insert (data: Partial<InventoryLine>): Promise<InventoryLine> {
     return this._repo.save(data)
   }

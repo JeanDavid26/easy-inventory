@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { LOCALE_ID, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -22,7 +22,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
     CoreModule,
     FontAwesomeModule
   ],
-  providers: [ IconLibraryService ],
+  providers: [ IconLibraryService, { provide: LOCALE_ID, useValue: 'fr-FR' } ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

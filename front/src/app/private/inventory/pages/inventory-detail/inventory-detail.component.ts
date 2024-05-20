@@ -55,13 +55,10 @@ export class InventoryDetailComponent {
       label : inventory?.label,
       inventoryTypeId : inventory?.inventoryTypeId
     })
-    this.form.valueChanges.subscribe((obj)=> {
-      console.log(obj)
-    })
+
   }
   public async enregistrer() : Promise<void> {
     const inventory = this.form.value
-    console.log('invenotry', inventory)
     await this._inventoryService.insert(inventory)
     this._router.navigateByUrl(`private/inventory/${this.id}/content`)
   }

@@ -1,7 +1,8 @@
-import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm'
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm'
 import { BaseTable } from './BaseTable'
 import { Inventory } from './Inventory.entity'
 import { MovementType } from './MovementType.entity'
+import { MovementLine } from './MovementLine.entity'
 
 @Entity({ schema: 'easyinventory', name: 'inventorymovement' })
 export class InventoryMovement extends BaseTable {
@@ -32,4 +33,7 @@ export class InventoryMovement extends BaseTable {
   @ManyToOne(() => Inventory, (inventory) => inventory.id)
   @JoinColumn({ name: 'destinationinventoryid' })
   oDestinationInventory: Inventory
+
+  @OneToMany(() => MovementLine, (movementLine) => movementLine.oInventoryMovement)
+  tMovementLine : MovementLine[]
 }

@@ -5,8 +5,8 @@ import { Inventory } from './Inventory.entity'
 
 @Entity({ schema: 'easyinventory', name: 'invenotryline' })
 export class InventoryLine extends BaseTable {
-  @Column({ name: 'productid' })
-  productId: number
+  @Column({ name: 'articleId' })
+  articleId: number
 
   @Column({ name: 'inventoryid' })
   inventoryId: number
@@ -18,7 +18,7 @@ export class InventoryLine extends BaseTable {
   updateDate: Date
 
   @ManyToOne(() => Article, (article) => article.id)
-  @JoinColumn({ name: 'productid' })
+  @JoinColumn({ name: 'articleId' })
   oArticle: Article
 
   @ManyToOne(() => Inventory, (inventory) => inventory.id)
