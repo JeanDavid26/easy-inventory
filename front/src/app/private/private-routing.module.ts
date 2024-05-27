@@ -20,6 +20,8 @@ import { InventoryTypeDetailComponent } from './administration/pages/inventory-t
 import { MovementListComponent } from './inventory/components/movement-list/movement-list.component';
 import { MovementDetailComponent } from './inventory/components/movement-detail/movement-detail.component';
 import { MovementDetailOverviewComponent } from './inventory/components/movement-detail-overview/movement-detail-overview.component';
+import { PaiementMethodListComponent } from './administration/pages/paiement-method-list/paiement-method-list.component';
+import { PaiementMethodDetailComponent } from './administration/pages/paiement-method-detail/paiement-method-detail.component';
 
 const routes: Routes = [
   { path: '', component: NavBarComponent, children: [
@@ -43,6 +45,8 @@ const routes: Routes = [
     { path : 'administration/movement-type/:id', component : MovementTypeDetailComponent},
     { path : 'administration/inventory-type', component : InventoryTypeListComponent},
     { path : 'administration/inventory-type/:id', component : InventoryTypeDetailComponent},
+    { path : 'administration/paiement-method', component : PaiementMethodListComponent},
+    { path : 'administration/paiement-method/:id', component : PaiementMethodDetailComponent},
   ] }
 ]
 

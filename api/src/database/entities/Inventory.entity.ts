@@ -1,6 +1,5 @@
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm'
 import { BaseTable } from './BaseTable'
-import { InventoryTypeEnum } from '../@models/inventory-type.enum'
 import { Document } from './Document.entity'
 import { InventoryLine } from './InventoryLine.entity'
 import { InventoryMovement } from './InventoryMovement.entity'

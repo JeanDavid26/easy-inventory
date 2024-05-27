@@ -5,6 +5,9 @@ import { InventoryType } from 'src/database/entities/InventoryType.entity'
 import { MovementType } from 'src/database/entities/MovementType.entity'
 import { UpsertInventoryTypeDto } from './dto/upsert-Inventory-type.dto'
 import { UpsertMovmentTypeDto } from './dto/upsert-movment-type.dto'
+import { UpsertPaiementMethodDto } from './dto/upsert-paiement-method.dto'
+import { PaiementMethod } from 'src/database/entities/PaiementMethod.entity'
+import { PaiementMethodManagerService } from 'src/database/db-manager/paiement-method-manager/paiement-method-manager.service'
 
 @Controller('administration')
 export class AdministrationController {
@@ -12,6 +15,7 @@ export class AdministrationController {
   constructor (
     private _movementTypeManagerService : MovementTypeManagerService,
     private _inventoryTypeManagerService : InventoryTypeManagerService,
+    private _paiementMethodManagerService :PaiementMethodManagerService
   ) {}
 
   // Movement Type
@@ -60,11 +64,39 @@ export class AdministrationController {
 
   @Put('inventorytype/:id')
   public updateInventoryType (@Param('id') id : number, @Body() oData : UpsertInventoryTypeDto) : Promise<InventoryType> {
-    return this._inventoryTypeManagerService.update(id, oData)
+    return this._inventoryTypeManagerService.update(Number(id), oData)
   }
 
   @Delete('inventorytype/:id')
   public deleteInventoryType (@Param('id') id : number) : Promise<void> {
     return this._inventoryTypeManagerService.delete(id)
+  }
+
+  // PaiementMethod
+
+  @Get('paiementmethod')
+  public listPaiementMethod () : Promise<PaiementMethod[]> {
+    return this._paiementMethodManagerService.list()
+  }
+
+  @Get('paiementmethod/:id')
+  public getPaiementMethod (@Param('id') id : number) : Promise<PaiementMethod> {
+    id = Number(id)
+    return this._paiementMethodManagerService.get(id)
+  }
+
+  @Post('paiementmethod')
+  public insertPaiementMethod (@Body() oData : UpsertPaiementMethodDto) : Promise<PaiementMethod> {
+    return this._paiementMethodManagerService.insert(oData)
+  }
+
+  @Put('paiementmethod/:id')
+  public updatePaiementMethod (@Param('id') id : number, @Body() oData : UpsertPaiementMethodDto) : Promise<PaiementMethod> {
+    return this._paiementMethodManagerService.update(Number(id), oData)
+  }
+
+  @Delete('paiementmethod/:id')
+  public deletePaiementMethod (@Param('id') id : number) : Promise<void> {
+    return this._paiementMethodManagerService.delete(id)
   }
 }

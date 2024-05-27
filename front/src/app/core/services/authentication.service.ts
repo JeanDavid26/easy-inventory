@@ -55,9 +55,9 @@ export class AuthenticationService {
 
   public redirectionConnexion () {
     if (this.isAuthenticated()) {
-      this._router.navigateByUrl('/private')
+      this._router.navigateByUrl('/private/dashboard')
     } else {
-      this._router.navigateByUrl('/public')
+      this._router.navigateByUrl('/public/login')
     }
   }
 

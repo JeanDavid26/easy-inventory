@@ -22,7 +22,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
     CoreModule,
     FontAwesomeModule
   ],
-  providers: [ IconLibraryService, { provide: LOCALE_ID, useValue: 'fr-FR' } ],
+  providers: [ IconLibraryService,  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

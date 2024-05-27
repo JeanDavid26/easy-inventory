@@ -4,7 +4,7 @@ import { LoginComponent } from './login/login.component';
 import { CreateAacountComponent } from './create-aacount/create-aacount.component';
 
 const routes: Routes = [
-  { path : '', redirectTo : 'private', pathMatch : 'full' },
+  { path : '', redirectTo : 'login', pathMatch : 'full' },
   { path : 'login', component : LoginComponent},
   { path : 'create-account', component : CreateAacountComponent}
 ]

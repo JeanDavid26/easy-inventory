@@ -27,6 +27,8 @@ import { InventoryType } from '../entities/InventoryType.entity'
 import { MovementType } from '../entities/MovementType.entity'
 import { MovementTypeManagerService } from './movement-type-manager/movement-type-manager.service'
 import { InventoryTypeManagerService } from './inventory-type-manager/inventory-type-manager.service'
+import { PaiementMethod } from '../entities/PaiementMethod.entity'
+import { PaiementMethodManagerService } from './paiement-method-manager/paiement-method-manager.service'
 
 @Module({
   imports: [
@@ -49,7 +51,8 @@ import { InventoryTypeManagerService } from './inventory-type-manager/inventory-
       AppFile,
       Document,
       InventoryType,
-      MovementType
+      MovementType,
+      PaiementMethod
     ])
   ],
   providers: [
@@ -65,7 +68,8 @@ import { InventoryTypeManagerService } from './inventory-type-manager/inventory-
     InventoryMovementManagerService,
     MovementLineManagerService,
     MovementTypeManagerService,
-    InventoryTypeManagerService
+    InventoryTypeManagerService,
+    PaiementMethodManagerService
   ],
   exports: [
     CategoryManagerService,
@@ -80,7 +84,9 @@ import { InventoryTypeManagerService } from './inventory-type-manager/inventory-
     InventoryMovementManagerService,
     MovementLineManagerService,
     MovementTypeManagerService,
-    InventoryTypeManagerService
+    InventoryTypeManagerService,
+    PaiementMethodManagerService
+
   ]
 })
 export class DbManagerModule {}
