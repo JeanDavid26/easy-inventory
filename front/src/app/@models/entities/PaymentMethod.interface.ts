@@ -1,4 +1,4 @@
-export interface PaiementMethod {
+export interface PaymentMethod {
   id? : number
   label? : string
 }

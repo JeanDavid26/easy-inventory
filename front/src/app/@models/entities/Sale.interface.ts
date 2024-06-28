@@ -1,6 +1,12 @@
 import { BaseTable } from "./BaseTable.interface";
+import { Payment } from "./Payment.interface";
+import { SaleLine } from "./SaleLine.interface";
+import { SaleSession } from "./SaleSession.interface";
 
 export interface Sale extends BaseTable {
-  saleDate: Date
-  status: string
+  saleSessionId?: number
+  totalAmount?: number
+  oSaleSession?: SaleSession
+  tSaleLine?: SaleLine[]
+  tPayments?: Payment[]
 }

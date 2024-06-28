@@ -1,21 +1,21 @@
 import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
-import { PaiementMethod } from 'src/database/entities/PaiementMethod.entity'
+import { PaymentMethod } from 'src/database/entities/PaiementMethod.entity'
 import { Repository } from 'typeorm'
 
 @Injectable()
 export class PaiementMethodManagerService {
 
   constructor (
-    @InjectRepository(PaiementMethod)
-    private _repo: Repository<PaiementMethod>,
+    @InjectRepository(PaymentMethod)
+    private _repo: Repository<PaymentMethod>,
   ) {}
 
-  public async list (): Promise<PaiementMethod[]> {
+  public async list (): Promise<PaymentMethod[]> {
     return this._repo.find()
   }
 
-  public async get (id: number): Promise<PaiementMethod> {
+  public async get (id: number): Promise<PaymentMethod> {
     return this._repo.findOne({
       where: {
         id
@@ -23,14 +23,14 @@ export class PaiementMethodManagerService {
     })
   }
 
-  public async insert (data: Partial<PaiementMethod>): Promise<PaiementMethod> {
+  public async insert (data: Partial<PaymentMethod>): Promise<PaymentMethod> {
     return this._repo.save(data)
   }
 
   public async update (
     id: number,
-    data: Partial<PaiementMethod>,
-  ): Promise<PaiementMethod> {
+    data: Partial<PaymentMethod>,
+  ): Promise<PaymentMethod> {
     delete data.id
     data.id = id
     return this._repo.save(data)

@@ -1,15 +1,23 @@
-# Étape 1 : Build de l'application
-FROM node:14 AS build
+# Utiliser l'image officielle Node.js comme image de base
+FROM node:18
+
+# Définir le répertoire de travail dans le conteneur
 WORKDIR /usr/src/app
+
+# Copier le fichier package.json et package-lock.json
 COPY package*.json ./
+
+# Installer les dépendances
 RUN npm install
+
+# Copier le reste des fichiers de l'application
 COPY . .
+
+# Construire l'application NestJS
 RUN npm run build
 
-# Étape 2 : Exécuter l'application
-FROM node:14-alpine
-WORKDIR /usr/src/app
-COPY --from=build /usr/src/app/dist ./dist
-COPY --from=build /usr/src/app/package*.json ./
-RUN npm install --production
-CMD ["node", "dist/main"]
+# Exposer le port de l'application
+EXPOSE 3000
+
+# Démarrer l'application
+CMD ["npm", "run", "start:prod"]

@@ -1,26 +1,37 @@
-version: '3.8'
+version: "3.3"
 services:
-  api:
-    build:
-      context: ./api
-      dockerfile: Dockerfile
-    ports:
-      - '3000:3000'
-    env_file:
-      - .env
-    volumes:
-      - ./:/usr/src/app
-    depends_on:
-      - db
-
   front:
     build:
-      context: ./front
+      context: ./front/
       dockerfile: Dockerfile
+    restart: always
     ports:
-      - '80:80'
-    depends_on:
-      - api
+      - "5000:80"
+    environment:
+      - API_URL=http://api:4000
+    networks:
+      - internalapp
+      - default
+
+  api:
+    build:
+      context: ./api/
+      dockerfile: Dockerfile
+    restart: always
+    expose:
+      - 4000
+    environment:
+      - MYSQL_USER
+      - MYSQL_HOST=db
+      - MYSQL_PASSWORD
+      - MYSQL_DATABASE
+      - JWT_SECRET_KEY
+      - SLACK_CLIENT_ID
+      - SLACK_CLIENT_SECRET
+      - API_PORT=4000
+    networks:
+      - internalapp
+      - default
 
   db:
     image: postgres:13
@@ -30,6 +41,9 @@ services:
       POSTGRES_DB: your_db_name
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    networks:
+      - internalapp
 
-volumes:
-  postgres_data:
+networks:
+  internalapp:
+    internal: true

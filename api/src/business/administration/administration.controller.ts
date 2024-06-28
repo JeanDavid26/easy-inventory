@@ -6,7 +6,7 @@ import { MovementType } from 'src/database/entities/MovementType.entity'
 import { UpsertInventoryTypeDto } from './dto/upsert-Inventory-type.dto'
 import { UpsertMovmentTypeDto } from './dto/upsert-movment-type.dto'
 import { UpsertPaiementMethodDto } from './dto/upsert-paiement-method.dto'
-import { PaiementMethod } from 'src/database/entities/PaiementMethod.entity'
+import { PaymentMethod } from 'src/database/entities/PaiementMethod.entity'
 import { PaiementMethodManagerService } from 'src/database/db-manager/paiement-method-manager/paiement-method-manager.service'
 
 @Controller('administration')
@@ -75,23 +75,23 @@ export class AdministrationController {
   // PaiementMethod
 
   @Get('paiementmethod')
-  public listPaiementMethod () : Promise<PaiementMethod[]> {
+  public listPaiementMethod () : Promise<PaymentMethod[]> {
     return this._paiementMethodManagerService.list()
   }
 
   @Get('paiementmethod/:id')
-  public getPaiementMethod (@Param('id') id : number) : Promise<PaiementMethod> {
+  public getPaiementMethod (@Param('id') id : number) : Promise<PaymentMethod> {
     id = Number(id)
     return this._paiementMethodManagerService.get(id)
   }
 
   @Post('paiementmethod')
-  public insertPaiementMethod (@Body() oData : UpsertPaiementMethodDto) : Promise<PaiementMethod> {
+  public insertPaiementMethod (@Body() oData : UpsertPaiementMethodDto) : Promise<PaymentMethod> {
     return this._paiementMethodManagerService.insert(oData)
   }
 
   @Put('paiementmethod/:id')
-  public updatePaiementMethod (@Param('id') id : number, @Body() oData : UpsertPaiementMethodDto) : Promise<PaiementMethod> {
+  public updatePaiementMethod (@Param('id') id : number, @Body() oData : UpsertPaiementMethodDto) : Promise<PaymentMethod> {
     return this._paiementMethodManagerService.update(Number(id), oData)
   }
 

@@ -27,8 +27,12 @@ import { InventoryType } from '../entities/InventoryType.entity'
 import { MovementType } from '../entities/MovementType.entity'
 import { MovementTypeManagerService } from './movement-type-manager/movement-type-manager.service'
 import { InventoryTypeManagerService } from './inventory-type-manager/inventory-type-manager.service'
-import { PaiementMethod } from '../entities/PaiementMethod.entity'
+import { PaymentMethod } from '../entities/PaiementMethod.entity'
 import { PaiementMethodManagerService } from './paiement-method-manager/paiement-method-manager.service'
+import { SaleSession } from '../entities/saleSession.entity'
+import { Payment } from '../entities/payment.entity'
+import { SaleSessionManagerService } from './sale-session-manager/sale-session-manager.service'
+import { PaymentManagerService } from './payment-manager/payment-manager.service'
 
 @Module({
   imports: [
@@ -45,14 +49,16 @@ import { PaiementMethodManagerService } from './paiement-method-manager/paiement
       InventoryLine,
       InventoryMovement,
       MovementLine,
-      Sale,
-      SaleLine,
       User,
       AppFile,
       Document,
       InventoryType,
       MovementType,
-      PaiementMethod
+      PaymentMethod,
+      Payment,
+      SaleSession,
+      SaleLine,
+      Sale
     ])
   ],
   providers: [
@@ -62,14 +68,16 @@ import { PaiementMethodManagerService } from './paiement-method-manager/paiement
     UserManagerService,
     AppFileManagerService,
     DocumentManagerService,
-    SaleManagerService,
-    SaleLineManagerService,
     InventoryLineManagerService,
     InventoryMovementManagerService,
     MovementLineManagerService,
     MovementTypeManagerService,
     InventoryTypeManagerService,
-    PaiementMethodManagerService
+    PaiementMethodManagerService,
+    SaleManagerService,
+    SaleLineManagerService,
+    SaleSessionManagerService,
+    PaymentManagerService
   ],
   exports: [
     CategoryManagerService,
@@ -85,7 +93,9 @@ import { PaiementMethodManagerService } from './paiement-method-manager/paiement
     MovementLineManagerService,
     MovementTypeManagerService,
     InventoryTypeManagerService,
-    PaiementMethodManagerService
+    PaiementMethodManagerService,
+    SaleSessionManagerService,
+    PaymentManagerService
 
   ]
 })
