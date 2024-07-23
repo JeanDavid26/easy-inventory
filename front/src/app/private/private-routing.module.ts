@@ -20,6 +20,9 @@ import { InventoryTypeDetailComponent } from './administration/pages/inventory-t
 import { MovementListComponent } from './inventory/components/movement-list/movement-list.component';
 import { MovementDetailComponent } from './inventory/components/movement-detail/movement-detail.component';
 import { MovementDetailOverviewComponent } from './inventory/components/movement-detail-overview/movement-detail-overview.component';
+import { SaleListComponent } from './sales/pages/sale-list/sale-list.component';
+import { SaleSessionDetailComponent } from './sales/pages/sale-session-detail/sale-session-detail.component';
+import { SaleDetailComponent } from './sales/pages/sale-detail/sale-detail.component';
 
 const routes: Routes = [
   { path: '', component: NavBarComponent, children: [
@@ -38,6 +41,9 @@ const routes: Routes = [
       { path : 'movement/:idMovement', component : MovementDetailOverviewComponent},
       { path : 'documents', component : DocumentsComponent }
     ] },
+    { path : 'sales', component : SaleListComponent },
+    { path : 'sales/:id', component : SaleSessionDetailComponent },
+    { path : 'sales/:id/sale/:idSale', component : SaleDetailComponent },
     { path : 'administration', component : AdministrationComponent},
     { path : 'administration/movement-type', component : MovementTypeListComponent},
     { path : 'administration/movement-type/:id', component : MovementTypeDetailComponent},

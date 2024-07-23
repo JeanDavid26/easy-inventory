@@ -1,23 +1,18 @@
-# Utiliser l'image officielle Node.js comme image de base
-FROM node:18
+# server/Dockerfile
+FROM node:18-alpine
 
-# Définir le répertoire de travail dans le conteneur
-WORKDIR /usr/src/app
+# Install dependencies
+RUN apk add --no-cache \
+    libreoffice \
+    && npm install -g @nestjs/cli
 
-# Copier le fichier package.json et package-lock.json
+WORKDIR /app
 COPY package*.json ./
-
-# Installer les dépendances
 RUN npm install
-
-# Copier le reste des fichiers de l'application
 COPY . .
+
 
 # Construire l'application NestJS
 RUN npm run build
-
-# Exposer le port de l'application
 EXPOSE 3000
-
-# Démarrer l'application
-CMD ["npm", "run", "start:prod"]
+CMD ["node", "dist/main.js"]

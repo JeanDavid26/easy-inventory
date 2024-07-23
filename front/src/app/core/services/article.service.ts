@@ -13,8 +13,13 @@ export class ArticleService {
     private _httpClient : HttpClient
   ){}
 
-  public async list () : Promise<Article[]> {
-    const route = environment.urlApi + `article`
+  public async list (tRelation ?: string[]) : Promise<Article[]> {
+    let query = null
+    if(tRelation && tRelation.length > 0) {
+      query = `?tRelation=${tRelation.join(',')}`
+    }
+    console.log('query', query)
+    const route = environment.urlApi + `article${query ?? ''}`
     return lastValueFrom(this._httpClient.get<Article[]>(route))
   }
 

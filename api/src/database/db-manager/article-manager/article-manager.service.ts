@@ -21,9 +21,9 @@ export class ArticleManagerService {
     return article
   }
 
-  public async list (): Promise<Article[]> {
+  public async list (tRelation?: string[]): Promise<Article[]> {
     return this._repo.find({
-      relations: [ 'oCategory' ]
+      relations: [ 'oCategory', ... tRelation ?? [] ]
     })
   }
 

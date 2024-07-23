@@ -6,6 +6,7 @@ import {
   Param,
   Post,
   Put,
+  Query,
 } from '@nestjs/common';
 import { ArticleManagerService } from 'src/database/db-manager/article-manager/article-manager.service';
 import { Article } from 'src/database/entities/Article.entity';
@@ -16,8 +17,15 @@ export class ArticleController {
   constructor(private _articleManagerService: ArticleManagerService) {}
 
   @Get()
-  public list(): Promise<Article[]> {
-    return this._articleManagerService.list();
+  public list(@Query('tRelation') tRelationQuery : string): Promise<Article[]> {
+    console.log('tRelationQuery', tRelationQuery)
+    let tRelation = []
+    if(tRelationQuery && tRelationQuery.match(',')){
+      tRelation = tRelationQuery.split(',')
+    }else if(tRelationQuery) {
+      tRelation = [ tRelationQuery]
+    }
+    return this._articleManagerService.list(tRelation);
   }
 
   @Get(':id')

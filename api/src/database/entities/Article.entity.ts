@@ -1,6 +1,7 @@
-import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm'
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm'
 import { BaseTable } from './BaseTable'
 import { Category } from './Category.entity'
+import { InventoryLine } from './InventoryLine.entity'
 
 @Entity({ schema: 'easyinventory', name: 'article' })
 export class Article extends BaseTable {
@@ -22,4 +23,7 @@ export class Article extends BaseTable {
   @ManyToOne(() => Category, (category) => category.id)
   @JoinColumn({ name: 'categoryid' })
   oCategory: Category
+
+  @OneToMany(() => InventoryLine, (inventoryLine) => inventoryLine.oArticle)
+  tInventoryLine: InventoryLine[]
 }

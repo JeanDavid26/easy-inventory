@@ -1,1 +1,114 @@
-<p>sale-detail works!</p>
+<div>
+
+</div>
+<ng-container *ngIf="!bReglement">
+
+  <form [formGroup]="formGroupSale" *ngIf="formGroupSale">
+      <div class="flex flex-col gap-5">
+        <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+          <table class="w-full text-sm text-left rtl:text-right text-gray-500">
+              <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+                  <tr>
+                    <th scope="col" class="px-6 py-3">
+                        Article
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        Quantité
+                    </th>
+                    <th>
+                      Total €
+                    </th>
+                    <th scope="col"></th>
+                  </tr>
+              </thead>
+              <tbody>
+                <ng-container formArrayName="tSaleLine">
+                  <tr
+                  class="odd:bg-white  border-b" *ngFor="let saleLine of formArraySaleLine.controls; let i = index" [formGroupName]="i">
+                    <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap ">
+                      <div appInputError>
+                        <label for="articleid" class="block mb-1 text-sm font-medium text-gray-800">Article</label>
+                        <select id="articleid" formControlName="articleId" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+                          <option [value]="article.id" *ngFor="let article of toArticle">{{article.referenceCode}} - {{article.label}}</option>
+                        </select>
+                      </div>
+                    </th>
+                    <td class="px-6 py-4">
+                      <app-input type="number" formControlName="quantity" label="Quantité"></app-input>
+                      <div *ngIf="saleLine.get('quantity').hasError('maxQuantity')" class="text-red-500 text-sm">
+                        Quantité maximale disponible: {{ mapArticleQuantity[saleLine.get('articleId').value] }}
+                      </div>
+                    </td>
+                    <td>
+                      {{saleLine.get('salePrice').value ?? '--'}} €
+                    </td>
+                    <td class="text-center">
+                      <fa-icon class="w-10 h-10 flex justify-center items-center text-black rounded-full hover:bg-gray-300 cursor-pointer transition-colors duration-300" [icon]="faXmark" (click)="removeSaleLine(i)"></fa-icon>
+                    </td>
+                  </tr>
+                </ng-container>
+
+                <tr
+                class="odd:bg-white even:bg-gray-50 border-b p-2">
+
+                    <td colspan="3" class="text-center"><app-button type="normal" (click)="addSaleLine()">Ajouter une ligne</app-button></td>
+                </tr>
+              </tbody>
+          </table>
+
+        </div>
+        <div class="flex justify-end p-5">
+          <app-button type="primary" (click)="setPayments()">Réglement {{totalFinal ?? '--'}} €</app-button >
+        </div>
+      </div>
+
+  </form>
+</ng-container>
+
+<ng-container *ngIf="bReglement">
+  <div class="mt-4">
+    <div class="flex flex-col p-5">
+      <span class="font-bold">Total: {{totalFinal}}€</span>
+
+      <div class="flex gap-2">
+        <app-button>Total carte</app-button>
+        <app-button>Total espèce</app-button>
+        <app-button>Plusieurs moyen de paiements</app-button>
+      </div>
+    </div>
+    <div class="overflow-x-auto">
+      <table class="min-w-full divide-y divide-gray-200">
+        <thead class="bg-gray-50">
+          <tr>
+            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              Article
+            </th>
+            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              Quantité
+            </th>
+            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              Prix
+            </th>
+          </tr>
+        </thead>
+        <tbody class="bg-white divide-y divide-gray-200">
+          <ng-container *ngFor="let line of formArraySaleLine.controls">
+            <tr *ngIf="line.valid">
+              <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                {{ getArticleLabel(line.get('articleId').value) }}
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                {{ line.get('quantity').value }}
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                {{ line.get('salePrice').value }}€
+              </td>
+            </tr>
+          </ng-container>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+
+</ng-container>
