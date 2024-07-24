@@ -1,7 +1,7 @@
 import { Body, Controller, Delete, Get, NotImplementedException, Param, Post } from '@nestjs/common'
 import { SaleSessionManagerService } from 'src/database/db-manager/sale-session-manager/sale-session-manager.service'
 import { Sale } from 'src/database/entities/Sale.entity'
-import { SaleSession } from 'src/database/entities/saleSession.entity'
+import { SaleSession } from 'src/database/entities/SaleSession.entity'
 import { SaleService } from './sale.service'
 import { InsertSaleDto } from '../dto/insert-sale.dto'
 import { SaleManagerService } from 'src/database/db-manager/sale-manager/sale-manager.service'
@@ -39,7 +39,6 @@ export class SaleController {
   public async getSale (@Param('id') id: number) : Promise<Sale> {
     return this._saleManagerService.get(id)
   }
-
 
   @Post()
   public async addSale (@Body() data : InsertSaleDto) : Promise<Sale> {

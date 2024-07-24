@@ -1,7 +1,7 @@
-import { Type } from "class-transformer";
-import { IsNotEmpty, ValidateNested } from "class-validator";
-import { SaleLine } from "src/database/entities/SaleLine.entity";
-import { Payment } from "src/database/entities/payment.entity";
+import { Type } from 'class-transformer'
+import { IsNotEmpty, ValidateNested } from 'class-validator'
+import { Payment } from 'src/database/entities/Payment.entity'
+import { SaleLine } from 'src/database/entities/SaleLine.entity'
 
 export class InsertSaleDto {
   @IsNotEmpty()
@@ -21,7 +21,6 @@ export class InsertSaleDto {
   totalAmount : number
 }
 
-
 class ValidateSaleLineDto {
   @IsNotEmpty()
   articleId : number
@@ -31,9 +30,6 @@ class ValidateSaleLineDto {
 
   @IsNotEmpty()
   salePrice : number
-
-  @IsNotEmpty()
-  saleId : number
 
 }
 
@@ -46,5 +42,5 @@ class ValidatePaymentDto {
   paymentMethodId : number
 
   @IsNotEmpty()
-  amout : number
+  amount : number
 }

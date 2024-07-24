@@ -22,23 +22,5 @@ export class PaiementMethodManagerService {
       }
     })
   }
-
-  public async insert (data: Partial<PaymentMethod>): Promise<PaymentMethod> {
-    return this._repo.save(data)
-  }
-
-  public async update (
-    id: number,
-    data: Partial<PaymentMethod>,
-  ): Promise<PaymentMethod> {
-    delete data.id
-    data.id = id
-    return this._repo.save(data)
-  }
-
-  public async delete (id: number): Promise<void> {
-    await this.get(id)
-
-    await this._repo.delete(id)
-  }
+ 
 }

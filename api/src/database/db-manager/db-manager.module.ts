@@ -29,8 +29,8 @@ import { MovementTypeManagerService } from './movement-type-manager/movement-typ
 import { InventoryTypeManagerService } from './inventory-type-manager/inventory-type-manager.service'
 import { PaymentMethod } from '../entities/PaiementMethod.entity'
 import { PaiementMethodManagerService } from './paiement-method-manager/paiement-method-manager.service'
-import { SaleSession } from '../entities/saleSession.entity'
-import { Payment } from '../entities/payment.entity'
+import { SaleSession } from '../entities/SaleSession.entity'
+import { Payment } from '../entities/Payment.entity'
 import { SaleSessionManagerService } from './sale-session-manager/sale-session-manager.service'
 import { PaymentManagerService } from './payment-manager/payment-manager.service'
 

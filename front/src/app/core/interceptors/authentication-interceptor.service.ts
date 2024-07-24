@@ -30,6 +30,7 @@ export class AuthenticationInterceptor implements HttpInterceptor {
               this._authService.signOut()
             }
           }
+          console.log(err)
           const error = new Error(err)
           return throwError(() => error)
         })

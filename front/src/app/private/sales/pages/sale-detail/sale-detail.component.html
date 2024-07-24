@@ -1,7 +1,7 @@
 <div>
 
 </div>
-<ng-container *ngIf="!bReglement">
+<ng-container *ngIf="bArticleSelection">
 
   <form [formGroup]="formGroupSale" *ngIf="formGroupSale">
       <div class="flex flex-col gap-5">
@@ -67,15 +67,7 @@
 
 <ng-container *ngIf="bReglement">
   <div class="mt-4">
-    <div class="flex flex-col p-5">
-      <span class="font-bold">Total: {{totalFinal}}€</span>
 
-      <div class="flex gap-2">
-        <app-button>Total carte</app-button>
-        <app-button>Total espèce</app-button>
-        <app-button>Plusieurs moyen de paiements</app-button>
-      </div>
-    </div>
     <div class="overflow-x-auto">
       <table class="min-w-full divide-y divide-gray-200">
         <thead class="bg-gray-50">
@@ -109,6 +101,68 @@
       </table>
     </div>
 
+    <div class="flex flex-col p-5">
+      <span class="font-bold">Total: {{totalFinal}}€</span>
+
+      <div class="flex gap-2 mt-2">
+        <app-button *ngFor="let oPaymentMethod of toPaymentMethod" (click)="totalPayment(oPaymentMethod.id)">Total {{oPaymentMethod.label}}</app-button>
+      </div>
+    </div>
   </div>
+
+</ng-container>
+
+
+<ng-container *ngIf="bReview">
+  <div class="overflow-x-auto">
+    <table class="min-w-full divide-y divide-gray-200">
+      <thead class="bg-gray-50">
+        <tr>
+          <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+            Article
+          </th>
+          <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+            Quantité
+          </th>
+          <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+            Prix
+          </th>
+        </tr>
+      </thead>
+      <tbody class="bg-white divide-y divide-gray-200">
+        <ng-container *ngFor="let line of formArraySaleLine.controls">
+          <tr *ngIf="line.valid">
+            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+              {{ getArticleLabel(line.get('articleId').value) }}
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+              {{ line.get('quantity').value }}
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+              {{ line.get('salePrice').value }}€
+            </td>
+          </tr>
+        </ng-container>
+      </tbody>
+    </table>
+  </div>
+<div class="flex justify-between px-6 py-4">
+  <div>
+    <span class=" font-bold"> Réglement</span>
+    <div *ngFor="let line of formArrayPayment.controls">
+     <span class=" whitespace-nowrap text-sm font-medium text-gray-900">
+       {{ getPaymentMethodLabel(line.get('paymentMethodId').value) }}
+     </span>
+     <span class=" whitespace-nowrap text-sm text-gray-500">
+       {{ line.get('amount').value }} €
+     </span>
+    </div>
+  </div>
+  <div>
+    <app-button (click)="save()">Enregistrer</app-button>
+  </div>
+</div>
+
+
 
 </ng-container>

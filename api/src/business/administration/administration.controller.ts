@@ -84,19 +84,4 @@ export class AdministrationController {
     id = Number(id)
     return this._paiementMethodManagerService.get(id)
   }
-
-  @Post('paiementmethod')
-  public insertPaiementMethod (@Body() oData : UpsertPaiementMethodDto) : Promise<PaymentMethod> {
-    return this._paiementMethodManagerService.insert(oData)
-  }
-
-  @Put('paiementmethod/:id')
-  public updatePaiementMethod (@Param('id') id : number, @Body() oData : UpsertPaiementMethodDto) : Promise<PaymentMethod> {
-    return this._paiementMethodManagerService.update(Number(id), oData)
-  }
-
-  @Delete('paiementmethod/:id')
-  public deletePaiementMethod (@Param('id') id : number) : Promise<void> {
-    return this._paiementMethodManagerService.delete(id)
-  }
 }

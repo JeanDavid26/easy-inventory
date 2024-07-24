@@ -12,7 +12,9 @@ import { Payment } from '../../../../@models/entities/Payment.interface';
 import { faXmark } from '@fortawesome/free-solid-svg-icons';
 import { ToastService } from '../../../../shared/toast/toast.service';
 import { Subscription } from 'rxjs';
-
+import { PaymentMethodEnum } from '../../../../@models/enum/payment-method.enum';
+import { PaymentMethod } from '../../../../@models/entities/PaymentMethod.interface';
+import { PaymentMethodService } from '../../../../core/services/payment-method.service';
 @Component({
   selector: 'app-sale-detail',
   templateUrl: './sale-detail.component.html',
@@ -25,14 +27,18 @@ export class SaleDetailComponent {
   public oSaleSession : SaleSession
   public oSale : Sale
 
+  public toPaymentMethod : PaymentMethod[] = []
   public toArticle : Article[] = []
   public mapArticleQuantity : Record<number,number> = {}
 
   public formGroupSale : FormGroup
 
   public totalFinal : number
-  public bReglement : boolean = false
+  public paymentMethodEnum = PaymentMethodEnum
 
+  public bArticleSelection : boolean = true
+  public bReglement : boolean = false
+  public bReview : boolean = false
   faXmark = faXmark
 
   public tSubscription : Subscription[] = []
@@ -44,6 +50,7 @@ export class SaleDetailComponent {
     private _activatedRoute : ActivatedRoute,
     private _fb : FormBuilder,
     private _articleService : ArticleService,
+    private _paymentMethodService : PaymentMethodService,
     private _toast : ToastService
     ){
       this.init().then(()=> {
@@ -55,11 +62,11 @@ export class SaleDetailComponent {
           },
           {
             label : `Session du ${new Date(this.oSaleSession.creationDate).toLocaleDateString()}`,
-            link : `sale/${this.saleSessionId}`
+            link : `sales/${this.saleSessionId}`
           },
           {
             label : `${this.id === 0 ? 'Nouvelle transaction' : 'Modifier transaction'}`,
-            link : `sale/${this.saleSessionId}/sale/${this.id}`
+            link : `sales/${this.saleSessionId}/sale/${this.id}`
           }
         ])
       })
@@ -80,6 +87,7 @@ export class SaleDetailComponent {
      this.oSaleSession = await this._saleService.getSaleSession(this.saleSessionId)
 
     this.toArticle = await this._articleService.list([ 'tInventoryLine'])
+    this.toPaymentMethod = await this._paymentMethodService.list()
     this._createMappageQuantity()
 
     this.formGroupSale = this._fb.group({
@@ -154,10 +162,20 @@ export class SaleDetailComponent {
     return null;
   }
 
+  public totalPayment (idPaymentMethod : number) :void {
+    this.addPayment({
+      paymentMethodId :idPaymentMethod,
+      amount : this.totalFinal
+    })
+
+    this.bReglement = false
+    this.bReview = true
+  }
+
   public addPayment(payment ?:Payment) : void{
     const fg = this._fb.group({
       paymentMethodId : payment?.paymentMethodId ?? null,
-      amout : payment?.amount ?? null
+      amount : payment?.amount ?? null
     })
 
     this.formArrayPayment.push(fg)
@@ -182,13 +200,18 @@ export class SaleDetailComponent {
       return
     }
 
+    this.bArticleSelection = false
     this.bReglement = true
   }
 
-  public async enregistrer () :Promise<void> {
+  public async save () :Promise<void> {
     const oSaleDto = this.formGroupSale.getRawValue()
+    oSaleDto.totalAmount = this.totalFinal
+
     if(this.id === 0){
-      this._saleService.addSale(oSaleDto)
+      this._saleService.addSale(oSaleDto).then(()=> {
+        this._router.navigateByUrl(`private/sales/${this.saleSessionId}`)
+      })
     }
   }
 
@@ -210,6 +233,11 @@ export class SaleDetailComponent {
   getArticleLabel(articleId: number) {
     const article = this.toArticle.find(a => a.id === Number(articleId));
     return article ? `${article.referenceCode} - ${article.label}` : 'Article non trouvé';
+  }
+
+  getPaymentMethodLabel(id : number) : string {
+    const oPaymentMethod = this.toPaymentMethod.find((o)=> o.id === id)
+    return oPaymentMethod?.label ?? ''
   }
 
 }

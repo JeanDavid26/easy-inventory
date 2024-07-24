@@ -1,6 +1,6 @@
 import { Entity, Column, ManyToOne, OneToMany, JoinColumn } from 'typeorm'
-import { SaleSession } from './saleSession.entity'
-import { Payment } from './payment.entity'
+import { SaleSession } from './SaleSession.entity'
+import { Payment } from './Payment.entity'
 import { SaleLine } from './SaleLine.entity'
 import { BaseTable } from './BaseTable'
 
