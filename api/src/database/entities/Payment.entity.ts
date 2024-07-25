@@ -9,7 +9,7 @@ export class Payment extends BaseTable {
   @Column({ name : 'saleid' })
   saleId : number
 
-  @Column()
+  @Column({ type : 'double precision', name  : 'amount' })
   amount: number
 
   @Column({ name : 'paymentmethodid' })
@@ -19,7 +19,7 @@ export class Payment extends BaseTable {
   @JoinColumn({ name: 'paymentmethodid' })
   oPaymentMethod: PaymentMethod
 
-  @ManyToOne(() => Sale, sale => sale.tPayments)
+  @ManyToOne(() => Sale, sale => sale.tPayment)
   @JoinColumn({ name: 'saleid' })
   oSale: Sale
 }

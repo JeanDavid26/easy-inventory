@@ -10,16 +10,16 @@ export class Sale extends BaseTable {
   @Column({ name : 'salesessionid' })
   saleSessionId: number
 
-  @Column()
+  @Column({ type : 'double precision', name  : 'totalamount' })
   totalAmount: number
 
   @ManyToOne(() => SaleSession, saleSession => saleSession.tSale)
-  @JoinColumn({ name: 'saleSessionId' })
+  @JoinColumn({ name: 'salesessionid' })
   oSaleSession: SaleSession
 
-  @OneToMany(()=> SaleLine, saleLine => saleLine.saleId)
+  @OneToMany(()=> SaleLine, saleLine => saleLine.oSale)
   tSaleLine : SaleLine[]
 
   @OneToMany(() => Payment, payment => payment.oSale)
-  tPayments: Payment[]
+  tPayment: Payment[]
 }

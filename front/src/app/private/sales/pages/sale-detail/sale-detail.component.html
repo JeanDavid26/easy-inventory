@@ -107,6 +107,11 @@
       <div class="flex gap-2 mt-2">
         <app-button *ngFor="let oPaymentMethod of toPaymentMethod" (click)="totalPayment(oPaymentMethod.id)">Total {{oPaymentMethod.label}}</app-button>
       </div>
+      <div class="flex gap-2 mt-2">
+        <app-button (click)="multiplePayment()">
+          Paiement multiple
+        </app-button>
+      </div>
     </div>
   </div>
 
@@ -159,7 +164,12 @@
     </div>
   </div>
   <div>
-    <app-button (click)="save()">Enregistrer</app-button>
+    <ng-container *ngIf="this.id === 0">
+      <app-button (click)="save()">Enregistrer</app-button>
+    </ng-container>
+    <ng-container *ngIf="this.id !== 0">
+      <app-button (click)="supprimer()">Supprimer</app-button>
+    </ng-container>
   </div>
 </div>
 

@@ -8,5 +8,5 @@ export interface Sale extends BaseTable {
   totalAmount?: number
   oSaleSession?: SaleSession
   tSaleLine?: SaleLine[]
-  tPayments?: Payment[]
+  tPayment?: Payment[]
 }

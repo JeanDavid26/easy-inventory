@@ -36,9 +36,6 @@ class ValidateSaleLineDto {
 class ValidatePaymentDto {
 
   @IsNotEmpty()
-  saleId : number
-
-  @IsNotEmpty()
   paymentMethodId : number
 
   @IsNotEmpty()

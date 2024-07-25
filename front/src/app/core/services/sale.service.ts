@@ -36,6 +36,11 @@ export class SaleService {
     return lastValueFrom(this._httpClient.post<Sale>(route, data))
   }
 
+  public deleteSale (id : number) : Promise<Sale> {
+    const route = environment.urlApi + `sale/${id}`
+    return lastValueFrom(this._httpClient.delete<Sale>(route))
+  }
+
   public getSale (id : number ) : Promise<Sale> {
     const route = environment.urlApi + `sale/${id}`
     return lastValueFrom(this._httpClient.get<Sale>(route))

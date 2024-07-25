@@ -11,11 +11,13 @@ export class SaleManagerService {
     return this._repo.findOne({
       where: {
         id
-      }
+      },
+      relations : [ 'tSaleLine', 'tPayment' ]
     })
   }
 
   public async insert (data: Partial<Sale>): Promise<Sale> {
+    console.log('data', data)
     return this._repo.save(data)
   }
 

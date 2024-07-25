@@ -10,6 +10,7 @@ export class SaleSessionManagerService {
 
   public async list (): Promise<SaleSession[]> {
     return this._repo.find({
+      
     })
   }
 
@@ -17,7 +18,8 @@ export class SaleSessionManagerService {
     return this._repo.findOne({
       where: {
         id
-      }
+      },
+      relations : [ 'tSale' ]
     })
   }
 

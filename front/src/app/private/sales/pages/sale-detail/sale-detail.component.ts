@@ -36,8 +36,9 @@ export class SaleDetailComponent {
   public totalFinal : number
   public paymentMethodEnum = PaymentMethodEnum
 
-  public bArticleSelection : boolean = true
+  public bArticleSelection : boolean = false
   public bReglement : boolean = false
+  public bMultiplePayment : boolean = false
   public bReview : boolean = false
   faXmark = faXmark
 
@@ -106,6 +107,11 @@ export class SaleDetailComponent {
       this.totalFinal = total
     }))
 
+    if(this.id === 0){
+      this.bArticleSelection = true
+      return
+    }
+
     if(this.id !== 0){
       this.oSale = await this._saleService.getSale(this.id)
       this.formGroupSale.patchValue({
@@ -114,9 +120,12 @@ export class SaleDetailComponent {
       this.oSale.tSaleLine.forEach((saleLine)=> {
         this.addSaleLine(saleLine)
       })
-      this.oSale.tPayments.forEach((payment)=> {
+      this.oSale.tPayment.forEach((payment)=> {
         this.addPayment(payment)
       })
+
+      this.bReview = true
+      this.bArticleSelection = false
     }
   }
 
@@ -172,6 +181,10 @@ export class SaleDetailComponent {
     this.bReview = true
   }
 
+  public multiplePayment() {
+    this.bMultiplePayment = true
+  }
+
   public addPayment(payment ?:Payment) : void{
     const fg = this._fb.group({
       paymentMethodId : payment?.paymentMethodId ?? null,
@@ -207,7 +220,7 @@ export class SaleDetailComponent {
   public async save () :Promise<void> {
     const oSaleDto = this.formGroupSale.getRawValue()
     oSaleDto.totalAmount = this.totalFinal
-
+    oSaleDto.saleSessionId = this.saleSessionId
     if(this.id === 0){
       this._saleService.addSale(oSaleDto).then(()=> {
         this._router.navigateByUrl(`private/sales/${this.saleSessionId}`)
@@ -217,7 +230,9 @@ export class SaleDetailComponent {
 
 
   public async supprimer () :Promise<void> {
-
+    this._saleService.deleteSale(this.id).then(()=> {
+      this._router.navigateByUrl(`private/sales/${this.saleSessionId}`)
+    })
   }
 
   getTotalBySaleLine(saleLine : any) : string {

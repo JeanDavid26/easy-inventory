@@ -42,12 +42,12 @@ export class SaleController {
 
   @Post()
   public async addSale (@Body() data : InsertSaleDto) : Promise<Sale> {
-    throw new NotImplementedException()
+    return this._saleService.addSale(data)
   }
 
-  @Delete('session/:idSession/sale/:id')
-  public async removeSale () : Promise<Sale> {
-    throw new NotImplementedException()
+  @Delete(':id')
+  public async removeSale (@Param('id') id : number) : Promise<Sale> {
+    return this._saleManagerService.delete(id)
   }
 
 }
