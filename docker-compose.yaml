@@ -1,14 +1,7 @@
 version: '3.8'
 
 services:
-  client:
-    build:
-      context: ./front
-      dockerfile: Dockerfile
-    ports:
-      - "80:80"
-  
-  server:
+  api:
     build:
       context: ./api
       dockerfile: Dockerfile
@@ -16,9 +9,19 @@ services:
       - "3000:3000"
     env_file:
       - .env
-    environment:
-      - NODE_ENV=production
 
-networks:
-  default:
-    driver: bridge
+  # Our Angular Frontend
+  front:
+    build:
+      dockerfile: Dockerfile
+      context: ./front
+      target: development
+    command: npm run start
+    volumes:
+      - /usr/src/app/front
+      - /usr/src/app/front/node_modules
+    ports:
+      - "4200:4200"
+    links:
+      - api
+

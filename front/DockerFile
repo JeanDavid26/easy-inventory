@@ -1,15 +1,15 @@
-# client/Dockerfile
-FROM node:18-alpine AS build
+# Stage 1: build
+FROM node:18 AS development
 
-WORKDIR /app
+WORKDIR /usr/src/app/front
+
 COPY package*.json ./
+
 RUN npm install
+RUN npm install -g @angular/cli@17.0.0
+
 COPY . .
 
-# Construire l'application Angular avec les variables d'environnement
-RUN npm run build --prod
+RUN npm run build
 
-FROM nginx:alpine
-COPY --from=build /app/dist/easy-inventory-front /usr/share/nginx/html
-EXPOSE 80
-CMD ["nginx", "-g", "daemon off;"]
+EXPOSE 4200
