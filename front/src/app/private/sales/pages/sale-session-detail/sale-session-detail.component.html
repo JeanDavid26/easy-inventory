@@ -1,5 +1,8 @@
 <ng-container *ngIf="oSaleSession">
   <div class="p-5 flex justify-end">
+    <app-button type="primary" (click)="closeSession()">
+      Clôturer la session de vente
+    </app-button>
     <app-button (click)="goToSaleDetail(0)">
       Ajouter une nouvelle transaction
     </app-button>

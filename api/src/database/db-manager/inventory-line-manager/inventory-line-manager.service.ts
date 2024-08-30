@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common'
+import { BadRequestException, Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { InventoryLine } from 'src/database/entities/InventoryLine.entity'
 import { Repository } from 'typeorm'
@@ -46,5 +46,24 @@ export class InventoryLineManagerService {
       deleteDate: new Date()
     }
     return this._repo.save(stock)
+  }
+
+  public async updateInventoryLine (articleId : number, quantity : number) : Promise<InventoryLine> {
+    const oInventoryLine = await this._repo.findOne({
+      where : {
+        articleId
+      }
+    })
+    if (!oInventoryLine) {
+      throw new BadRequestException('Stock de quantité pour un article non trouvé')
+    }
+    if (oInventoryLine.quantity - quantity < 0) {
+      throw new BadRequestException('Quantité inférieur à zéro')
+    }
+    
+    return this._repo.save({
+      id : oInventoryLine.id,
+      quantity : oInventoryLine.quantity - quantity
+    })
   }
 }

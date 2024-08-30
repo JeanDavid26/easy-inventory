@@ -10,18 +10,10 @@ services:
     env_file:
       - .env
 
-  # Our Angular Frontend
   front:
     build:
-      dockerfile: Dockerfile
       context: ./front
-      target: development
-    command: npm run start
-    volumes:
-      - /usr/src/app/front
-      - /usr/src/app/front/node_modules
+      dockerfile: Dockerfile
     ports:
-      - "4200:4200"
-    links:
-      - api
+      - "80:80"
 

@@ -34,6 +34,7 @@ export class SaleDetailComponent {
   public formGroupSale : FormGroup
 
   public totalFinal : number
+  public totalAmountMultiple : number
   public paymentMethodEnum = PaymentMethodEnum
 
   public bArticleSelection : boolean = false
@@ -107,6 +108,16 @@ export class SaleDetailComponent {
       this.totalFinal = total
     }))
 
+    this.tSubscription.push(this.formArrayPayment.valueChanges.subscribe((tPayment)=> {
+      let total = 0
+      for(const payment of tPayment){
+        if(payment.amount){
+          total += Number(payment.amount)
+        }
+      }
+      this.totalAmountMultiple = total
+    }))
+
     if(this.id === 0){
       this.bArticleSelection = true
       return
@@ -171,6 +182,20 @@ export class SaleDetailComponent {
     return null;
   }
 
+  amountValidator(control: AbstractControl) : { [key: string]: boolean } | null {
+    let totalAmount = 0
+    for(const controlToCheck of this.formArrayPayment.controls) {
+      if(controlToCheck !== control.parent) {
+        totalAmount += control.value
+      }
+    }
+
+    if (control.value + totalAmount > this.totalFinal) {
+      return { 'maxAmount': true}
+    }
+    return null
+  }
+
   public totalPayment (idPaymentMethod : number) :void {
     this.addPayment({
       paymentMethodId :idPaymentMethod,
@@ -185,10 +210,20 @@ export class SaleDetailComponent {
     this.bMultiplePayment = true
   }
 
+  validatePayments() {
+    if(this.totalAmountMultiple !== this.totalFinal) {
+      this._toast.displayToast('warning', 'Montant inexacte, veuillez vérifier les réglements !')
+      return
+    }
+
+    this.bReglement = false
+    this.bReview = true
+  }
+
   public addPayment(payment ?:Payment) : void{
     const fg = this._fb.group({
-      paymentMethodId : payment?.paymentMethodId ?? null,
-      amount : payment?.amount ?? null
+      paymentMethodId : [payment?.paymentMethodId ?? null, [ Validators.required, this.amountValidator.bind(this) ]],
+      amount : [payment?.amount ?? null, [ Validators.required ]]
     })
 
     this.formArrayPayment.push(fg)
@@ -251,6 +286,7 @@ export class SaleDetailComponent {
   }
 
   getPaymentMethodLabel(id : number) : string {
+    id = Number(id)
     const oPaymentMethod = this.toPaymentMethod.find((o)=> o.id === id)
     return oPaymentMethod?.label ?? ''
   }

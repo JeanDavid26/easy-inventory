@@ -7,7 +7,14 @@
     "start:production": "ng serve --host 0.0.0.0",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "test": "ng test",
+    "build-image": "docker build -t easy-inventory-front-image .",
+    "remove-image": "docker rmi easy-inventory-front-image",
+    "run-container": "docker run --name easy-inventory-front-container -p 8080:80 easy-inventory-front-image",
+    "remove-container": "docker rm -f easy-inventory-front-container",
+    "containerize": "npm run build-image && npm run run-container",
+    "recontainerize": "npm run remove-container && npm run build-image && npm run run-container"
+
   },
   "private": true,
   "dependencies": {

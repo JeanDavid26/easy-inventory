@@ -104,15 +104,72 @@
     <div class="flex flex-col p-5">
       <span class="font-bold">Total: {{totalFinal}}€</span>
 
-      <div class="flex gap-2 mt-2">
+      <div class="flex gap-2 mt-2" *ngIf="!bMultiplePayment">
         <app-button *ngFor="let oPaymentMethod of toPaymentMethod" (click)="totalPayment(oPaymentMethod.id)">Total {{oPaymentMethod.label}}</app-button>
       </div>
-      <div class="flex gap-2 mt-2">
+      <div class="flex gap-2 mt-2" *ngIf="!bMultiplePayment">
         <app-button (click)="multiplePayment()">
           Paiement multiple
         </app-button>
       </div>
     </div>
+
+    <div *ngIf="bMultiplePayment">
+      <form [formGroup]="formGroupSale" *ngIf="formGroupSale">
+        <div class="flex flex-col gap-5">
+          <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+            <table class="w-full text-sm text-left rtl:text-right text-gray-500">
+                <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+                    <tr>
+                      <th scope="col" class="px-6 py-3">
+                          Méthode
+                      </th>
+                      <th scope="col" class="px-6 py-3">
+                          Montant €
+                      </th>
+                    </tr>
+                </thead>
+                <tbody>
+                  <ng-container formArrayName="tPayment">
+                    <tr
+                    class="odd:bg-white  border-b" *ngFor="let payment of formArrayPayment.controls; let i = index" [formGroupName]="i">
+                      <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap ">
+                        <div appInputError>
+                          <label for="paimentmethodid" class="block mb-1 text-sm font-medium text-gray-800">Méthode de paiement</label>
+                          <select id="paimentmethodid" formControlName="paymentMethodId" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+                            <option [value]="paymentMethod.id" *ngFor="let paymentMethod of toPaymentMethod">{{paymentMethod.label}}</option>
+                          </select>
+                        </div>
+                      </th>
+                      <td class="px-6 py-4">
+                        <app-input type="number" formControlName="amount" label="Montant"></app-input>
+                        <div *ngIf="payment.get('amount').hasError('maxAmount')" class="text-red-500 text-sm">
+                          Montant maximale : {{ totalFinal }} €
+                        </div>
+                      </td>
+                      <td class="text-center">
+                        <fa-icon class="w-10 h-10 flex justify-center items-center text-black rounded-full hover:bg-gray-300 cursor-pointer transition-colors duration-300" [icon]="faXmark" (click)="removePayment(i)"></fa-icon>
+                      </td>
+                    </tr>
+                  </ng-container>
+
+                  <tr
+                  class="odd:bg-white even:bg-gray-50 border-b p-2">
+
+                      <td colspan="2" class="text-center"><app-button type="normal" (click)="addPayment()">Ajouter un paiement</app-button></td>
+                  </tr>
+                </tbody>
+            </table>
+
+          </div>
+          <div class="flex justify-end p-5">
+            <app-button type="primary" (click)="validatePayments()">Valider réglement {{ totalAmountMultiple }} €</app-button >
+          </div>
+        </div>
+
+      </form>
+    </div>
+
   </div>
 
 </ng-container>

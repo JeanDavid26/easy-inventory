@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, NotImplementedException, Param, Post } from '@nestjs/common'
+import { Body, Controller, Delete, Get, NotImplementedException, Param, Post, Put } from '@nestjs/common'
 import { SaleSessionManagerService } from 'src/database/db-manager/sale-session-manager/sale-session-manager.service'
 import { Sale } from 'src/database/entities/Sale.entity'
 import { SaleSession } from 'src/database/entities/SaleSession.entity'
@@ -30,9 +30,9 @@ export class SaleController {
     return this._saleSessionManagerService.insert({})
   }
  
-  @Post('session/close')
-  public async closeSession () : Promise<SaleSession> {
-    throw new NotImplementedException()
+  @Put('session/close/:id')
+  public async closeSession (@Param('id') id:number) : Promise<SaleSession> {
+    return this._saleService.closeSession(Number(id))
   }
 
   @Get(':id')

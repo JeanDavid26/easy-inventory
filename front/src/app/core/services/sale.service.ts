@@ -31,6 +31,11 @@ export class SaleService {
     return lastValueFrom(this._httpClient.post<SaleSession>(route, {}))
   }
 
+  public closeSession(id : number) : Promise<SaleSession> {
+    const route = environment.urlApi + `sale/session/close/${id}`
+    return lastValueFrom(this._httpClient.put<SaleSession>(route, {}))
+  }
+
   public addSale (data : InsertSaleDto ) : Promise<Sale> {
     const route = environment.urlApi + 'sale'
     return lastValueFrom(this._httpClient.post<Sale>(route, data))
@@ -45,4 +50,5 @@ export class SaleService {
     const route = environment.urlApi + `sale/${id}`
     return lastValueFrom(this._httpClient.get<Sale>(route))
   }
+
 }

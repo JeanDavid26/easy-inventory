@@ -51,4 +51,10 @@ export class SaleSessionDetailComponent {
   public goToSaleDetail(id : number) :void {
     this._router.navigateByUrl(`private/sales/${this.oSaleSession.id}/sale/${id}`)
   }
+
+  public async closeSession() : Promise<void> {
+    this._saleService.closeSession(this.id).then(()=> {
+      this._router.navigateByUrl('private/sales')
+    })
+  }
 }
