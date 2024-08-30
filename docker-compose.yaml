@@ -1,6 +1,16 @@
 version: '3.8'
 
 services:
+  postgres:
+    image: postgres:14
+    container_name: my_postgres
+    env_file:
+      - .env
+    ports:
+      - "5445:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
   api:
     build:
       context: ./api
@@ -9,11 +19,15 @@ services:
       - "3000:3000"
     env_file:
       - .env
+    depends_on:
+      - postgres
 
   front:
     build:
       context: ./front
       dockerfile: Dockerfile
     ports:
-      - "80:80"
+      - "8080:80"
 
+volumes:
+  pgdata:

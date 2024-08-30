@@ -3,7 +3,6 @@ import { Injectable } from "@angular/core";
 import { environment } from "../../../environments/environment";
 import { lastValueFrom } from "rxjs";
 import { Router } from "@angular/router";
-import { Location } from "@angular/common";
 import { LocalStorageService } from "./local-storage.service";
 import { User } from "../../@models/entities/User.interface";
 
@@ -36,7 +35,9 @@ export class AuthenticationService {
   }
 
   public signUp(user : User) : Promise<User> {
+    console.log(environment)
     const route = environment.urlApi + `auth/signup`
+    console.log(route)
     return lastValueFrom(this._httpClient.post<User>(route, user))
   }
 

@@ -23,11 +23,15 @@ jobs:
           cd easy-inventory
           git pull origin main
           
-          echo "TYPEORM_HOST=${{ secrets.TYPEORM_HOST }}" > .env
-          echo "TYPEORM_PORT=${{ secrets.TYPEORM_PORT }}" >> .env
+          echo "TYPEORM_HOST=my_postgres" > .env
+          echo "TYPEORM_PORT=5432" >> .env
           echo "TYPEORM_USERNAME=${{ secrets.TYPEORM_USERNAME }}" >> .env
           echo "TYPEORM_PASSWORD=${{ secrets.TYPEORM_PASSWORD }}" >> .env
-          echo "TYPEORM_DATABASE=${{ secrets.TYPEORM_DATABASE }}" >> .env
+          echo "TYPEORM_DATABASE=easyinventory" >> .env
           echo "JWT_SECRET_KEY=${{ secrets.JWT_SECRET_KEY }}" >> .env
-          echo "NODE_ENV=${{ secrets.NODE_ENV }}" >> .env
+          echo "NODE_ENV=production" >> .env
+          echo "POSTGRES_USER=${{ secrets.POSTGRES_USER }}" >> .env
+          echo "POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }}" >> .env
+          echo "POSTGRES_DB=easyinventory" >> .env
+          
           docker compose up -d --build
