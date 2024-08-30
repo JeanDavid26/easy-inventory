@@ -27,7 +27,7 @@ services:
       context: ./front
       dockerfile: dockerfile
     ports:
-      - "8080:80"
+      - "80:80"
 
 volumes:
   pgdata:
