@@ -18,7 +18,6 @@ export class ArticleService {
     if(tRelation && tRelation.length > 0) {
       query = `?tRelation=${tRelation.join(',')}`
     }
-    console.log('query', query)
     const route = environment.urlApi + `article${query ?? ''}`
     return lastValueFrom(this._httpClient.get<Article[]>(route))
   }

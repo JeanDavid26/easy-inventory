@@ -43,7 +43,6 @@ export class InventoryMovementService {
           await this._inventoryLineManagerService.delete(oInventoryLineSource.id)
         } else {
           const newQuantity = oInventoryLineSource.quantity - oMovementLineDto.quantity
-          console.log(oInventoryLineSource)
           await this._inventoryLineManagerService.update(oInventoryLineSource.id, { quantity : newQuantity })
         }
       }

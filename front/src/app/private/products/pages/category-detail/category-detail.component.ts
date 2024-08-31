@@ -4,6 +4,7 @@ import { CategoryService } from '../../../../core/services/category.service';
 import { ActivatedRoute, ActivatedRouteSnapshot, Router } from '@angular/router';
 import { Category } from '../../../../@models/entities/Category.interface';
 import { BreadcrumbService } from '../../../../core/services/breadcrumb.service';
+import { Article } from '../../../../@models/entities/Article.interface';
 
 @Component({
   selector: 'app-category-detail',
@@ -60,5 +61,9 @@ export class CategoryDetailComponent {
       await this._categoryService.update(this.id, category)
     }
 
+  }
+
+  goToArticle(article: Article) : void {
+    this._router.navigateByUrl(`private/products/article/${article.id}`)
   }
 }

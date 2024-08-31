@@ -1,15 +1,15 @@
-import { DataSource, DataSourceOptions } from 'typeorm';
-import * as dotenv from 'dotenv';
+import { DataSource, DataSourceOptions } from 'typeorm'
+import * as dotenv from 'dotenv'
 
 if (process.env.NODE_ENV !== 'production') {
-  dotenv.config();
+  dotenv.config()
 }
 
-const host = process.env.TYPEORM_HOST;
-const username = process.env.TYPEORM_USERNAME;
-const password = process.env.TYPEORM_PASSWORD;
-const port = process.env.TYPEORM_PORT;
-const dbName = process.env.TYPEORM_DATABASE;
+const host = process.env.TYPEORM_HOST
+const username = process.env.TYPEORM_USERNAME
+const password = process.env.TYPEORM_PASSWORD
+const port = process.env.TYPEORM_PORT
+const dbName = process.env.TYPEORM_DATABASE
 
 const dataSourceOptions: DataSourceOptions = {
   type: 'postgres',
@@ -20,12 +20,11 @@ const dataSourceOptions: DataSourceOptions = {
   database: dbName,
   synchronize: false,
   migrationsRun: true,
-  entities: ['dist/src/database/entities/**/*.entity.js'],
+  entities: [ 'dist/src/database/entities/**/*.entity.js' ],
   migrationsTableName: 'migration',
   metadataTableName: 'metadataTableName',
-  migrations: ['dist/src/database/migrations/*.js'],
-};
-console.log(dataSourceOptions);
+  migrations: [ 'dist/src/database/migrations/*.js' ]
+}
 
-const datasource = new DataSource(dataSourceOptions);
-export default datasource;
+const datasource = new DataSource(dataSourceOptions)
+export default datasource

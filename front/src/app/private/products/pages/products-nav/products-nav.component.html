@@ -1,22 +1,23 @@
+<div class="flex flex-row w-full h-full flex-grow bg-blue-100">
+    <aside id="default-sidebar" class="relative left-0 bottom-0 h-full z-40 w-64  overflow-hidden transition-transform -translate-x-full sm:translate-x-0" aria-label="Sidebar">
+      <div class="h-full px-3 py-4 overflow-y-auto bg-gray-50">
+         <ul class="space-y-2 font-medium">
+            <li *ngFor="let linkData of linksData" class="cursor-pointer">
+               <a (click)="activeLink = linkData.label; navigate(linkData.link)"
+                  routerLinkActive="active"
+                  class="flex items-center p-2 text-gray-900  hover:bg-gray-100  group"
+                  [ngClass]="linkData.label !== activeLink ? 'border-transparent' : ''"
+                  [ngClass]="linkData.label === activeLink ? 'text-blue-600 border-l-4 border-blue-600' : ''"
+                  >
+                  <span class="ms-3">{{linkData.label}}</span>
+               </a>
+            </li>
 
+         </ul>
+      </div>
+    </aside>
 
-<div class="text-sm font-medium text-center text-gray-500 border-b border-gray-200">
-  <ul class="flex flex-wrap -mb-px">
-      <li class="me-2" *ngFor="let linkData of linksData">
-          <a
-          (click)="activeLink = linkData.label; navigate(linkData.link)"
-          routerLinkActive="active"
-          class="inline-block p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 cursor-pointer"
-          [ngClass]="linkData.label !== activeLink ? 'border-transparent' : ''"
-          [ngClass]="linkData.label === activeLink ? 'text-blue-600 border-b-2 border-blue-600' : ''"
-          >
-            {{linkData.label}}
-          </a>
-      </li>
-
-
-  </ul>
-</div>
-<div class=" flex-1 overflow-auto h-full">
-  <router-outlet></router-outlet>
-</div>
+    <div class="p-4 w-full overflow-y-auto bg-white">
+      <router-outlet></router-outlet>
+    </div>
+  </div>
