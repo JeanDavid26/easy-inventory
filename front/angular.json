@@ -34,7 +34,7 @@
             "inlineStyleLanguage": "scss",
             "assets": [
               "src/favicon.ico",
-              "src/assets"
+              "src/assets/favicon-inventory.png"
             ],
             "styles": [
               "src/styles.scss",
