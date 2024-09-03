@@ -72,7 +72,6 @@ export class ArticleDetailComponent {
         this._router.navigateByUrl('private/products/article')
       })
     }
-
   }
 
   softDelete() : void {
