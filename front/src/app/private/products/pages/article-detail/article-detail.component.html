@@ -1,8 +1,8 @@
 <div class="flex flex-col grow p-10 gap-5">
   <div class="flex justify-end gap-5">
     <app-button *ngIf="id" (click)="softDelete()">Supprimer</app-button>
-    <app-button *ngIf="!id" (click)="enregistrer()">Ajouter</app-button>
-    <app-button *ngIf="id" (click)="enregistrer()">Enregister</app-button>
+    <app-button type="primary" *ngIf="!id" (click)="enregistrer()">Ajouter</app-button>
+    <app-button type="primary" *ngIf="id" (click)="enregistrer()">Enregister</app-button>
 
   </div>
   <form class="flex flex-col gap-3 grow-0" [formGroup]="form" *ngIf="form">
