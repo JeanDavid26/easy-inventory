@@ -58,7 +58,9 @@ export class CategoryDetailComponent {
         this._router.navigateByUrl('private/products/category')
       })
     }else {
-      await this._categoryService.update(this.id, category)
+      await this._categoryService.update(this.id, category).then(()=> {
+        this._router.navigateByUrl('private/products/category')
+      })
     }
 
   }

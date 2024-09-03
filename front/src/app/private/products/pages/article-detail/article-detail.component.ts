@@ -67,7 +67,10 @@ export class ArticleDetailComponent {
         this._router.navigateByUrl('private/products/article')
       })
     }else {
-      await this._articleService.update(this.id, article)
+      await this._articleService.update(this.id, article).then(()=> {
+        this._toastService.displayToast('sucess')
+        this._router.navigateByUrl('private/products/article')
+      })
     }
 
   }
