@@ -72,16 +72,16 @@ export class ArticleListComponent implements OnInit {
   }
 
   public filterArticles(): void {
-    const searchTerm = this.searchForm.get('searchTerm')?.value.toLowerCase();
+    const searchTerm = this.searchForm.get('searchTerm')?.value?.toLowerCase();
     if (!searchTerm) {
       this.filteredArticles = [...this.tArticle];
     } else {
       this.filteredArticles = this.tArticle.filter(article =>
-        article.referenceCode.toLowerCase().includes(searchTerm) ||
-        article.barCode.toLowerCase().includes(searchTerm) ||
-        article.label.toLowerCase().includes(searchTerm) ||
-        article.oCategory.label.toLowerCase().includes(searchTerm) ||
-        article.unitPrice.toString().includes(searchTerm)
+        article.referenceCode?.toLowerCase().includes(searchTerm) ||
+        article.barCode?.toLowerCase().includes(searchTerm) ||
+        article.label?.toLowerCase().includes(searchTerm) ||
+        article.oCategory.label?.toLowerCase().includes(searchTerm) ||
+        article.unitPrice?.toString().includes(searchTerm)
       );
     }
   }
