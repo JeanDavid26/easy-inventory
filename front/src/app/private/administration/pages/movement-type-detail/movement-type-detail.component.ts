@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { BreadcrumbService } from '../../../../core/services/breadcrumb.service';
 import { MovementType } from '../../../../@models/entities/MovementType.interface';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute, ActivatedRouteSnapshot, Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { MovementTypeService } from '../../../../core/services/movement-type.service';
 import { ToastService } from '../../../../shared/toast/toast.service';
 
@@ -66,7 +66,10 @@ export class MovementTypeDetailComponent {
         this._router.navigateByUrl('private/administration/movement-type')
       })
     }else {
-      await this._movementTypeService.update(this.id, movementType)
+      await this._movementTypeService.update(this.id, movementType).then(()=> {
+        this._toastService.displayToast('sucess')
+        this._router.navigateByUrl('private/administration/movement-type')
+      })
     }
 
   }

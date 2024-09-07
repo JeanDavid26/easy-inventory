@@ -10,6 +10,7 @@ import { BehaviorSubject, lastValueFrom } from "rxjs"
 export class InventoryService {
 
   public inventory : BehaviorSubject<Inventory> = new BehaviorSubject(null)
+  public hasAddedMovement : BehaviorSubject<boolean> = new BehaviorSubject(false)
   constructor(
     private _httpClient : HttpClient
   ){}

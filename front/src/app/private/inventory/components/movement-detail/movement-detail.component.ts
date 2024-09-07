@@ -183,6 +183,13 @@ export class MovementDetailComponent {
     this.stepDisplayed = 1
   }
 
+  public retourStep2() : void {
+    this.steps[1].isValidated = false
+    this.steps[1].onGoing = true
+    this.steps[2].onGoing = false
+    this.stepDisplayed = 2
+  }
+
 
 
   // Méthode pour initialiser un FormGroup représentant un MovementLineDto

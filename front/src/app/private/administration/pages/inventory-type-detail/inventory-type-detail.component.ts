@@ -66,7 +66,10 @@ export class InventoryTypeDetailComponent {
         this._router.navigateByUrl('private/administration/inventory-type')
       })
     }else {
-      await this._inventoryTypeService.update(this.id, inventoryType)
+      await this._inventoryTypeService.update(this.id, inventoryType).then(()=> {
+        this._toastService.displayToast('sucess')
+        this._router.navigateByUrl('private/administration/inventory-type')
+      })
     }
 
   }

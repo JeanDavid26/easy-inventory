@@ -31,7 +31,7 @@
 <div>
   <ng-container *ngIf="stepDisplayed === 1">
     <div class="w-full flex flex-row justify-end gap-5 mb-5">
-      <app-button (click)="validateStep1()">Suivant</app-button>
+      <app-button type="primary" (click)="validateStep1()">Suivant</app-button>
     </div>
 
     <form class="flex flex-col gap-3 grow-0" [formGroup]="formMovementInformation" *ngIf="formMovementInformation">
@@ -87,7 +87,7 @@
   <ng-container *ngIf="stepDisplayed === 2">
     <div class="w-full flex flex-row justify-between gap-5 mb-5">
       <app-button (click)="retourStep1()">Retour</app-button>
-      <app-button (click)="validateStep2()">Suivant</app-button>
+      <app-button type="primary" (click)="validateStep2()">Suivant</app-button>
     </div>
     <form [formGroup]="formMovementInformation">
       <ng-container *ngIf="movmentTypeSelected.isInternal === true">
@@ -198,8 +198,8 @@
 
   <ng-container *ngIf="stepDisplayed === 3">
     <div class="w-full flex flex-row justify-between gap-5 mb-5">
-      <app-button (click)="retourStep1()">Retour</app-button>
-      <app-button (click)="enregistrer()">Finaliser le mouvement</app-button>
+      <app-button (click)="retourStep2()">Retour</app-button>
+      <app-button type="primary" (click)="enregistrer()">Finaliser le mouvement</app-button>
     </div>
     <div class="p-4 bg-white shadow-md rounded-lg">
       <h3 class="text-lg font-semibold text-gray-800">Résumé du Mouvement</h3>

@@ -5,6 +5,7 @@ import { ActivatedRoute, ActivatedRouteSnapshot, Router } from '@angular/router'
 import { Category } from '../../../../@models/entities/Category.interface';
 import { BreadcrumbService } from '../../../../core/services/breadcrumb.service';
 import { Article } from '../../../../@models/entities/Article.interface';
+import { ToastService } from '../../../../shared/toast/toast.service';
 
 @Component({
   selector: 'app-category-detail',
@@ -21,7 +22,8 @@ export class CategoryDetailComponent {
     private _fb : FormBuilder,
     private _activatedRouteSnapshot : ActivatedRoute,
     private _router : Router,
-    private _bcService : BreadcrumbService
+    private _bcService : BreadcrumbService,
+    private _toast : ToastService
   ) {
 
     this.initForm().then(()=> {
@@ -55,10 +57,12 @@ export class CategoryDetailComponent {
     }
     if(!this.id){
       await this._categoryService.insert(category).then(()=> {
+        this._toast.displayToast('sucess')
         this._router.navigateByUrl('private/products/category')
       })
     }else {
       await this._categoryService.update(this.id, category).then(()=> {
+        this._toast.displayToast('sucess')
         this._router.navigateByUrl('private/products/category')
       })
     }
