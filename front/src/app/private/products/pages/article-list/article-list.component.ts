@@ -18,6 +18,8 @@ export class ArticleListComponent implements OnInit {
   public filteredArticles: Article[] = [];
   public tCategory: any[] = [];
   public searchForm: FormGroup;
+  public sortColumn: string | null = null;
+  public sortDirection: 'asc' | 'desc' | null = null;
 
   constructor(
     private _articleService: ArticleService,
@@ -85,4 +87,38 @@ export class ArticleListComponent implements OnInit {
       );
     }
   }
+
+  public sortArticles(column: string): void {
+    if (this.sortColumn === column) {
+      this.sortDirection = this.sortDirection === 'asc' ? 'desc' : this.sortDirection === 'desc' ? null : 'asc';
+    } else {
+      this.sortColumn = column;
+      this.sortDirection = 'asc';
+    }
+
+    if (this.sortDirection === null) {
+      this.sortColumn = null;
+      this.filteredArticles = [...this.tArticle];
+    } else {
+      this.filteredArticles.sort((a, b) => {
+        const valueA = this.getValueForSort(a, column);
+        const valueB = this.getValueForSort(b, column);
+        if (valueA < valueB) return this.sortDirection === 'asc' ? -1 : 1;
+        if (valueA > valueB) return this.sortDirection === 'asc' ? 1 : -1;
+        return 0;
+      });
+    }
+  }
+
+  private getValueForSort(article: Article, column: string): any {
+    switch (column) {
+      case 'referenceCode': return article.referenceCode;
+      case 'barCode': return article.barCode;
+      case 'label': return article.label;
+      case 'category': return article.oCategory.label;
+      case 'unitPrice': return article.unitPrice;
+      default: return '';
+    }
+  }
+
 }

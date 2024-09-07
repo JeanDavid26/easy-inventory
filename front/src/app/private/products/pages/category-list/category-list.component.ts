@@ -16,6 +16,8 @@ export class CategoryListComponent implements OnInit {
   public tCategory: Category[] = [];
   public filteredCategories: Category[] = [];
   public searchForm: FormGroup;
+  public sortColumn: string = '';
+  public sortDirection: 'asc' | 'desc' | '' = '';
 
   constructor(
     private _categoryService: CategoryService,
@@ -62,6 +64,27 @@ export class CategoryListComponent implements OnInit {
       this.filteredCategories = this.tCategory.filter(category =>
         category.label.toLowerCase().includes(searchTermLower)
       );
+    }
+  }
+
+  public sortCategories(column: string): void {
+    if (this.sortColumn === column) {
+      this.sortDirection = this.sortDirection === 'asc' ? 'desc' : this.sortDirection === 'desc' ? '' : 'asc';
+    } else {
+      this.sortColumn = column;
+      this.sortDirection = 'asc';
+    }
+
+    if (this.sortDirection === '') {
+      this.filterCategories();
+    } else {
+      this.filteredCategories.sort((a, b) => {
+        const valueA = column === 'label' ? a.label : a.tArticle?.length || 0;
+        const valueB = column === 'label' ? b.label : b.tArticle?.length || 0;
+        if (valueA < valueB) return this.sortDirection === 'asc' ? -1 : 1;
+        if (valueA > valueB) return this.sortDirection === 'asc' ? 1 : -1;
+        return 0;
+      });
     }
   }
 }
