@@ -62,7 +62,7 @@
                   {{article.oCategory.label}}
                 </td>
                 <td class="px-6 py-4">
-                  {{article.unitPrice}} €
+                  {{article.unitPrice | round}} €
                 </td>
             </tr>
             <ng-container *ngIf="filteredArticles.length === 0">

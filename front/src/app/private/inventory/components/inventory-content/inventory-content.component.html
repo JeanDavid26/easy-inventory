@@ -1,12 +1,12 @@
 <div class="flex flex-col grow w-full gap-5" *ngIf="inventory">
   <div class="flex flex-row justify-end content-center">
-    <app-button (click)="addMovementStock()">Ajouter un mouvement de stock</app-button>
+    <app-button type="primary" (click)="addMovementStock()">Ajouter un mouvement de stock</app-button>
   </div>
 
   <div class="flex flex-col gap-5">
       <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
-        <table class="w-full text-sm text-left rtl:text-right text-gray-500">
-            <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+        <table class="w-full text-sm text-left rtl:text-right text-gray-700">
+            <thead class="text-xs text-white uppercase bg-gray-700">
                 <tr>
                   <th scope="col" class="px-6 py-3">
                       Code de référence
@@ -41,7 +41,7 @@
                         {{invetoryLine.quantity}}
                     </td>
                     <td class="px-6 py-4">
-                      {{invetoryLine.oArticle.unitPrice * invetoryLine.quantity}} €
+                      {{(invetoryLine.oArticle.unitPrice * invetoryLine.quantity) | round}} €
                   </td>
                 </tr>
                 <ng-container *ngIf="inventory.tInventoryLine.length === 0">

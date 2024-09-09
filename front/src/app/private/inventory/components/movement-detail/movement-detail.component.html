@@ -37,17 +37,11 @@
     <form class="flex flex-col gap-3 grow-0" [formGroup]="formMovementInformation" *ngIf="formMovementInformation">
       <span><strong>Référence :</strong> {{formMovementInformation.get('reference').value}}</span>
 
-      <div class="w-1/4" appInputError>
-        <label for="movementtype" class="block mb-1 text-sm font-medium text-gray-800 ">Type de mouvement</label>
-        <select id="movementtype" formControlName="movementTypeId" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
-          <option [value]="mouvementType.id" *ngFor="let mouvementType of toMovementType">{{mouvementType.label}}</option>
-        </select>
-      </div>
+      <app-select class="w-1/4" formControlName="movementTypeId" [tOptions]="toMovementType"   label="Type de mouvement"></app-select>
 
       <div class="w-1/4">
         <label for="movementtype" class="block mb-1 text-sm font-medium text-gray-800 ">Date du mouvement</label>
         <app-date-picker formControlName="dateTime">
-
         </app-date-picker>
       </div>
 
@@ -55,27 +49,12 @@
 
         <ng-container *ngIf="movmentTypeSelected">
           <ng-container *ngIf="movmentTypeSelected.isInternal === true">
-            <div class="w-1/4" appInputError>
-              <label for="sourceinventory" class="block mb-1 text-sm font-medium text-gray-800 ">Source</label>
-              <select id="sourceinventory" formControlName="sourceInventoryId" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
-                <option [value]="invenotry.id" *ngFor="let invenotry of toInventory">{{invenotry.label}}</option>
-              </select>
-            </div>
-            <div class="w-1/4" appInputError>
-              <label for="destinationinventory" class="block mb-1 text-sm font-medium text-gray-800 ">Destination</label>
-              <select id="destinationinventory" formControlName="destinationInventoryId" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
-                <option [value]="inventory.id" *ngFor="let inventory of toInventory">{{inventory.label}}</option>
-              </select>
-            </div>
+            <app-select class="w-1/4" formControlName="sourceInventoryId" [tOptions]="toInventory"  label="Source"></app-select>
+            <app-select class="w-1/4" formControlName="destinationInventoryId" [tOptions]="toInventory"   label="Destination"></app-select>
           </ng-container>
 
           <ng-container *ngIf="!movmentTypeSelected.isInternal">
-            <div class="w-1/4" appInputError>
-              <label for="destinationinventory" class="block mb-1 text-sm font-medium text-gray-800 ">Destination</label>
-              <select id="destinationinventory" formControlName="destinationInventoryId" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
-                <option [value]="inventory.id" *ngFor="let inventory of toInventory">{{inventory.label}}</option>
-              </select>
-            </div>
+            <app-select class="w-1/4" formControlName="destinationInventoryId" [tOptions]="toInventory"   label="Destination"></app-select>
           </ng-container>
 
         </ng-container>
@@ -93,8 +72,8 @@
       <ng-container *ngIf="movmentTypeSelected.isInternal === true">
         <div class="flex flex-col gap-5">
           <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
-            <table class="w-full text-sm text-left rtl:text-right text-gray-500">
-                <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+            <table class="w-full text-sm text-left rtl:text-right text-gray-700">
+                <thead class="text-xs text-white uppercase bg-gray-700">
                     <tr>
                       <th scope="col" class="px-6 py-3">
                           Article
@@ -110,12 +89,7 @@
                     <tr
                     class="odd:bg-white even:bg-gray-50 border-b" *ngFor="let movementLine of movementLines.controls; let i = index" [formGroupName]="i">
                       <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap ">
-                        <div appInputError>
-                          <label for="articleid" class="block mb-1 text-sm font-medium text-gray-800">Article</label>
-                          <select id="articleid" formControlName="articleId" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
-                            <option [value]="article.id" *ngFor="let article of toArticleSource">{{article.referenceCode}} - {{article.label}}</option>
-                          </select>
-                        </div>
+                        <app-select formControlName="articleId" [tOptions]="toArticleSource" [labelKey]="['referenceCode', 'label']"   label="Article"></app-select>
                       </th>
                       <td class="px-6 py-4">
                         <app-input type="number" formControlName="quantity" label="Quantité"></app-input>
@@ -146,8 +120,8 @@
       <ng-container *ngIf="!movmentTypeSelected.isInternal">
         <div class="flex flex-col gap-5">
           <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
-            <table class="w-full text-sm text-left rtl:text-right text-gray-500">
-                <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+            <table class="w-full text-sm text-left rtl:text-right text-gray-700">
+                <thead class="text-xs text-white uppercase bg-gray-700">
                     <tr>
                       <th scope="col" class="px-6 py-3">
                           Article
@@ -163,13 +137,8 @@
                     <tr
                     class="odd:bg-white even:bg-gray-50 border-b" *ngFor="let movementLine of movementLines.controls; let i = index" [formGroupName]="i">
                         <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap ">
-                          <div appInputError>
-                          <label for="articleid" class="block mb-1 text-sm font-medium text-gray-800 ">Article</label>
-                            <select id="articleid" formControlName="articleId" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
-                              <option [value]="article.id" *ngFor="let article of toArticle">{{article.referenceCode}} - {{article.label}}</option>
-                            </select>
-                          </div>
-                        </th>
+                        <app-select formControlName="articleId" [tOptions]="toArticle" [labelKey]="['referenceCode', 'label']" label="Article"></app-select>
+                      </th>
                         <td class="px-6 py-4">
                           <app-input type="number" formControlName="quantity" label="Quatité"></app-input>
                         </td>

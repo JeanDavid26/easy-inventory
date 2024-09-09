@@ -6,12 +6,8 @@
 
   </div>
   <form class="flex flex-col gap-3 grow-0" [formGroup]="form" *ngIf="form">
-    <div class="w-1/2" appInputError>
-      <label for="category" class="block mb-1 text-sm font-medium text-gray-800 ">Catégorie *</label>
-      <select id="category" formControlName="categoryId" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
-        <option [value]="category.id" *ngFor="let category of tCategory">{{category.label}}</option>
-      </select>
-    </div>
+
+    <app-select class="w-1/2" formControlName="categoryId" label="TEST CAT" [tOptions]="tCategory"></app-select>
 
     <app-input appInputError class="w-1/4" label="Désignation" formControlName="label" [required]="true"></app-input>
 

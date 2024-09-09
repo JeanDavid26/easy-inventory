@@ -23,7 +23,7 @@ export class InventoryListComponent {
   ){
     this._bcService.setBreadCrumb([
       {
-        label : 'Stock',
+        label : 'Gestion des stocks',
         link : 'inventory'
       }
     ])

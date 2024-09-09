@@ -1,13 +1,13 @@
 
 <div class="flex flex-col grow w-full gap-5" *ngIf="oInventory">
   <div class="flex flex-row justify-end content-center">
-    <app-button (click)="goToMovementDetail(0)">Ajouter un mouvement de stock</app-button>
+    <app-button type="primary" (click)="goToMovementDetail(0)">Ajouter un mouvement de stock</app-button>
   </div>
 
   <div class="flex flex-col gap-5">
       <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
-        <table class="w-full text-sm text-left rtl:text-right text-gray-500">
-          <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+        <table class="w-full text-sm text-left rtl:text-right text-gray-700">
+          <thead class="text-xs text-white uppercase bg-gray-700">
               <tr>
                 <th scope="col" class="px-6 py-3">
                     Référence
@@ -22,7 +22,7 @@
           </thead>
           <tbody>
               <tr (click)="goToMovementDetail(inventoryMovement.id)" *ngFor="let inventoryMovement of toInventoryMovement"
-              class="odd:bg-white even:bg-gray-50 hover:bg-gray-100 border-b">
+              class="odd:bg-white even:bg-gray-100 hover:bg-gray-200 border-b cursor-pointer">
                   <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap ">
                       {{inventoryMovement.reference}}
                   </th>

@@ -13,6 +13,8 @@ import { InputComponent } from './components/input/input.component';
 
 
 import localeFr from '@angular/common/locales/fr';
+import { RoundPipe } from './pipes/round/round.pipe';
+import { SelectComponent } from './components/select/select.component';
 
 registerLocaleData(localeFr);
 
@@ -24,7 +26,9 @@ registerLocaleData(localeFr);
     DatePickerComponent,
     ToastComponent,
     InputErrorDirective,
-    InputComponent
+    InputComponent,
+    RoundPipe,
+    SelectComponent
   ],
   imports: [
     CommonModule,
@@ -42,7 +46,9 @@ registerLocaleData(localeFr);
     ToastComponent,
     InputErrorDirective,
     InputComponent,
-    FontAwesomeModule
+    FontAwesomeModule,
+    RoundPipe,
+    SelectComponent
   ],
   providers :[
     { provide: LOCALE_ID, useValue: 'fr-FR' }

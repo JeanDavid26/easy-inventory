@@ -1,4 +1,9 @@
 :host{
+  .active-link{
+    border-bottom-width: 2px;
+    --tw-border-opacity: 1;
+    border-bottom-color: rgb(255 255 255 / var(--tw-border-opacity)) /* #ffffff */;
+  }
   .nav-bar{
     height: 60px;
   }
@@ -9,5 +14,8 @@
 
   .content{
     height: calc(100vh - 100px);
+  }
+  .nav-item{
+    justify-content: center;
   }
 }

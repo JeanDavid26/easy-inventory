@@ -30,7 +30,7 @@ export class InventoryContentComponent {
     ).subscribe((inventory)=>{
       this._bcService.setBreadCrumb([
         {
-          label : 'Stock',
+          label : 'Gestion des stocks',
           link : 'inventory'
         },
         {

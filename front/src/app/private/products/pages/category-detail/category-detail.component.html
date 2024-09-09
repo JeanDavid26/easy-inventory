@@ -13,8 +13,8 @@
     <span class="font-bold text-gray-800">Articles associés</span>
 
     <div class="relative overflow-x-auto sm:rounded-lg ">
-      <table class="w-full text-sm text-left rtl:text-right text-gray-500">
-          <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+      <table class="w-full text-sm text-left rtl:text-right text-gray-700">
+          <thead class="text-xs text-white uppercase bg-gray-700">
               <tr>
                   <th scope="col" class="px-6 py-3">
                       Désignation
@@ -28,7 +28,7 @@
               </tr>
           </thead>
           <tbody>
-              <tr *ngFor="let article of category.tArticle" (click)="goToArticle(article)" class="odd:bg-white even:bg-gray-50 hover:bg-gray-100 border-b cursor-pointer">
+              <tr *ngFor="let article of category.tArticle" (click)="goToArticle(article)" class="odd:bg-white even:bg-gray-100 hover:bg-gray-200 border-b cursor-pointer">
                   <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
                       {{article.label}}
                   </th>
@@ -36,12 +36,12 @@
                     {{article.referenceCode}}
                 </td>
                   <td class="px-6 py-4">
-                      {{article.unitPrice}} €
+                      {{article.unitPrice | round}} €
                   </td>
               </tr>
               <ng-container *ngIf="category.tArticle.length === 0">
                 <tr
-                class="odd:bg-white even:bg-gray-50 hover:bg-gray-100 border-b cursor-pointer">
+                class="odd:bg-white even:bg-gray-100 hover:bg-gray-200 border-b cursor-pointer">
                     <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
                         Pas de d'articles associés à cette catégorie
                     </th>

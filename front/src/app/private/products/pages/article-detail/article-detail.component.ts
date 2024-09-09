@@ -43,6 +43,7 @@ export class ArticleDetailComponent {
 
   public async initForm() {
     this.tCategory = await this._categoryService.list()
+
     this.id = Number(this._activatedRouteSnapshot.snapshot.params['id'])
     if(this.id){
       this.article = await this._articleService.get(this.id)
@@ -76,6 +77,7 @@ export class ArticleDetailComponent {
 
   softDelete() : void {
     this._articleService.softDelete(this.id).then(()=> {
+        this._toastService.displayToast('sucess')
         this._router.navigateByUrl('private/products/article')
     })
   }

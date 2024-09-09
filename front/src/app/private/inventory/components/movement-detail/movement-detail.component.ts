@@ -174,6 +174,7 @@ export class MovementDetailComponent {
     this.steps[1].isValidated = true
     this.steps[2].onGoing = true
     this.stepDisplayed = 3
+    console.log(this.movementLines.getRawValue())
   }
 
   public retourStep1() : void {
@@ -198,6 +199,7 @@ export class MovementDetailComponent {
       articleId:[null, [Validators.required]],  // Initialiser avec une valeur par défaut si nécessaire
       quantity: [null, [Validators.required, this.quantityValidator.bind(this)]]
     });
+
   }
 
   quantityValidator(control: AbstractControl): { [key: string]: boolean } | null {
