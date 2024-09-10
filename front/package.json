@@ -14,7 +14,6 @@
     "remove-container": "docker rm -f easy-inventory-front-container",
     "containerize": "npm run build-image && npm run run-container",
     "recontainerize": "npm run remove-container && npm run build-image && npm run run-container"
-
   },
   "private": true,
   "dependencies": {
@@ -29,6 +28,7 @@
     "@fortawesome/angular-fontawesome": "^0.14.1",
     "@fortawesome/fontawesome-svg-core": "^6.5.2",
     "@fortawesome/free-solid-svg-icons": "^6.5.2",
+    "file-saver": "^2.0.5",
     "flowbite": "^2.2.1",
     "flowbite-datepicker": "^1.2.6",
     "rxjs": "~7.8.0",
@@ -40,6 +40,7 @@
     "@angular-devkit/build-angular": "^17.1.2",
     "@angular/cli": "^17.1.2",
     "@angular/compiler-cli": "^17.1.0",
+    "@types/file-saver": "^2.0.7",
     "@types/jasmine": "~5.1.0",
     "@types/node": "^20.11.30",
     "@types/uuid": "^9.0.8",

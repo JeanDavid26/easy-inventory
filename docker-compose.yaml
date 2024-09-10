@@ -21,6 +21,8 @@ services:
       - .env
     depends_on:
       - postgres
+    volumes:
+      - uploads:/app/uploads
 
   front:
     build:
@@ -31,3 +33,4 @@ services:
 
 volumes:
   pgdata:
+  uploads:

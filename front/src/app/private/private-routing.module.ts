@@ -28,6 +28,7 @@ const routes: Routes = [
   { path: '', component: NavBarComponent, children: [
     { path : 'dashboard', component : DashboardComponent },
     { path : 'products', component : ProductsNavComponent, children : [
+      { path : '', redirectTo : 'article', pathMatch : 'full'},
       { path : 'category', component : CategoryListComponent },
       { path : 'category/:id', component : CategoryDetailComponent },
       { path : 'article', component : ArticleListComponent },
