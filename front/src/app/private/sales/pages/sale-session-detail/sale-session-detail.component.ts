@@ -57,4 +57,8 @@ export class SaleSessionDetailComponent {
       this._router.navigateByUrl('private/sales')
     })
   }
+
+  public getTotalAmount(): number {
+    return this.oSaleSession.tSale?.reduce((total, sale) => total + sale.totalAmount, 0) || 0;
+  }
 }

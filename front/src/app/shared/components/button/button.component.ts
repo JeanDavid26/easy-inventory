@@ -6,7 +6,7 @@ import { Component, Input } from '@angular/core';
   styleUrl: './button.component.scss'
 })
 export class ButtonComponent {
-  @Input() type : 'primary' | 'normal'
+  @Input() type : 'primary' | 'normal' | 'important'
 
   primaryClasses = [
     'text-white',
@@ -20,23 +20,28 @@ export class ButtonComponent {
 
   normalClasses = [
     'text-gray-900',
-    'bg-white',
     'border',
-    'border-gray-300',
     'focus:outline-none',
-    'hover:bg-gray-100',
-    'focus:ring-4',
-    'focus:ring-gray-100',
     'font-bold',
     'py-2',
     'px-4',
     'rounded',
-    'dark:bg-gray-800',
-    'dark:text-white',
-    'dark:border-gray-600',
-    'dark:hover:bg-gray-700',
-    'dark:hover:border-gray-600',
-    'dark:focus:ring-gray-700'
+    'bg-gray-800',
+    'text-white',
+    'border-gray-600',
+    'hover:bg-gray-700',
+    'hover:border-gray-600',
+    'focus:ring-gray-700'
+  ];
+
+  importantClasses = [
+    'text-white',
+    'bg-red-500',
+    'hover:bg-red-600',
+    'font-bold',
+    'py-2',
+    'px-4',
+    'rounded'
   ];
 
   getClasses() {

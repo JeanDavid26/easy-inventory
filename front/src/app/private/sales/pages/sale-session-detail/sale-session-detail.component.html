@@ -1,50 +1,60 @@
 <ng-container *ngIf="oSaleSession">
-  <div class="p-5 flex justify-end">
-    <app-button type="primary" (click)="closeSession()">
-      Clôturer la session de vente
-    </app-button>
+  <div class="p-5 bg-gray-100 mb-4">
+    <div class="flex justify-between items-center mb-4">
+      <div>
+        <h2 class="text-xl font-bold">Session de vente du {{oSaleSession.creationDate | date:'dd/MM/yyyy'}}</h2>
+        <p>Nombre de transactions : {{oSaleSession.tSale?.length || 0}}</p>
+        <p>Valeur totale : {{getTotalAmount()}}€</p>
+
+      </div>
+      <div class="flex gap-2">
+        <app-button type="primary" (click)="closeSession()">
+          Clôturer la session de vente
+        </app-button>
+
+      </div>
+    </div>
+  </div>
+  <div class="flex justify-end mb-4 mr-4">
     <app-button (click)="goToSaleDetail(0)">
       Ajouter une nouvelle transaction
     </app-button>
   </div>
+  <div class="max-h-[500px] overflow-y-auto">
+    <table class="w-full text-sm text-left rtl:text-right text-gray-700">
+      <thead class="text-xs text-white uppercase bg-gray-700">
+          <tr>
+              <th scope="col" class="px-6 py-3">
+                  Transaction n°
+              </th>
+              <th scope="col" class="px-6 py-3">
+                  Valeur
+              </th>
+          </tr>
+      </thead>
+      <tbody>
+        <ng-container *ngIf="oSaleSession.tSale && oSaleSession.tSale.length > 0">
+          <tr (click)="goToSaleDetail(sale.id)" *ngFor="let sale of oSaleSession.tSale"
+          class="odd:bg-white even:bg-gray-100 hover:bg-gray-200 border-b cursor-pointer">
+              <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap ">
+                  {{sale.id}}
+              </th>
+              <td class="px-6 py-4">
+                {{sale.totalAmount}}€
+              </td>
 
-  <div>
-
-      <table class="w-full text-sm text-left rtl:text-right text-gray-700">
-        <thead class="text-xs text-white uppercase bg-gray-700">
-            <tr>
-                <th scope="col" class="px-6 py-3">
-                    Transaction n°
-                </th>
-                <th scope="col" class="px-6 py-3">
-                    Valeur
-                </th>
-            </tr>
-        </thead>
-        <tbody>
-          <ng-container *ngIf="oSaleSession.tSale && oSaleSession.tSale.length > 0">
-            <tr (click)="goToSaleDetail(sale.id)" *ngFor="let sale of oSaleSession.tSale"
-            class="odd:bg-white even:bg-gray-100 hover:bg-gray-200 border-b cursor-pointer">
+          </tr>
+          </ng-container>
+          <ng-container *ngIf="!oSaleSession.tSale ||  oSaleSession.tSale?.length === 0">
+            <tr
+            class="odd:bg-white even:bg-gray-50 border-b">
                 <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap ">
-                    {{sale.id}}
+                    Pas de vente enregistrée
                 </th>
-                <td class="px-6 py-4">
-                  {{sale.totalAmount}}€
-                </td>
-
-            </tr>
-            </ng-container>
-            <ng-container *ngIf="!oSaleSession.tSale ||  oSaleSession.tSale?.length === 0">
-              <tr
-              class="odd:bg-white even:bg-gray-50 border-b">
-                  <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap ">
-                      Pas de vente enregistrée
-                  </th>
-                </tr>
-            </ng-container>
-        </tbody>
+              </tr>
+          </ng-container>
+      </tbody>
     </table>
-
   </div>
 </ng-container>
 
