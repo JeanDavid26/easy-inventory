@@ -141,13 +141,18 @@ export class SaleDetailComponent {
   }
 
   private _createMappageQuantity () : void {
+    let toArticleAvailable = []
     for(const oArticle of this.toArticle){
       const quantity =  oArticle.tInventoryLine.reduce((accumulator, currentValue) => {
         return accumulator + currentValue.quantity;
       }, 0)
-
-      this.mapArticleQuantity[oArticle.id] = quantity
+      if(quantity> 0){
+        this.mapArticleQuantity[oArticle.id] = quantity
+        toArticleAvailable.push(oArticle)
+      }
     }
+
+    this.toArticle = toArticleAvailable
   }
 
   public addSaleLine (oSaleLine? : SaleLine) :void {

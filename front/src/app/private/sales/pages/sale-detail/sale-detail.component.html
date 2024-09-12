@@ -26,12 +26,7 @@
                   <tr
                   class="odd:bg-white  border-b" *ngFor="let saleLine of formArraySaleLine.controls; let i = index" [formGroupName]="i">
                     <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap ">
-                      <div appInputError>
-                        <label for="articleid" class="block mb-1 text-sm font-medium text-gray-800">Article</label>
-                        <select id="articleid" formControlName="articleId" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
-                          <option [value]="article.id" *ngFor="let article of toArticle">{{article.referenceCode}} - {{article.label}}</option>
-                        </select>
-                      </div>
+                      <app-select [tOptions]="toArticle" [labelKey]="['referenceCode', 'label']" label="Article" formControlName="articleId"></app-select>
                     </th>
                     <td class="px-6 py-4">
                       <app-input type="number" formControlName="quantity" label="Quantité"></app-input>
@@ -49,7 +44,7 @@
                 </ng-container>
 
                 <tr
-                class="odd:bg-white even:bg-gray-50 border-b p-2">
+                class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap ">
 
                     <td colspan="3" class="text-center"><app-button type="normal" (click)="addSaleLine()">Ajouter une ligne</app-button></td>
                 </tr>
@@ -69,16 +64,16 @@
   <div class="mt-4">
 
     <div class="overflow-x-auto">
-      <table class="min-w-full divide-y divide-gray-200">
-        <thead class="bg-gray-50">
+      <table class="w-full text-sm text-left rtl:text-right text-gray-700">
+        <thead class="text-xs text-white uppercase bg-gray-700">
           <tr>
-            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+            <th scope="col" class="px-6 py-3">
               Article
             </th>
-            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+            <th scope="col" class="px-6 py-3">
               Quantité
             </th>
-            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+            <th scope="col" class="px-6 py-3">
               Prix
             </th>
           </tr>
@@ -86,13 +81,13 @@
         <tbody class="bg-white divide-y divide-gray-200">
           <ng-container *ngFor="let line of formArraySaleLine.controls">
             <tr *ngIf="line.valid">
-              <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+              <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
                 {{ getArticleLabel(line.get('articleId').value) }}
               </td>
-              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+              <td class="px-6 py-4 ">
                 {{ line.get('quantity').value }}
               </td>
-              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+              <td class="px-6 py-4">
                 {{ line.get('salePrice').value }}€
               </td>
             </tr>
@@ -127,6 +122,7 @@
                       <th scope="col" class="px-6 py-3">
                           Montant €
                       </th>
+                      <th scope="col" class="px-6 py-3"></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -134,12 +130,7 @@
                     <tr
                     class="odd:bg-white  border-b" *ngFor="let payment of formArrayPayment.controls; let i = index" [formGroupName]="i">
                       <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap ">
-                        <div appInputError>
-                          <label for="paimentmethodid" class="block mb-1 text-sm font-medium text-gray-800">Méthode de paiement</label>
-                          <select id="paimentmethodid" formControlName="paymentMethodId" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
-                            <option [value]="paymentMethod.id" *ngFor="let paymentMethod of toPaymentMethod">{{paymentMethod.label}}</option>
-                          </select>
-                        </div>
+                        <app-select [tOptions]="toPaymentMethod" formControlName="paymentMethodId" label="Méthode de paiement"></app-select>
                       </th>
                       <td class="px-6 py-4">
                         <app-input type="number" formControlName="amount" label="Montant"></app-input>
@@ -156,7 +147,7 @@
                   <tr
                   class="odd:bg-white even:bg-gray-50 border-b p-2">
 
-                      <td colspan="2" class="text-center"><app-button type="normal" (click)="addPayment()">Ajouter un paiement</app-button></td>
+                      <td colspan="3" class="text-center"><app-button type="normal" (click)="addPayment()">Ajouter un paiement</app-button></td>
                   </tr>
                 </tbody>
             </table>
@@ -177,30 +168,30 @@
 
 <ng-container *ngIf="bReview">
   <div class="overflow-x-auto">
-    <table class="min-w-full divide-y divide-gray-200">
-      <thead class="bg-gray-50">
+    <table class="w-full text-sm text-left rtl:text-right text-gray-700">
+      <thead class="text-xs text-white uppercase bg-gray-700">
         <tr>
-          <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+          <th scope="col" class="px-6 py-3">
             Article
           </th>
-          <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+          <th scope="col" class="px-6 py-3">
             Quantité
           </th>
-          <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+          <th scope="col" class="px-6 py-3">
             Prix
           </th>
         </tr>
       </thead>
       <tbody class="bg-white divide-y divide-gray-200">
         <ng-container *ngFor="let line of formArraySaleLine.controls">
-          <tr *ngIf="line.valid">
-            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+          <tr *ngIf="line.valid" class="odd:bg-white even:bg-gray-100 hover:bg-gray-200 border-b">
+            <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
               {{ getArticleLabel(line.get('articleId').value) }}
             </td>
-            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+            <td class="px-6 py-4">
               {{ line.get('quantity').value }}
             </td>
-            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+            <td class="px-6 py-4 ">
               {{ line.get('salePrice').value }}€
             </td>
           </tr>
@@ -210,12 +201,12 @@
   </div>
 <div class="flex justify-between px-6 py-4">
   <div>
-    <span class=" font-bold"> Réglement</span>
+    <span class="text-xl font-bold"> Réglement</span>
     <div *ngFor="let line of formArrayPayment.controls">
-     <span class=" whitespace-nowrap text-sm font-medium text-gray-900">
+     <span class="text-l whitespace-nowrap text-sm font-bold text-gray-900">
        {{ getPaymentMethodLabel(line.get('paymentMethodId').value) }}
      </span>
-     <span class=" whitespace-nowrap text-sm text-gray-500">
+     <span class=" whitespace-nowrap text-sm text-gray-900">
        {{ line.get('amount').value }} €
      </span>
     </div>
@@ -224,7 +215,7 @@
     <ng-container *ngIf="this.id === 0">
       <app-button (click)="save()">Enregistrer</app-button>
     </ng-container>
-    <ng-container *ngIf="this.id !== 0">
+    <ng-container *ngIf="this.id !== 0 && this.oSaleSession.status === 'ongoing'">
       <app-button (click)="supprimer()">Supprimer</app-button>
     </ng-container>
   </div>
