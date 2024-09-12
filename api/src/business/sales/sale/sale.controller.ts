@@ -35,6 +35,11 @@ export class SaleController {
     return this._saleService.closeSession(Number(id))
   }
 
+  @Get('recent-sales')
+  public async getRecentSales () : Promise<Sale[]> {
+    return this._saleManagerService.getRecentSales()
+  }
+
   @Get(':id')
   public async getSale (@Param('id') id: number) : Promise<Sale> {
     return this._saleManagerService.get(id)

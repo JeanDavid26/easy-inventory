@@ -54,4 +54,15 @@ export class InventoryMovementManagerService {
     }
     return this._repo.save(stock)
   }
+
+  public async getRecentMovements () : Promise<InventoryMovement[]> {
+    return this._repo.find({
+      where: {
+        deleteDate: null
+      },
+      relations : [ 'oSourceInventory', 'oDestinationInventory', 'oMovementType', 'tMovementLine', 'tMovementLine.oArticle' ],
+      order : { dateTime : 'DESC' },
+      take : 10
+    })
+  }
 }

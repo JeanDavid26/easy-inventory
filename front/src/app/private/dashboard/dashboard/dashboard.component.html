@@ -1,1 +1,49 @@
-<p>dashboard works!</p>
+<div class="flex flex-col p-4 space-y-4 h-full">
+
+  <!-- Résumé des stocks -->
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+    <div class="bg-white p-4 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300">
+      <h2 class="text-lg font-semibold mb-2 text-gray-700">Total des articles</h2>
+      <p class="text-3xl font-bold text-blue-600">{{ totalArticles }}</p>
+    </div>
+    <div class="bg-white p-4 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300">
+      <h2 class="text-lg font-semibold mb-2 text-gray-700">Valeur totale du stock</h2>
+      <p class="text-3xl font-bold text-green-600">{{ totalStockValue | currency:'EUR' }}</p>
+    </div>
+    <div class="bg-white p-4 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300">
+      <h2 class="text-lg font-semibold mb-2 text-gray-700">Nombre de catégories</h2>
+      <p class="text-3xl font-bold text-purple-600">{{ totalCategories }}</p>
+    </div>
+  </div>
+
+  <!-- Graphique des ventes récentes -->
+  <div class="bg-white p-4 rounded-lg shadow flex-grow">
+    <h2 class="text-lg font-semibold mb-2">Ventes des 7 derniers jours</h2>
+    <div class="h-64">
+      <canvas id="salesChart"></canvas>
+    </div>
+  </div>
+
+  <!-- Derniers mouvements de stock -->
+  <div class="bg-white p-4 rounded-lg shadow flex-grow">
+    <h2 class="text-lg font-semibold mb-2">Derniers mouvements de stock</h2>
+    <div class="overflow-x-auto max-h-64">
+      <table class="w-full text-sm text-left text-gray-700">
+        <thead class="text-xs text-white uppercase bg-gray-700">
+          <tr>
+            <th scope="col" class="px-4 py-2">Référence</th>
+            <th scope="col" class="px-4 py-2">Type</th>
+            <th scope="col" class="px-4 py-2">Date</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let movement of recentMovements" class="odd:bg-white even:bg-gray-100 hover:bg-gray-200 border-b cursor-pointer" (click)="goToMovement(movement.id)">
+            <td class="px-4 py-2">{{ movement.reference }}</td>
+            <td class="px-4 py-2">{{ movement.oMovementType.label }}</td>
+            <td class="px-4 py-2">{{ movement.dateTime | date:'short' }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

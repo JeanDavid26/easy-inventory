@@ -28,6 +28,7 @@
     "@fortawesome/angular-fontawesome": "^0.14.1",
     "@fortawesome/fontawesome-svg-core": "^6.5.2",
     "@fortawesome/free-solid-svg-icons": "^6.5.2",
+    "chart.js": "^4.4.4",
     "file-saver": "^2.0.5",
     "flowbite": "^2.2.1",
     "flowbite-datepicker": "^1.2.6",

@@ -35,4 +35,14 @@ export class SaleManagerService {
     }
     return this._repo.save(stock)
   }
+
+  public async getRecentSales () : Promise<Sale[]> {
+    return this._repo.find({
+      where: {
+        deleteDate: null
+      },
+      order : { creationDate : 'DESC' },
+      take : 10
+    })
+  }
 }

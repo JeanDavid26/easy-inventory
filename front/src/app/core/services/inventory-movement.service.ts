@@ -40,4 +40,9 @@ export class InventoryMovementService {
     return lastValueFrom(this._httpClient.delete<void>(route))
   }
 
+  public async getRecentMovements () : Promise<InventoryMovement[]> {
+    const route = environment.urlApi + `inventory-movement/recent-movements`
+    return lastValueFrom(this._httpClient.get<InventoryMovement[]>(route))
+  }
+
 }
