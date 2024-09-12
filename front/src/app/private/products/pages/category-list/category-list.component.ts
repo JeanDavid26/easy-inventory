@@ -62,7 +62,8 @@ export class CategoryListComponent implements OnInit {
     } else {
       const searchTermLower = searchTerm.toLowerCase();
       this.filteredCategories = this.tCategory.filter(category =>
-        category.label.toLowerCase().includes(searchTermLower)
+        category.label.toLowerCase().includes(searchTermLower) ||
+        category.code.toLocaleLowerCase().includes(searchTermLower)
       );
     }
   }
@@ -79,8 +80,24 @@ export class CategoryListComponent implements OnInit {
       this.filterCategories();
     } else {
       this.filteredCategories.sort((a, b) => {
-        const valueA = column === 'label' ? a.label : a.tArticle?.length || 0;
-        const valueB = column === 'label' ? b.label : b.tArticle?.length || 0;
+        let valueA, valueB;
+        switch (column) {
+          case 'label':
+            valueA = a.label;
+            valueB = b.label;
+            break;
+          case 'code':
+            valueA = a.code;
+            valueB = b.code;
+            break;
+          case 'tArticle':
+            valueA = a.tArticle?.length || 0;
+            valueB = b.tArticle?.length || 0;
+            break;
+          default:
+            valueA = a[column as keyof Category];
+            valueB = b[column as keyof Category];
+        }
         if (valueA < valueB) return this.sortDirection === 'asc' ? -1 : 1;
         if (valueA > valueB) return this.sortDirection === 'asc' ? 1 : -1;
         return 0;

@@ -7,6 +7,7 @@
   <form class="flex flex-col gap-3 grow-0" [formGroup]="form" *ngIf="form">
 
     <app-input appInputError class="w-1/4" label="Désignation" formControlName="label" [required]="true"></app-input>
+    <app-input appInputError class="w-1/4" label="Code" formControlName="code"></app-input>
   </form>
 
   <div class="flex flex-col gap-5" *ngIf="category">

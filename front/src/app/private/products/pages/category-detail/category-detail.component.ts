@@ -47,7 +47,8 @@ export class CategoryDetailComponent {
     }
 
     this.form = this._fb.group({
-      label : [this.category?.label, Validators.required]
+      label : [this.category?.label, Validators.required],
+      code : [this.category?.code],
     })
   }
 

@@ -56,6 +56,16 @@ export class ArticleDetailComponent {
       unitPrice : [ this.article?.unitPrice, Validators.required],
       barCode : this.article?.barCode
     })
+
+    this.form.get('categoryId').valueChanges.subscribe((idString)=> {
+      if(idString){
+        const id = Number(idString)
+        const oCategory = this.tCategory.find((obj)=> obj.id === id)
+        if(oCategory.code && !this.form.get('referenceCode').value?.match(oCategory.code)){
+          this.form.get('referenceCode').setValue(oCategory.code)
+        }
+      }
+    })
   }
 
   public async enregistrer () : Promise<void> {

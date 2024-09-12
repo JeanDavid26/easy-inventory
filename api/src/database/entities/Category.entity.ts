@@ -7,6 +7,9 @@ export class Category extends BaseTable {
   @Column()
   label: string
 
+  @Column({ nullable : true })
+  code: string
+
   @OneToMany(() => Article, (article) => article.oCategory)
   tArticle: Article[]
 }

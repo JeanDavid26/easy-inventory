@@ -1,6 +1,9 @@
-import { IsNotEmpty } from 'class-validator';
+import { IsNotEmpty, IsOptional } from 'class-validator'
 
 export class UpsertCategoryDto {
   @IsNotEmpty()
-  label: string;
+  label: string
+
+  @IsOptional()
+  code : string
 }
