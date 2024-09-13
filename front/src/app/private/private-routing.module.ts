@@ -26,7 +26,7 @@ import { SaleDetailComponent } from './sales/pages/sale-detail/sale-detail.compo
 
 const routes: Routes = [
   { path: '', component: NavBarComponent, children: [
-    { path: '',   redirectTo: '/dashboard', pathMatch: 'full' },
+    { path: '',   redirectTo: '/private/dashboard', pathMatch: 'full' },
     { path : 'dashboard', component : DashboardComponent },
     { path : 'products', component : ProductsNavComponent, children : [
       { path : '', redirectTo : 'article', pathMatch : 'full'},
