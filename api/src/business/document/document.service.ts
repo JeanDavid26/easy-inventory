@@ -3,7 +3,7 @@ import { DocumentManagerService } from 'src/database/db-manager/document-manager
 import { Document } from 'src/database/entities/Document.entity'
 import { UploadDocumentDto } from './dto/upload-document.dto'
 import { FileService } from 'src/shared/services/file/file.service'
-
+import { Response } from 'express'
 @Injectable()
 export class DocumentService {
   constructor (
@@ -30,8 +30,15 @@ export class DocumentService {
     return this._documentManagerService.findByInventoryId(inventoryId)
   }
 
-  public async getContentFromDocument (documentId: number): Promise<Buffer> {
+  public async getContentFromDocument (documentId: number, res : Response): Promise<Buffer> {
     const document = await this._documentManagerService.get(documentId)
-    return this._fileService.getBufferFromPath(document.oAppFile.path)
+    const buffer = await this._fileService.getBufferFromPath(document.oAppFile.path)
+    res.setHeader('Access-Control-Expose-Headers', 'Content-Disposition')
+    res.setHeader('Content-Disposition', `filename=Visuel Document`)
+    res.setHeader('Content-Type', document.oAppFile.contentType)
+
+    res.send(buffer)
+
+    return buffer
   }
 }

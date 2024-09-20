@@ -29,6 +29,11 @@ export class DocumentService {
     return lastValueFrom(this._httpClient.get<Document[]>(route));
   }
 
+  public async deleteDocument (documentId : number) : Promise<Document>  {
+    const route = Location.joinWithSlash(environment.urlApi, `document/${documentId}`)
+    return lastValueFrom(this._httpClient.delete<Document>(route))
+  }
+
   public getDocumentContent (documentId: number): Promise<{ fileURL : string, contentType : string }> {
     let route = Location.joinWithSlash(environment.urlApi, `document/content/${documentId}`)
 

@@ -45,9 +45,11 @@
             <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
               {{ document.label }}
             </td>
-            <td class="px-6 py-4">
-              <a class="font-medium text-blue-600 hover:underline" (click)="downloadDocument(document.id, document.oAppFile.originalName)">Télécharger</a>
+            <td class="px-6 py-4 flex flex-row gap-4">
+              <a class="font-medium text-blue-600 hover:underline cursor-pointer" (click)="downloadDocument(document.id, document.oAppFile.originalName)">Télécharger</a>
+              <a class="font-medium text-red-600 hover:underline cursor-pointer" (click)="deleteDocument(document.id)" >Supprimer</a>
             </td>
+
           </tr>
           <ng-container *ngIf="filteredDocuments.length === 0">
             <tr class="bg-white border-b">

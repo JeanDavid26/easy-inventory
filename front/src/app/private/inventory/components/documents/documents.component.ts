@@ -18,6 +18,7 @@ export class DocumentsComponent implements OnInit {
   public sortColumn: string | null = null;
   public sortDirection: 'asc' | 'desc' | null = null;
 
+
   constructor(
     private documentService: DocumentService,
     private inventoryService: InventoryService,
@@ -121,6 +122,11 @@ export class DocumentsComponent implements OnInit {
         console.error('Erreur lors de l\'upload du document:', error);
       }
     }
+  }
+
+  async deleteDocument(documentId : number) : Promise<void> {
+    await this.documentService.deleteDocument(documentId)
+    this.loadDocuments()
   }
 
   downloadDocument(documentId: number, filename : string) {

@@ -1,9 +1,11 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   Post,
+  Res,
   UploadedFile,
   UseInterceptors
 } from '@nestjs/common'
@@ -11,10 +13,12 @@ import { DocumentService } from './document.service'
 import { Document } from 'src/database/entities/Document.entity'
 import { FileInterceptor } from '@nestjs/platform-express'
 import { UploadDocumentDto } from './dto/upload-document.dto'
+import { Response } from 'express'
+import { DocumentManagerService } from 'src/database/db-manager/document-manager/document-manager.service'
 
 @Controller('document')
 export class DocumentController {
-  constructor (private _documentService: DocumentService) {}
+  constructor (private _documentService: DocumentService, private _documentManagerService : DocumentManagerService) {}
 
   @Post('upload')
   @UseInterceptors(FileInterceptor('file'))
@@ -35,7 +39,13 @@ export class DocumentController {
   @Get('content/:documentId')
   public getContentFromDocument (
     @Param('documentId') documentId: number,
+    @Res() res : Response
   ): Promise<Buffer> {
-    return this._documentService.getContentFromDocument(documentId)
+    return this._documentService.getContentFromDocument(documentId, res)
+  }
+
+  @Delete(':id')
+  public deleteDocument (@Param('id') id : number) : Promise<Document> {
+    return this._documentManagerService.softDelete(Number(id))
   }
 }
