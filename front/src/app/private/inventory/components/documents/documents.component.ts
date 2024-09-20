@@ -4,7 +4,7 @@ import { Document } from '../../../../@models/entities/Document.interface';
 import { InventoryService } from '../../../../core/services/inventory.service';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
-
+import { saveAs } from 'file-saver'
 @Component({
   selector: 'app-documents',
   templateUrl: './documents.component.html',
@@ -123,14 +123,15 @@ export class DocumentsComponent implements OnInit {
     }
   }
 
-  downloadDocument(documentId: number) {
-    this.documentService.getDocumentContent(documentId).subscribe((buffer) => {
-      const url = window.URL.createObjectURL(new Blob([buffer]));
-      const link = document.createElement('a');
-      link.href = url;
-      link.setAttribute('download', 'document.pdf');
-      document.body.appendChild(link);
-      link.click();
+  downloadDocument(documentId: number, filename : string) {
+    this.documentService.getDocumentContent(documentId).then((res) => {
+      if (res.contentType === 'application/pdf' || res.contentType.match('image')?.length > 0) {
+        window.open(res.fileURL)
+      } else {
+        saveAs(res.fileURL, `${filename}`)
+      }
+
+
     });
   }
 }

@@ -52,7 +52,8 @@ export class DocumentManagerService {
     return this._repo.find({
       where: {
         inventoryId: Number(inventoryId)
-      }
+      },
+      relations : [ 'oAppFile' ]
     })
   }
 }
