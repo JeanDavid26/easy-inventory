@@ -51,9 +51,9 @@ export class SaleService {
     return lastValueFrom(this._httpClient.get<Sale>(route))
   }
 
-  public getRecentSales () : Promise<Sale[]> {
+  public getRecentSales () : Promise<number[]> {
     const route = environment.urlApi + 'sale/recent-sales'
-    return lastValueFrom(this._httpClient.get<Sale[]>(route))
+    return lastValueFrom(this._httpClient.get<number[]>(route))
   }
 
 }

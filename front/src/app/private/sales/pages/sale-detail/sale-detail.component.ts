@@ -56,7 +56,6 @@ export class SaleDetailComponent {
     private _toast : ToastService
     ){
       this.init().then(()=> {
-        console.log(this.oSaleSession)
         this._bcService.setBreadCrumb([
           {
             label : 'Vente',
@@ -85,7 +84,6 @@ export class SaleDetailComponent {
   public async init () : Promise<void> {
     this.id = Number(this._activatedRoute.snapshot.params['idSale'])
     this.saleSessionId = Number(this._activatedRoute.snapshot.params['id'])
-    console.log(this.saleSessionId)
      this.oSaleSession = await this._saleService.getSaleSession(this.saleSessionId)
 
     this.toArticle = await this._articleService.list([ 'tInventoryLine'])
@@ -161,18 +159,15 @@ export class SaleDetailComponent {
       quantity : [oSaleLine?.quantity ?? null, [Validators.required, this.quantityValidator.bind(this)]],
       salePrice : [ oSaleLine?.salePrice ?? null, [Validators.required]]
     })
-    console.log(this.formArraySaleLine)
     this.tSubscription.push(fg.valueChanges.subscribe((fgValue)=> {
       let totalAmout = null
       if(fgValue.articleId && fgValue.quantity){
         const article = this.toArticle.find((article)=> article.id === Number(fgValue.articleId))
-        console.log(article)
         totalAmout = article.unitPrice * fgValue.quantity
       }
       fg.get('salePrice').setValue(totalAmout, { emitEvent : false})
     }))
     this.formArraySaleLine.push(fg)
-    console.log(this.formArraySaleLine)
   }
 
   quantityValidator(control: AbstractControl): { [key: string]: boolean } | null {
@@ -280,7 +275,6 @@ export class SaleDetailComponent {
     if(!saleLineValue.articleId || !saleLineValue.quantity){
       return '--'
     }
-    console.log(saleLineValue)
     const oArticle = this.toArticle.find((article)=> article.id === saleLineValue.articleId)
     return `${saleLineValue.quantity * oArticle.unitPrice}`
   }

@@ -174,7 +174,6 @@ export class MovementDetailComponent {
     this.steps[1].isValidated = true
     this.steps[2].onGoing = true
     this.stepDisplayed = 3
-    console.log(this.movementLines.getRawValue())
   }
 
   public retourStep1() : void {

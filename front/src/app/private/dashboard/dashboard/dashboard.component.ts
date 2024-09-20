@@ -7,6 +7,7 @@ import { CategoryService } from '../../../core/services/category.service';
 import { SaleService } from '../../../core/services/sale.service';
 import { InventoryMovementService } from '../../../core/services/inventory-movement.service';
 import { Router } from '@angular/router';
+import { EChartsOption } from 'echarts';
 
 @Component({
   selector: 'app-dashboard',
@@ -20,6 +21,7 @@ export class DashboardComponent implements OnInit {
   lowStockArticles: any[] = [];
   recentMovements: any[] = [];
   salesChart: any;
+  chartOptions: EChartsOption;
 
   constructor(
     private _bcService: BreadcrumbService,
@@ -30,7 +32,7 @@ export class DashboardComponent implements OnInit {
     private inventoryMovementService: InventoryMovementService,
     private _router: Router
   ) {
-    Chart.register(...registerables); // Ajouté
+
   }
 
   ngOnInit() {
@@ -49,35 +51,59 @@ export class DashboardComponent implements OnInit {
     this.createSalesChart(salesData);
   }
 
-  createSalesChart(salesData: any) {
-    console.log(salesData);
+  createSalesChart(salesData: number[]) {
 
-    this.salesChart = new Chart('salesChart', {
-      type: 'line',
-      data: {
-        labels: salesData.map((sale: any) => sale.creationDate),
-        datasets: [{
-          label: 'Ventes',
-          data: salesData.map((sale: any) => sale.totalPrice),
-          borderColor: 'rgb(75, 192, 192)',
-          tension: 0.1
-        }]
+    const currentDate = new Date();
+    const currentMonth = currentDate.getMonth();
+    const currentYear = currentDate.getFullYear();
+
+    // Get the weeks of the current month (as strings)
+    const weeks = this.getWeeksOfCurrentMonth(currentYear, currentMonth);
+
+
+    // Define chart options with weeks as the x-axis data
+    this.chartOptions = {
+      title: {
+        text: 'Ventes du mois'
       },
-      options: {
-        responsive: true,
-        scales: {
-          y: {
-            beginAtZero: true,
-            type: 'linear' // Ajouté
-          }
-        }
-      }
-    });
+      tooltip: {},
+      xAxis: {
+        type: 'category',
+        data: weeks
+      },
+      yAxis: {
+        type: 'value',
+        axisLabel: {
+          formatter: '{value} €'  // Add the euro symbol here
+        },
+
+      },
+      series: [{
+        name: 'Ventes €',
+        type: 'bar',
+        data: salesData
+      }]
+    };
+  }
+
+   // Function to calculate the 4 weeks of the current month
+   getWeeksOfCurrentMonth(year: number, month: number): string[] {
+    const weeks = [];
+    const daysInMonth = new Date(year, month + 1, 0).getDate(); // Get the number of days in the month
+    let startDate = 1;
+
+    while (startDate <= daysInMonth) {
+      const weekEnd = Math.min(startDate + 6, daysInMonth);
+      weeks.push(`Semaine: ${startDate}-${weekEnd}`);
+      startDate += 7;
+    }
+
+    // If more than 4 weeks, return the last 4 weeks only
+    return weeks.slice(-4);
   }
 
   public async goToMovement(id: number) {
     const oMovement = this.recentMovements.find((movement: any) => movement.id === id);
-    console.log(oMovement);
     const oInventory = await this.inventoryService.get(oMovement.destinationInventoryId)
     this._router.navigateByUrl(`/private/inventory/${oInventory.id}/movement/${id}`)
   }

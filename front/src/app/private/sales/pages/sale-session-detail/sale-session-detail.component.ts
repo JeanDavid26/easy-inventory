@@ -45,7 +45,6 @@ export class SaleSessionDetailComponent {
     }
     this.id = Number(idString)
     this.oSaleSession = await this._saleService.getSaleSession(this.id)
-    console.log(this.oSaleSession)
   }
 
   public goToSaleDetail(id : number) :void {

@@ -17,6 +17,7 @@ export class PaymentManagerService {
   }
 
   public async insert (data: Partial<Payment>): Promise<Payment> {
+    delete data.id
     return this._repo.save(data)
   }
 

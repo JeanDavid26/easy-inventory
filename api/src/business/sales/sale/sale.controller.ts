@@ -36,8 +36,8 @@ export class SaleController {
   }
 
   @Get('recent-sales')
-  public async getRecentSales () : Promise<Sale[]> {
-    return this._saleManagerService.getRecentSales()
+  public async getRecentSales () : Promise<number[]> {
+    return this._saleService.getRecentSales()
   }
 
   @Get(':id')

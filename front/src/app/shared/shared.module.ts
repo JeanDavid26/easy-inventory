@@ -15,6 +15,7 @@ import { InputComponent } from './components/input/input.component';
 import localeFr from '@angular/common/locales/fr';
 import { RoundPipe } from './pipes/round/round.pipe';
 import { SelectComponent } from './components/select/select.component';
+import { NgxEchartsModule } from 'ngx-echarts';
 
 registerLocaleData(localeFr);
 
@@ -35,6 +36,9 @@ registerLocaleData(localeFr);
     ReactiveFormsModule,
     FormsModule,
     RouterModule,
+    NgxEchartsModule.forRoot({
+      echarts: () => import('echarts')
+    })
   ],
   exports : [
     ReactiveFormsModule,
@@ -48,7 +52,8 @@ registerLocaleData(localeFr);
     InputComponent,
     FontAwesomeModule,
     RoundPipe,
-    SelectComponent
+    SelectComponent,
+    NgxEchartsModule
   ],
   providers :[
     { provide: LOCALE_ID, useValue: 'fr-FR' }

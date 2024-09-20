@@ -18,9 +18,8 @@
 
   <!-- Graphique des ventes récentes -->
   <div class="bg-white p-4 rounded-lg shadow flex-grow">
-    <h2 class="text-lg font-semibold mb-2">Ventes des 7 derniers jours</h2>
     <div class="h-64">
-      <canvas id="salesChart"></canvas>
+      <div *ngIf="chartOptions" echarts [options]="chartOptions" class="echart-container"></div>
     </div>
   </div>
 

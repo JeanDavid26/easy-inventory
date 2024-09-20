@@ -15,7 +15,6 @@ export class DocumentService {
   ){}
 
   public async uploadDocument(file : File, body : Document) : Promise<Document> {
-    console.log(body)
     const route = environment.urlApi + `document/upload`
     const formData : FormData = new FormData()
     formData.append('file', file)

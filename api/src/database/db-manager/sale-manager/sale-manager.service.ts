@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { Sale } from 'src/database/entities/Sale.entity'
-import { Repository } from 'typeorm'
+import { Between, Repository } from 'typeorm'
 
 @Injectable()
 export class SaleManagerService {
@@ -17,7 +17,6 @@ export class SaleManagerService {
   }
 
   public async insert (data: Partial<Sale>): Promise<Sale> {
-    console.log('data', data)
     return this._repo.save(data)
   }
 
@@ -37,12 +36,15 @@ export class SaleManagerService {
   }
 
   public async getRecentSales () : Promise<Sale[]> {
-    return this._repo.find({
+    const startOfMonth = new Date(new Date().getFullYear(), new Date().getMonth(), 1)
+    const endOfMonth = new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0, 23, 59, 59)
+    const sales = await this._repo.find({
       where: {
-        deleteDate: null
+        deleteDate: null,
+        creationDate:  Between(startOfMonth, endOfMonth)
       },
-      order : { creationDate : 'DESC' },
-      take : 10
+      order : { creationDate : 'DESC' }
     })
+    return sales
   }
 }

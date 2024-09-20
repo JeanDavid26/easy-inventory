@@ -35,9 +35,7 @@ export class AuthenticationService {
   }
 
   public signUp(user : User) : Promise<User> {
-    console.log(environment)
     const route = environment.urlApi + `auth/signup`
-    console.log(route)
     return lastValueFrom(this._httpClient.post<User>(route, user))
   }
 

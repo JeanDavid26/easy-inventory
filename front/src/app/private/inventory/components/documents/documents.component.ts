@@ -116,7 +116,6 @@ export class DocumentsComponent implements OnInit {
       };
       try {
         const uploadedDocument = await this.documentService.uploadDocument(file, document as Document);
-        console.log('Document uploadé avec succès:', uploadedDocument);
         await this.loadDocuments(); // Recharger la liste des documents
       } catch (error) {
         console.error('Erreur lors de l\'upload du document:', error);

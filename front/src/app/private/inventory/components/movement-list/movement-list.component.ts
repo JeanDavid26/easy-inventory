@@ -66,7 +66,6 @@ export class MovementListComponent implements OnInit {
   private filterMovements(): void {
     const searchTerm = this.searchForm.get('searchTerm')?.value?.toLowerCase();
     if (!searchTerm) {
-      console.log('pas de recherche', this.toInventoryMovement)
       this.filteredMovements = [...this.toInventoryMovement];
     } else {
       this.filteredMovements = this.toInventoryMovement.filter(movement =>

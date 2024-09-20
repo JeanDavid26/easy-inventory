@@ -23,8 +23,9 @@ export class SaleService {
     
     const oSale = await this._saleManagerService.insert({
       totalAmount : Number(data.totalAmount),
-      saleSessionId: data.saleSessionId
+      saleSessionId: Number(data.saleSessionId)
     })
+
     console.log(oSale)
     const tSaleLinePromises = data.tSaleLine.map((saleLinde)=> {
       return this._saleLineManagerService.insert({
@@ -61,5 +62,17 @@ export class SaleService {
       status : 'closed'
     })
   }
-  
+
+  public async getRecentSales () : Promise<number[]> {
+    const salesOfTheMonth = await this._saleManagerService.getRecentSales()
+    console.log(salesOfTheMonth)
+    // Split the sales in each week of the month and return an arry of the total amount of each week
+    // the return should be an array of 4 number which each represent the total amount of the week  
+    const salesByWeek = [ 0, 0, 0, 0 ]
+    for (const oSale of salesOfTheMonth) {
+      const week = Math.floor((oSale.creationDate.getDate() - 1) / 7)
+      salesByWeek[week] += oSale.totalAmount
+    }
+    return salesByWeek
+  }
 }
