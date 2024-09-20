@@ -9,6 +9,15 @@ export class InventoryLineManagerService {
     @InjectRepository(InventoryLine) private _repo: Repository<InventoryLine>,
   ) {}
 
+  public async listByInventoryId (inventoryId: number): Promise<InventoryLine[]> {
+    return this._repo.find({
+      where: {
+        inventoryId
+      },
+      relations : [ 'oArticle', 'oArticle.oCategory' ]
+    })
+  }
+
   public async get (id: number): Promise<InventoryLine> {
     return this._repo.findOne({
       where: {

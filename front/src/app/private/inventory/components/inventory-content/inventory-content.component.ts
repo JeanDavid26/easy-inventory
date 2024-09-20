@@ -8,6 +8,8 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { CategoryService } from '../../../../core/services/category.service';
 import { Category } from '../../../../@models/entities/Category.interface';
+import { InventoryLine } from '../../../../@models/entities/InventoryLine.interface';
+import { InventoryLineService } from '../../../../core/services/inventory-line.service';
 
 @Component({
   selector: 'app-inventory-content',
@@ -16,7 +18,8 @@ import { Category } from '../../../../@models/entities/Category.interface';
 })
 export class InventoryContentComponent implements OnInit {
   public inventory: Inventory;
-  public filteredInventoryLines: any[] = [];
+  public tInventoryLine : InventoryLine[] = []
+  public filteredInventoryLines: InventoryLine[] = [];
   public searchForm: FormGroup;
   public sortColumn: string | null = null;
   public sortDirection: 'asc' | 'desc' | null = null;
@@ -24,6 +27,7 @@ export class InventoryContentComponent implements OnInit {
 
   constructor(
     private _inventoryService: InventoryService,
+    private _inventoryLineService: InventoryLineService,
     private _bcService: BreadcrumbService,
     private _router: Router,
     private _fb: FormBuilder,
@@ -41,10 +45,19 @@ export class InventoryContentComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this._loadTInventoryLine()
     this.setupSearch();
     this.setupCategoryFilter();
     this.filterInventoryLines();
     this.loadCategories();
+  }
+
+  private async _loadTInventoryLine() : Promise<void> {
+    if(this.inventory.id){
+      const tInventoryLine = await this._inventoryLineService.listByInventoryId(this.inventory.id)
+      this.tInventoryLine = tInventoryLine
+      this.filterInventoryLines()
+    }
   }
 
   private setupSearch(): void {
@@ -79,7 +92,7 @@ export class InventoryContentComponent implements OnInit {
     const searchTerm = this.searchForm.get('searchTerm')?.value?.toLowerCase();
     const categoryFilter = this.searchForm.get('categoryFilter')?.value;
 
-    this.filteredInventoryLines = this.inventory.tInventoryLine.filter(line => {
+    this.filteredInventoryLines = this.tInventoryLine.filter(line => {
       const matchesSearch = !searchTerm ||
         line.oArticle.referenceCode.toLowerCase().includes(searchTerm) ||
         line.oArticle.label.toLowerCase().includes(searchTerm) ||
@@ -105,7 +118,7 @@ export class InventoryContentComponent implements OnInit {
 
     if (this.sortDirection === null) {
       this.sortColumn = null;
-      this.filteredInventoryLines = [...this.inventory.tInventoryLine];
+      this.filteredInventoryLines = [...this.tInventoryLine];
     } else {
       this.filteredInventoryLines.sort((a, b) => {
         const valueA = this.getValueForSort(a, column);
