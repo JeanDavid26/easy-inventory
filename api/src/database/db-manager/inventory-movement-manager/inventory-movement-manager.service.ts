@@ -62,7 +62,7 @@ export class InventoryMovementManagerService {
       },
       relations : [ 'oSourceInventory', 'oDestinationInventory', 'oMovementType', 'tMovementLine', 'tMovementLine.oArticle' ],
       order : { dateTime : 'DESC' },
-      take : 10
+      take : 5
     })
   }
 }
