@@ -85,10 +85,13 @@ export class SaleDetailComponent {
     this.id = Number(this._activatedRoute.snapshot.params['idSale'])
     this.saleSessionId = Number(this._activatedRoute.snapshot.params['id'])
      this.oSaleSession = await this._saleService.getSaleSession(this.saleSessionId)
-
-    this.toArticle = await this._articleService.list([ 'tInventoryLine'])
+    if(this.id){
+      this.toArticle = await this._articleService.list()
+    }else {
+      this.toArticle = await this._articleService.list([ 'tInventoryLine'])
+      this._createMappageQuantity()
+    }
     this.toPaymentMethod = await this._paymentMethodService.list()
-    this._createMappageQuantity()
 
     this.formGroupSale = this._fb.group({
       totalAmout : null,
@@ -280,6 +283,8 @@ export class SaleDetailComponent {
   }
 
   getArticleLabel(articleId: number) {
+    console.log(articleId)
+    console.log(this.toArticle)
     const article = this.toArticle.find(a => a.id === Number(articleId));
     return article ? `${article.referenceCode} - ${article.label}` : 'Article non trouvé';
   }

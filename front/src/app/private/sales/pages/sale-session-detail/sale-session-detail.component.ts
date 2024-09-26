@@ -45,6 +45,10 @@ export class SaleSessionDetailComponent {
     }
     this.id = Number(idString)
     this.oSaleSession = await this._saleService.getSaleSession(this.id)
+    this.oSaleSession.tSale.forEach((sale) => {
+      sale.displayTablePayment = sale.tPayment.map(obj => obj.oPaymentMethod.label).join(', ')
+      sale.displayTableRef = sale.tSaleLine.map((obj) => obj.oArticle.referenceCode).join(', ')
+    })
   }
 
   public goToSaleDetail(id : number) :void {

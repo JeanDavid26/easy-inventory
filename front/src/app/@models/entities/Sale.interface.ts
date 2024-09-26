@@ -9,4 +9,6 @@ export interface Sale extends BaseTable {
   oSaleSession?: SaleSession
   tSaleLine?: SaleLine[]
   tPayment?: Payment[]
+  displayTableRef? : string
+  displayTablePayment? : string
 }

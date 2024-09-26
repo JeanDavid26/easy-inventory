@@ -28,6 +28,12 @@
                   Transaction n°
               </th>
               <th scope="col" class="px-6 py-3">
+                Références
+              </th>
+              <th scope="col" class="px-6 py-3">
+                Méthode de paiement
+              </th>
+              <th scope="col" class="px-6 py-3">
                   Valeur
               </th>
           </tr>
@@ -38,6 +44,12 @@
           class="odd:bg-white even:bg-gray-100 hover:bg-gray-200 border-b cursor-pointer">
               <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap ">
                   {{sale.id}}
+              </th>
+              <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap ">
+                {{sale.displayTableRef}}
+              </th>
+              <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap ">
+                {{sale.displayTablePayment}}
               </th>
               <td class="px-6 py-4">
                 {{sale.totalAmount}}€

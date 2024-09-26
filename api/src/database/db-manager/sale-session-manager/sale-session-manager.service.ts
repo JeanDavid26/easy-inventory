@@ -19,7 +19,7 @@ export class SaleSessionManagerService {
       where: {
         id
       },
-      relations : [ 'tSale', 'tSale.tSaleLine' ]
+      relations : [ 'tSale', 'tSale.tSaleLine', 'tSale.tSaleLine.oArticle', 'tSale.tPayment', 'tSale.tPayment.oPaymentMethod' ]
     })
   }
 
