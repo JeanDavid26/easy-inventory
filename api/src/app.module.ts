@@ -8,9 +8,9 @@ import { APP_FILTER, APP_GUARD } from '@nestjs/core'
 import { TranslateValidatorErrorFilter } from './shared/filter/translate-validator-error/translate-validator-error.filter'
 import { AuthModule } from './auth/auth.module'
 import { AuthGuard } from './auth/services/auth.guard'
-
+import { SentryGlobalFilter, SentryModule } from '@sentry/nestjs/setup'
 @Module({
-  imports: [ SharedModule, DbManagerModule, BusinessModule, AuthModule ],
+  imports: [ SharedModule, DbManagerModule, BusinessModule, AuthModule, SentryModule.forRoot() ],
   controllers: [ AppController ],
   providers: [
     AppService,
@@ -21,6 +21,10 @@ import { AuthGuard } from './auth/services/auth.guard'
     {
       provide: APP_GUARD,
       useClass: AuthGuard
+    },
+    {
+      provide: APP_FILTER,
+      useClass: SentryGlobalFilter
     }
   ]
 })
