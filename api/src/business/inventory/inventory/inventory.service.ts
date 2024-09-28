@@ -28,7 +28,7 @@ export class InventoryService {
     let value = 0
     let quantity = 0
     oInventory.tInventoryLine.forEach(inventoryLine => {
-      value += inventoryLine.oArticle.unitPrice * inventoryLine.quantity
+      value += inventoryLine.oArticle?.unitPrice ?? 0 * inventoryLine.quantity
       quantity += inventoryLine.quantity
     })
     return { value, quantity }
