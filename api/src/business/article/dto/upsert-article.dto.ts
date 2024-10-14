@@ -1,18 +1,21 @@
-import { IsNotEmpty, IsOptional } from 'class-validator';
+import { IsNotEmpty, IsOptional } from 'class-validator'
 
 export class UpsertArticleDto {
   @IsNotEmpty()
-  label: string;
+  label: string
 
   @IsNotEmpty()
-  categoryId: number;
+  categoryId: number
 
   @IsNotEmpty()
-  unitPrice: number;
+  unitPrice: number
 
   @IsNotEmpty()
-  referenceCode: string;
+  referenceCode: string
 
   @IsOptional()
-  barCode: string;
+  barCode: string
+
+  @IsOptional()
+  isNotStorable: boolean
 }

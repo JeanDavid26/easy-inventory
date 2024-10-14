@@ -54,7 +54,8 @@ export class ArticleDetailComponent {
       referenceCode : [ this.article?.referenceCode, Validators.required],
       categoryId : [ this.article?.categoryId, Validators.required],
       unitPrice : [ this.article?.unitPrice, Validators.required],
-      barCode : this.article?.barCode
+      barCode : this.article?.barCode,
+      isNotStorable : this.article?.isNotStorable ?? false
     })
 
     this.form.get('categoryId').valueChanges.subscribe((idString)=> {

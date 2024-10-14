@@ -2,6 +2,7 @@ import { BaseTable } from "./BaseTable.interface";
 import { Payment } from "./Payment.interface";
 import { SaleLine } from "./SaleLine.interface";
 import { SaleSession } from "./SaleSession.interface";
+import { UnpaidSale } from "./UnpaidSale.interface";
 
 export interface Sale extends BaseTable {
   saleSessionId?: number
@@ -11,4 +12,5 @@ export interface Sale extends BaseTable {
   tPayment?: Payment[]
   displayTableRef? : string
   displayTablePayment? : string
+  tSaleRepayment? : UnpaidSale[]
 }

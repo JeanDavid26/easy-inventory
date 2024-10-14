@@ -17,14 +17,22 @@ export class ArticleController {
   constructor (private _articleManagerService: ArticleManagerService) {}
 
   @Get()
-  public list (@Query('tRelation') tRelationQuery : string): Promise<Article[]> {
+  public list (@Query() queryParam : string): Promise<Article[]> {
     let tRelation = []
+    const tRelationQuery = queryParam['tRelation'] ?? null
     if (tRelationQuery && tRelationQuery.match(',')) {
       tRelation = tRelationQuery.split(',')
     } else if (tRelationQuery) {
       tRelation = [ tRelationQuery ]
     }
-    return this._articleManagerService.list(tRelation)
+
+    const bFilterStorableQuery = queryParam['bFilterStorable'] ?? null
+
+    let bFilterStorable = false
+    if (bFilterStorableQuery && bFilterStorableQuery === 'true') {
+      bFilterStorable = true
+    }
+    return this._articleManagerService.list(tRelation, bFilterStorable)
   }
 
   @Get(':id')
@@ -34,12 +42,12 @@ export class ArticleController {
   }
 
   @Post()
-  public ajouter (@Body() data: UpsertArticleDto): Promise<Article> {
+  public insert (@Body() data: UpsertArticleDto): Promise<Article> {
     return this._articleManagerService.insert(data)
   }
 
   @Put(':id')
-  public modifier (
+  public update (
     @Param('id') id: number,
     @Body() data: UpsertArticleDto,
   ): Promise<Article> {

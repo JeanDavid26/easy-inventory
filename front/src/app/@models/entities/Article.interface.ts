@@ -8,6 +8,7 @@ export interface Article extends BaseTable {
   barCode: string;
   unitPrice: number;
   categoryId: number;
+  isNotStorable:boolean;
   oCategory?: Category;
   tInventoryLine? : InventoryLine[]
 }

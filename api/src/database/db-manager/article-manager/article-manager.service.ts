@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { Article } from 'src/database/entities/Article.entity'
-import { Repository } from 'typeorm'
+import { FindOptionsWhere, Repository } from 'typeorm'
 
 @Injectable()
 export class ArticleManagerService {
@@ -21,8 +21,16 @@ export class ArticleManagerService {
     return article
   }
 
-  public async list (tRelation?: string[]): Promise<Article[]> {
+  public async list (tRelation?: string[], bFilterStorable? : boolean): Promise<Article[]> {
+    
+    let where : FindOptionsWhere<Article> = null
+    if (bFilterStorable) {
+      where = {
+        isNotStorable : false
+      }
+    }
     return this._repo.find({
+      where,
       relations: [ 'oCategory', ... tRelation ?? [] ]
     })
   }

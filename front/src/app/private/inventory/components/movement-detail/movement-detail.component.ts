@@ -102,7 +102,7 @@ export class MovementDetailComponent {
   private async  initList () : Promise<void> {
     this.toMovementType = await this._movementTypeService.list()
     this.toInventory = await this._inventoryService.list()
-    this.toArticle = await this._articleService.list()
+    this.toArticle = await this._articleService.list(null, true)
   }
   private _initForm () : void {
     const reference = this._createReference()
