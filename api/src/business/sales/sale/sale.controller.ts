@@ -3,7 +3,7 @@ import { SaleSessionManagerService } from 'src/database/db-manager/sale-session-
 import { Sale } from 'src/database/entities/Sale.entity'
 import { SaleSession } from 'src/database/entities/SaleSession.entity'
 import { SaleService } from './sale.service'
-import { InsertSaleDto } from '../dto/insert-sale.dto'
+import { InsertSaleDto } from './dto/insert-sale.dto'
 import { SaleManagerService } from 'src/database/db-manager/sale-manager/sale-manager.service'
 
 @Controller('sale')

@@ -85,7 +85,6 @@ export class FileService {
   }
 
   public getBufferFromPath (path: string): Promise<Buffer> {
-    console.log(path)
     const wholePath = `uploads/${path}`
     return fs.promises.readFile(wholePath)
   }

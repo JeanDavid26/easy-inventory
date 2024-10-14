@@ -150,6 +150,9 @@ export class SaleDetailComponent {
       if(quantity> 0){
         this.mapArticleQuantity[oArticle.id] = quantity
         toArticleAvailable.push(oArticle)
+      } else if (oArticle.isNotStorable) {
+        this.mapArticleQuantity[oArticle.id] = -1
+        toArticleAvailable.push(oArticle)
       }
     }
 
@@ -158,7 +161,7 @@ export class SaleDetailComponent {
 
   public addSaleLine (oSaleLine? : SaleLine) :void {
     const fg = this._fb.group({
-      articleId : [oSaleLine?.id ?? null, Validators.required],
+      articleId : [oSaleLine?.articleId ?? null, Validators.required],
       quantity : [oSaleLine?.quantity ?? null, [Validators.required, this.quantityValidator.bind(this)]],
       salePrice : [ oSaleLine?.salePrice ?? null, [Validators.required]]
     })
@@ -177,6 +180,9 @@ export class SaleDetailComponent {
     const articleId = control.parent?.get('articleId')?.value;
     if (articleId && this.mapArticleQuantity[articleId] !== undefined) {
       const maxQuantity = this.mapArticleQuantity[articleId];
+      if(maxQuantity === -1){
+        return null
+      }
       if (control.value > maxQuantity) {
         control.setValue(maxQuantity)
         return { 'maxQuantity': true };
@@ -283,9 +289,7 @@ export class SaleDetailComponent {
   }
 
   getArticleLabel(articleId: number) {
-    console.log(articleId)
-    console.log(this.toArticle)
-    const article = this.toArticle.find(a => a.id === Number(articleId));
+    const article = this.toArticle.find(a => a.id === articleId);
     return article ? `${article.referenceCode} - ${article.label}` : 'Article non trouvé';
   }
 

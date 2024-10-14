@@ -47,7 +47,7 @@ export class SaleSessionDetailComponent {
     this.oSaleSession = await this._saleService.getSaleSession(this.id)
     this.oSaleSession.tSale.forEach((sale) => {
       sale.displayTablePayment = sale.tPayment.map(obj => obj.oPaymentMethod.label).join(', ')
-      sale.displayTableRef = sale.tSaleLine.map((obj) => obj.oArticle.referenceCode).join(', ')
+      sale.displayTableRef = sale.tSaleLine.map((obj) => obj.oArticle?.referenceCode ?? '').join(', ')
     })
   }
 

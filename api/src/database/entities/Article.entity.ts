@@ -20,6 +20,9 @@ export class Article extends BaseTable {
   @Column({ name: 'categoryid' })
   categoryId: number
 
+  @Column({ name: 'isnotstorable', default : false })
+  isNotStorable: boolean
+
   @ManyToOne(() => Category, (category) => category.id)
   @JoinColumn({ name: 'categoryid' })
   oCategory: Category
