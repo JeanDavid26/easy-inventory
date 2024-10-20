@@ -35,7 +35,7 @@
                       </div>
                     </td>
                     <td>
-                      {{saleLine.get('salePrice').value ?? '--'}} €
+                      {{saleLine.get('salePrice').value ?? 0 | round}} €
                     </td>
                     <td class="text-center">
                       <fa-icon class="w-10 h-10 flex justify-center items-center text-black rounded-full hover:bg-gray-300 cursor-pointer transition-colors duration-300" [icon]="faXmark" (click)="removeSaleLine(i)"></fa-icon>
@@ -53,7 +53,7 @@
 
         </div>
         <div class="flex justify-end p-5">
-          <app-button type="primary" (click)="setPayments()">Réglement {{totalFinal ?? '--'}} €</app-button >
+          <app-button type="primary" (click)="setPayments()">Réglement {{totalFinal ?? 0 | round}} €</app-button >
         </div>
       </div>
 
@@ -88,7 +88,7 @@
                 {{ line.get('quantity').value }}
               </td>
               <td class="px-6 py-4">
-                {{ line.get('salePrice').value }}€
+                {{ line.get('salePrice').value | round}}€
               </td>
             </tr>
           </ng-container>
@@ -135,7 +135,7 @@
                       <td class="px-6 py-4">
                         <app-input type="number" formControlName="amount" label="Montant"></app-input>
                         <div *ngIf="payment.get('amount').hasError('maxAmount')" class="text-red-500 text-sm">
-                          Montant maximale : {{ totalFinal }} €
+                          Montant maximale : {{ totalFinal | round }} €
                         </div>
                       </td>
                       <td class="text-center">
@@ -154,7 +154,7 @@
 
           </div>
           <div class="flex justify-end p-5">
-            <app-button type="primary" (click)="validatePayments()">Valider réglement {{ totalAmountMultiple }} €</app-button >
+            <app-button type="primary" (click)="validatePayments()">Valider réglement {{ totalAmountMultiple | round}} €</app-button >
           </div>
         </div>
 
@@ -192,7 +192,7 @@
               {{ line.get('quantity').value }}
             </td>
             <td class="px-6 py-4 ">
-              {{ line.get('salePrice').value }}€
+              {{ line.get('salePrice').value | round }}€
             </td>
           </tr>
         </ng-container>
