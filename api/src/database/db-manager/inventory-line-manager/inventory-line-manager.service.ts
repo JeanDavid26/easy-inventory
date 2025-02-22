@@ -1,7 +1,7 @@
 import { BadRequestException, Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { InventoryLine } from 'src/database/entities/InventoryLine.entity'
-import { Repository } from 'typeorm'
+import { DeleteResult, Repository } from 'typeorm'
 
 @Injectable()
 export class InventoryLineManagerService {
@@ -46,6 +46,11 @@ export class InventoryLineManagerService {
     delete data.id
     data.id = id
     return this._repo.save(data)
+  }
+
+  public async hardDelete (id: number) : Promise<DeleteResult> {
+    await this.get(id)
+    return this._repo.delete(id)
   }
 
   public async delete (id: number): Promise<InventoryLine> {

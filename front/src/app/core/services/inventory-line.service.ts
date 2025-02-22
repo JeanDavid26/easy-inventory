@@ -18,4 +18,9 @@ export class InventoryLineService {
     const route = environment.urlApi + `inventory-line/list-inventory/${inventoryId}`
     return lastValueFrom(this._httpClient.get<InventoryLine[]>(route))
   }
+
+  public async deleteInventoryLine (id : number) : Promise<any> {
+    const route = environment.urlApi + `inventory-line/${id}`
+    return lastValueFrom(this._httpClient.delete<any>(route))
+  }
 }

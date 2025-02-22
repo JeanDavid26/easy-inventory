@@ -1,5 +1,5 @@
 import { Type } from 'class-transformer'
-import { IsArray, IsDate, IsNotEmpty, IsNumber, IsOptional, Length, ValidateNested } from 'class-validator'
+import { IsArray, IsDate, IsNotEmpty, IsNumber, IsOptional, ValidateNested } from 'class-validator'
 import { TransformDate } from 'src/shared/decorator/transform-date.decorator'
 import { TransformNumber } from 'src/shared/decorator/transform.number.decorator'
 

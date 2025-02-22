@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common'
+import { BadRequestException, Injectable } from '@nestjs/common'
 import { InventoryManagerService } from 'src/database/db-manager/inventory-manager/inventory-manager.service'
 import { Inventory } from 'src/database/entities/Inventory.entity'
 
@@ -8,6 +8,7 @@ export class InventoryService {
 
   public async list (): Promise<Inventory[]> {
     const tInventory = (await this._inventoryManagerService.list()).map(inventory => {
+  
       const resValueQuantity = this._getValueQuantityInventory(inventory)
       return {
         ... inventory,
