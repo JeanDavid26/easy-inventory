@@ -12,7 +12,7 @@ export class ArticleManagerService {
       where: {
         id
       },
-      relations: [ 'oCategory' ]
+      relations: [ 'oCategory', 'tInventoryLine' ]
     })
 
     if (!article) {

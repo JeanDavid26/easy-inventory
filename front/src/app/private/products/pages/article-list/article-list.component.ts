@@ -4,8 +4,10 @@ import { Router } from '@angular/router';
 import { Article } from '../../../../@models/entities/Article.interface';
 import { BreadcrumbService } from '../../../../core/services/breadcrumb.service';
 import { CategoryService } from '../../../../core/services/category.service';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
+import { InventoryLineService } from '../../../../core/services/inventory-line.service';
+import { ToastService } from '../../../../shared/toast/toast.service';
 
 @Component({
   selector: 'app-article-list',
@@ -20,13 +22,18 @@ export class ArticleListComponent implements OnInit {
   public searchForm: FormGroup;
   public sortColumn: string | null = null;
   public sortDirection: 'asc' | 'desc' | null = null;
+  public editingRow: { [key: number]: boolean } = {};
+  public editQuantityControl: FormControl = new FormControl();
+  private originalQuantity: number;
 
   constructor(
     private _articleService: ArticleService,
     private _router: Router,
     private _bcService: BreadcrumbService,
     private _categoryService: CategoryService,
-    private _fb: FormBuilder
+    private _fb: FormBuilder,
+    private _inventoryLineService: InventoryLineService,
+    private _toastService: ToastService
   ) {
     this.searchForm = this._fb.group({
       searchTerm: ['']
@@ -57,7 +64,7 @@ export class ArticleListComponent implements OnInit {
 
   public async initList(): Promise<void> {
     await this.loadCategories();
-    this.tArticle = await this._articleService.list();
+    this.tArticle = await this._articleService.list(['tInventoryLine']);
     this.filteredArticles = [...this.tArticle];
   }
 
@@ -117,7 +124,50 @@ export class ArticleListComponent implements OnInit {
       case 'label': return article.label;
       case 'category': return article.oCategory.label;
       case 'unitPrice': return article.unitPrice;
+      case 'quantity': return this.getArticleQuantity(article);
       default: return '';
+    }
+  }
+
+  public getArticleQuantity(article: Article): number {
+    if (!article.tInventoryLine || article.tInventoryLine.length === 0) {
+      return 0;
+    }
+    return article.tInventoryLine[0].quantity;
+  }
+
+  public startEditing(article: Article): void {
+    this.editingRow = {}; // Réinitialise pour n'éditer qu'une ligne à la fois
+    this.editingRow[article.id] = true;
+    this.editQuantityControl.setValue(article.tInventoryLine[0].quantity);
+    this.originalQuantity = article.tInventoryLine[0].quantity;
+  }
+
+  public cancelEditing(): void {
+    this.editingRow = {};
+    this.editQuantityControl.setValue(null);
+  }
+
+  public async saveQuantity(article: Article, event: Event): Promise<void> {
+    event.stopPropagation();
+    try {
+      const newQuantity = this.editQuantityControl.value;
+      if (newQuantity === this.originalQuantity) {
+        this.cancelEditing();
+        return;
+      }
+
+      await this._inventoryLineService.updateInventoryLine(
+        article.tInventoryLine[0].id,
+        { quantity: newQuantity }
+      );
+
+      await this.initList(); // Assurez-vous que cette méthode existe pour recharger les articles
+      this.cancelEditing();
+      this._toastService.displayToast('sucess', 'Quantité mise à jour avec succès');
+    } catch (error) {
+      console.error('Erreur lors de la mise à jour de la quantité:', error);
+      this._toastService.displayToast('error', 'Erreur lors de la mise à jour de la quantité');
     }
   }
 

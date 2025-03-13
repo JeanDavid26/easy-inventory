@@ -44,25 +44,52 @@
               Prix unitaire
               <span class="ml-1">{{ sortColumn === 'unitPrice' ? (sortDirection === 'asc' ? '▲' : sortDirection === 'desc' ? '▼' : '◆') : '◆' }}</span>
             </th>
+            <th scope="col" class="px-6 py-3 cursor-pointer" (click)="sortArticles('quantity')">
+              Quantité en stock
+              <span class="ml-1">{{ sortColumn === 'quantity' ? (sortDirection === 'asc' ? '▲' : sortDirection === 'desc' ? '▼' : '◆') : '◆' }}</span>
+            </th>
           </tr>
         </thead>
         <tbody>
-            <tr (click)="goToArticleDetail(article.id)" *ngFor="let article of filteredArticles"
-            class="odd:bg-white even:bg-gray-100 hover:bg-gray-200 border-b cursor-pointer">
-                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+            <tr *ngFor="let article of filteredArticles"
+            class="odd:bg-white even:bg-gray-100 hover:bg-gray-200 border-b">
+                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap cursor-pointer" (click)="goToArticleDetail(article.id)">
                   {{article.referenceCode}}
                 </th>
-                <td class="px-6 py-4">
+                <td class="px-6 py-4 cursor-pointer" (click)="goToArticleDetail(article.id)">
                   {{article.barCode}}
                 </td>
-                <td class="px-6 py-4">
+                <td class="px-6 py-4 cursor-pointer" (click)="goToArticleDetail(article.id)">
                   {{article.label}}
                 </td>
-                <td class="px-6 py-4">
+                <td class="px-6 py-4 cursor-pointer" (click)="goToArticleDetail(article.id)">
                   {{article.oCategory.label}}
                 </td>
-                <td class="px-6 py-4">
+                <td class="px-6 py-4 cursor-pointer" (click)="goToArticleDetail(article.id)">
                   {{article.unitPrice | round}} €
+                </td>
+                <td class="px-6 py-4">
+                  <ng-container *ngIf="!editingRow[article.id]; else editMode">
+                    {{ getArticleQuantity(article) }}
+                  </ng-container>
+                  <ng-template #editMode>
+                    <div class="flex items-center gap-2">
+                      <app-input
+                        type="number"
+                        [formControl]="editQuantityControl"
+                        class="w-24"
+                      ></app-input>
+                      <app-button type="primary" (click)="saveQuantity(article, $event)">Valider</app-button>
+                      <app-button (click)="cancelEditing()">Annuler</app-button>
+                    </div>
+                  </ng-template>
+                  <button *ngIf="!editingRow[article.id] && article.tInventoryLine?.length > 0"
+                    class="ml-2 text-blue-600 hover:text-blue-800"
+                    (click)="$event.stopPropagation(); startEditing(article)">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 inline" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+                    </svg>
+                  </button>
                 </td>
             </tr>
             <ng-container *ngIf="filteredArticles.length === 0">

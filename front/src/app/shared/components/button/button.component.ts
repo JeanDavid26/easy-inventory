@@ -6,7 +6,7 @@ import { Component, Input } from '@angular/core';
   styleUrl: './button.component.scss'
 })
 export class ButtonComponent {
-  @Input() type : 'primary' | 'normal' | 'important'
+  @Input() type : 'primary' | 'normal' | 'important' | 'danger'
 
   primaryClasses = [
     'text-white',
@@ -44,7 +44,24 @@ export class ButtonComponent {
     'rounded'
   ];
 
+  dangerClasses = [
+    'text-white',
+    'bg-red-500',
+    'hover:bg-red-600',
+  ]
+
   getClasses() {
-    return this.type === 'primary' ? this.primaryClasses : this.normalClasses;
+    switch (this.type) {
+      case 'primary':
+        return this.primaryClasses;
+      case 'normal':
+        return this.normalClasses;
+      case 'important':
+        return this.importantClasses;
+      case 'danger':
+        return this.dangerClasses;
+      default:
+        return this.normalClasses;
+    }
   }
 }

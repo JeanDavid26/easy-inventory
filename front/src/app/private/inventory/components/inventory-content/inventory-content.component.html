@@ -173,7 +173,7 @@
               <div class="flex items-center gap-2">
                 @if (!editingRow[inventoryLine.id]) {
                   <app-button
-                    type="important"
+                    type="normal"
                     class="!p-2"
                     (click)="startEditing(inventoryLine)"
                     title="Modifier la quantité"
@@ -184,7 +184,7 @@
                   </app-button>
                 }
                 <app-button
-                  type="normal"
+                  type="important"
                   class="!p-2"
                   (click)="supprimerInventoryLine(inventoryLine.id)"
                   title="Supprimer l'article"
