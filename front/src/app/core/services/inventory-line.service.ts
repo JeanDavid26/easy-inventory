@@ -23,4 +23,9 @@ export class InventoryLineService {
     const route = environment.urlApi + `inventory-line/${id}`
     return lastValueFrom(this._httpClient.delete<any>(route))
   }
+
+  public async updateInventoryLine(id: number, data: { quantity: number }): Promise<InventoryLine> {
+    const route = environment.urlApi + `inventory-line/${id}`;
+    return lastValueFrom(this._httpClient.put<InventoryLine>(route, data));
+  }
 }

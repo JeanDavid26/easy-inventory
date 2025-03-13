@@ -1,4 +1,4 @@
-import { BadRequestException, Controller, Delete, Get, Param } from '@nestjs/common'
+import { BadRequestException, Body, Controller, Delete, Get, Param, Put } from '@nestjs/common'
 import { InventoryLineManagerService } from 'src/database/db-manager/inventory-line-manager/inventory-line-manager.service'
 import { InventoryLine } from 'src/database/entities/InventoryLine.entity'
 
@@ -15,6 +15,12 @@ export class InventoryLineController {
     return this._inventoryLineManagerService.listByInventoryId(
       Number(inventoryId),
     )
+  }
+
+  @Put(':id')
+  public updateInventoryLine (@Param('id') id: string, @Body() data : { quantity : number }): Promise<InventoryLine> {
+    const idCasted = Number(id)
+    return this._inventoryLineManagerService.updateInventoryLineById(idCasted, data.quantity)
   }
 
   @Delete(':id')

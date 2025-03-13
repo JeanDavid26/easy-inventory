@@ -11,10 +11,11 @@ import {
 import { ArticleManagerService } from 'src/database/db-manager/article-manager/article-manager.service'
 import { Article } from 'src/database/entities/Article.entity'
 import { UpsertArticleDto } from './dto/upsert-article.dto'
+import { InventoryLineManagerService } from 'src/database/db-manager/inventory-line-manager/inventory-line-manager.service'
 
 @Controller('article')
 export class ArticleController {
-  constructor (private _articleManagerService: ArticleManagerService) {}
+  constructor (private _articleManagerService: ArticleManagerService, private _inventoryLineManagerService : InventoryLineManagerService) {}
 
   @Get()
   public list (@Query() queryParam : string): Promise<Article[]> {
@@ -56,8 +57,9 @@ export class ArticleController {
   }
 
   @Delete(':id')
-  public softDelete (@Param('id') id: number): Promise<Article> {
+  public async softDelete (@Param('id') id: number): Promise<Article> {
     id = Number(id)
+    await this._inventoryLineManagerService.deleteByArticleId(id)
     return this._articleManagerService.softDelete(id)
   }
 }

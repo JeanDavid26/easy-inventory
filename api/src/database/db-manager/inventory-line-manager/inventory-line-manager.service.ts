@@ -35,11 +35,15 @@ export class InventoryLineManagerService {
     })
   }
 
+  public async deleteByArticleId (articleId : number) : Promise<DeleteResult> {
+    return this._repo.delete({ articleId })
+  }
+
   public async insert (data: Partial<InventoryLine>): Promise<InventoryLine> {
     return this._repo.save(data)
   }
 
-  public async update (
+  public async update ( 
     id: number,
     data: Partial<InventoryLine>,
   ): Promise<InventoryLine> {
@@ -78,6 +82,25 @@ export class InventoryLineManagerService {
     return this._repo.save({
       id : oInventoryLine.id,
       quantity : oInventoryLine.quantity - quantity
+    })
+  }
+
+  public async updateInventoryLineById (id : number, quantity : number) : Promise<InventoryLine> {
+    const oInventoryLine = await this._repo.findOne({
+      where : {
+        id
+      }
+    })
+    if (!oInventoryLine) {
+      throw new BadRequestException('Stock de quantité pour un article non trouvé')
+    }
+    if (quantity < 0) {
+      throw new BadRequestException('Quantité inférieur à zéro')
+    }
+    
+    return this._repo.save({
+      id,
+      quantity : quantity
     })
   }
 }

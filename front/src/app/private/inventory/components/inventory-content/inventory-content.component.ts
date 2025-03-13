@@ -4,12 +4,13 @@ import { InventoryService } from '../../../../core/services/inventory.service';
 import { BreadcrumbService } from '../../../../core/services/breadcrumb.service';
 import { filter, first } from 'rxjs';
 import { Router } from '@angular/router';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { CategoryService } from '../../../../core/services/category.service';
 import { Category } from '../../../../@models/entities/Category.interface';
 import { InventoryLine } from '../../../../@models/entities/InventoryLine.interface';
 import { InventoryLineService } from '../../../../core/services/inventory-line.service';
+import { ToastService } from '../../../../shared/toast/toast.service';
 
 @Component({
   selector: 'app-inventory-content',
@@ -24,11 +25,15 @@ export class InventoryContentComponent implements OnInit {
   public sortColumn: string | null = null;
   public sortDirection: 'asc' | 'desc' | null = null;
   public categories: Category[] = [];
+  public editingRow: { [key: number]: boolean } = {};
+  public editQuantityControl: FormControl = new FormControl();
+  private originalQuantity: number;
 
   constructor(
     private _inventoryService: InventoryService,
     private _inventoryLineService: InventoryLineService,
     private _bcService: BreadcrumbService,
+    private _toastService: ToastService,
     private _router: Router,
     private _fb: FormBuilder,
     private _categoryService: CategoryService
@@ -160,5 +165,39 @@ export class InventoryContentComponent implements OnInit {
     await this._inventoryLineService.deleteInventoryLine(id);
 
     await this._loadTInventoryLine();
+  }
+
+  public startEditing(inventoryLine: InventoryLine): void {
+    this.editingRow = {}; // Réinitialise pour n'éditer qu'une ligne à la fois
+    this.editingRow[inventoryLine.id] = true;
+    this.editQuantityControl.setValue(inventoryLine.quantity);
+    this.originalQuantity = inventoryLine.quantity;
+  }
+
+  public cancelEditing(): void {
+    this.editingRow = {};
+    this.editQuantityControl.setValue(null);
+  }
+
+  public async saveQuantity(inventoryLineId: number): Promise<void> {
+    try {
+      const newQuantity = this.editQuantityControl.value;
+      if (newQuantity === this.originalQuantity) {
+        this.cancelEditing();
+        return;
+      }
+
+      await this._inventoryLineService.updateInventoryLine(inventoryLineId, {
+        quantity: newQuantity
+      });
+
+      await this._loadTInventoryLine();
+      this.cancelEditing();
+      // Optionnel : ajouter un message de succès
+      this._toastService.displayToast('sucess', 'Quantité mise à jour avec succès');
+    } catch (error) {
+      // Gérer l'erreur et afficher un message
+      console.error('Erreur lors de la mise à jour de la quantité:', error);
+    }
   }
 }
