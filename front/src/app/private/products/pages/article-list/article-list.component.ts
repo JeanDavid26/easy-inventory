@@ -171,4 +171,15 @@ export class ArticleListComponent implements OnInit {
     }
   }
 
+  public async softDelete(id: number): Promise<void> {
+    try {
+      await this._articleService.softDelete(id);
+      await this.initList();
+      this._toastService.displayToast('sucess', 'Article supprimé avec succès');
+    } catch (error) {
+      console.error('Erreur lors de la suppression de l\'article:', error);
+      this._toastService.displayToast('error', 'Erreur lors de la suppression de l\'article');
+    }
+  }
+
 }
