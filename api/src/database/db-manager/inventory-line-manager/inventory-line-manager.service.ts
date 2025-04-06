@@ -7,7 +7,7 @@ import { DeleteResult, Repository } from 'typeorm'
 export class InventoryLineManagerService {
   constructor (
     @InjectRepository(InventoryLine) private _repo: Repository<InventoryLine>,
-  ) {}
+  ) {}  
 
   public async listByInventoryId (inventoryId: number): Promise<InventoryLine[]> {
     return this._repo.find({
