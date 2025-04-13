@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { NavBarComponent } from './nav-bar/nav-bar.component';
-import { DashboardComponent } from './dashboard/dashboard/dashboard.component';
 import { CategoryListComponent } from './products/pages/category-list/category-list.component';
 import { ArticleListComponent } from './products/pages/article-list/article-list.component';
 import { InventoryListComponent } from './inventory/pages/inventory-list/inventory-list.component';
@@ -26,8 +25,7 @@ import { SaleDetailComponent } from './sales/pages/sale-detail/sale-detail.compo
 
 const routes: Routes = [
   { path: '', component: NavBarComponent, children: [
-    { path: '',   redirectTo: '/private/dashboard', pathMatch: 'full' },
-    { path : 'dashboard', component : DashboardComponent },
+    { path: '',   redirectTo: '/private/inventory', pathMatch: 'full' },
     { path : 'products', component : ProductsNavComponent, children : [
       { path : '', redirectTo : 'article', pathMatch : 'full'},
       { path : 'category', component : CategoryListComponent },

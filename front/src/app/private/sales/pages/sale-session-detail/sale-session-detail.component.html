@@ -2,16 +2,43 @@
   <div class="p-5 bg-gray-100 mb-4">
     <div class="flex justify-between items-center mb-4">
       <div>
-        <h2 class="text-xl font-bold">Session de vente du {{oSaleSession.creationDate | date:'dd/MM/yyyy'}}</h2>
-        <p>Nombre de transactions : {{oSaleSession.tSale?.length || 0}}</p>
-        <p>Valeur totale : {{getTotalAmount()}}€</p>
+        <div class="flex items-center gap-2 mb-2">
+          <h2 class="text-xl font-bold" *ngIf="!isEditing">
+            Session de vente du {{oSaleSession.creationDate | date:'dd/MM/yyyy'}}
+          </h2>
+          <div *ngIf="isEditing" class="flex items-center gap-4">
+            <app-date-picker [(ngModel)]="editDate"></app-date-picker>
+          </div>
+          <button *ngIf="!isEditing && oSaleSession.status === 'ongoing'"
+                  class="p-1 hover:bg-gray-200 rounded-full"
+                  (click)="startEditing()">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+            </svg>
+          </button>
+        </div>
 
+        <div class="flex items-center gap-2 mb-2">
+          <p *ngIf="!isEditing">Référence : {{oSaleSession.saleSessionReference || 'Non définie'}}</p>
+          <div *ngIf="isEditing" class="flex items-center gap-2">
+            <app-input [(ngModel)]="editReference" label="Référence"></app-input>
+          </div>
+        </div>
+
+        <p>Nombre de transactions : {{oSaleSession.tSale?.length || 0}}</p>
+        <p>Total : {{getTotalAmount() | round}}€</p>
+        <p>Total CB : {{getTotalCB() | round}}€</p>
+        <p>Totale espéce/chèque: {{getTotalCashCheck() | round}}€</p>
       </div>
+
       <div class="flex gap-2">
-        <app-button type="primary" (click)="closeSession()" *ngIf="oSaleSession.status === 'ongoing'">
+        <ng-container *ngIf="isEditing">
+          <app-button (click)="saveChanges()">Enregistrer</app-button>
+          <app-button type="normal" (click)="cancelEditing()">Annuler</app-button>
+        </ng-container>
+        <app-button type="primary" (click)="closeSession()" *ngIf="oSaleSession.status === 'ongoing' && !isEditing">
           Clôturer la session de vente
         </app-button>
-
       </div>
     </div>
   </div>
@@ -25,16 +52,16 @@
       <thead class="text-xs text-white uppercase bg-gray-700">
           <tr>
               <th scope="col" class="px-6 py-3">
-                  Transaction n°
+                Références
               </th>
               <th scope="col" class="px-6 py-3">
-                Références
+                Désignation
               </th>
               <th scope="col" class="px-6 py-3">
                 Méthode de paiement
               </th>
               <th scope="col" class="px-6 py-3">
-                  Valeur
+                Valeur
               </th>
           </tr>
       </thead>
@@ -43,16 +70,16 @@
           <tr (click)="goToSaleDetail(sale.id)" *ngFor="let sale of oSaleSession.tSale"
           class="odd:bg-white even:bg-gray-100 hover:bg-gray-200 border-b cursor-pointer">
               <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap ">
-                  {{sale.id}}
+                {{sale.displayTableRef}}
               </th>
               <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap ">
-                {{sale.displayTableRef}}
+                {{sale.displayTableRefLabel}}
               </th>
               <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap ">
                 {{sale.displayTablePayment}}
               </th>
               <td class="px-6 py-4">
-                {{sale.totalAmount}}€
+                {{sale.totalAmount | round}}€
               </td>
 
           </tr>

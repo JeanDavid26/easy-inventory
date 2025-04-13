@@ -4,8 +4,7 @@ import { SaleListComponent } from './pages/sale-list/sale-list.component';
 import { SaleDetailComponent } from './pages/sale-detail/sale-detail.component';
 import { SharedModule } from '../../shared/shared.module';
 import { SaleSessionDetailComponent } from './pages/sale-session-detail/sale-session-detail.component';
-
-
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -15,7 +14,8 @@ import { SaleSessionDetailComponent } from './pages/sale-session-detail/sale-ses
   ],
   imports: [
     CommonModule,
-    SharedModule
+    SharedModule,
+    FormsModule
   ]
 })
 export class SalesModule { }

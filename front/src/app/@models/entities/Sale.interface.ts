@@ -11,6 +11,7 @@ export interface Sale extends BaseTable {
   tSaleLine?: SaleLine[]
   tPayment?: Payment[]
   displayTableRef? : string
+  displayTableRefLabel? : string
   displayTablePayment? : string
   tSaleRepayment? : UnpaidSale[]
 }

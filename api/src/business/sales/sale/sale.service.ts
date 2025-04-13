@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common'
+import { BadRequestException, Injectable } from '@nestjs/common'
 import { PaymentManagerService } from 'src/database/db-manager/payment-manager/payment-manager.service'
 import { SaleLineManagerService } from 'src/database/db-manager/sale-line-manager/sale-line-manager.service'
 import { SaleManagerService } from 'src/database/db-manager/sale-manager/sale-manager.service'
@@ -9,6 +9,7 @@ import { SaleSessionManagerService } from 'src/database/db-manager/sale-session-
 import { InventoryLineManagerService } from 'src/database/db-manager/inventory-line-manager/inventory-line-manager.service'
 import { UnpaidSaleManagerService } from 'src/database/db-manager/unpaid-sale-manager/unpaid-sale-manager.service'
 import { ArticleManagerService } from 'src/database/db-manager/article-manager/article-manager.service'
+import { UpdateSaleSessionDto } from './dto/update-sale-session.dto'
 
 @Injectable()
 export class SaleService {
@@ -88,5 +89,18 @@ export class SaleService {
       salesByWeek[week] += oSale.totalAmount
     }
     return salesByWeek
+  }
+
+  public updateSaleSession (id : number, body : UpdateSaleSessionDto) : Promise<SaleSession> {
+    const oSaleSession = this._saleSessionManagerService.get(id)
+
+    if (!oSaleSession) {
+      throw new BadRequestException('La session de vente n\'existe pas.')
+    }
+
+    return this._saleSessionManagerService.update(id, {
+      ...oSaleSession,
+      ... body
+    })
   }
 }

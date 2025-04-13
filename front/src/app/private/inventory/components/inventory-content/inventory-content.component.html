@@ -32,8 +32,7 @@
     </div>
 
     <app-button type="primary" (click)="addMovementStock()"
-      >Ajouter un mouvement de stock</app-button
-    >
+      >Ajouter un mouvement de stock</app-button>
   </div>
 
   <!-- Tableau avec défilement -->
@@ -163,11 +162,7 @@
               </ng-template>
             </td>
             <td class="px-6 py-4">
-              {{
-                inventoryLine.oArticle.unitPrice * inventoryLine.quantity
-                  | round
-              }}
-              €
+              {{ inventoryLine.oArticle.unitPrice * inventoryLine.quantity | round}} €
             </td>
             <td class="px-6 py-4">
               <div class="flex items-center gap-2">

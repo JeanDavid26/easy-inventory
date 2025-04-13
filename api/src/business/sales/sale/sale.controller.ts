@@ -5,6 +5,7 @@ import { SaleSession } from 'src/database/entities/SaleSession.entity'
 import { SaleService } from './sale.service'
 import { InsertSaleDto } from './dto/insert-sale.dto'
 import { SaleManagerService } from 'src/database/db-manager/sale-manager/sale-manager.service'
+import { UpdateSaleSessionDto } from './dto/update-sale-session.dto'
 
 @Controller('sale')
 export class SaleController {
@@ -28,6 +29,11 @@ export class SaleController {
   @Post('session/open')
   public async openSession () : Promise<SaleSession> {
     return this._saleSessionManagerService.insert({})
+  }
+
+  @Put('session/:id')
+  public async updateSaleSession (@Param('id') id : number, @Body() body : UpdateSaleSessionDto) : Promise<SaleSession> {
+    return this._saleService.updateSaleSession(id, body) 
   }
  
   @Put('session/close/:id')

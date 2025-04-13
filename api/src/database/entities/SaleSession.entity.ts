@@ -8,6 +8,9 @@ export class SaleSession extends BaseTable {
   @PrimaryGeneratedColumn()
   id: number
 
+  @Column({ name : 'salesessionreference', nullable: true })
+  saleSessionReference : string
+
   @Column({
     type: 'enum',
     enum: SaleStatus,

@@ -3,12 +3,15 @@
     <app-button type="primary" (click)="openSession()">Lancer une session de vente</app-button>
   </div>
 
-  <div class="relative overflow-x-auto shadow-md sm:rounded-lg ">
+  <div class="relative overflow-x-auto shadow-md sm:rounded-lg max-h-[70vh] overflow-y-auto">
     <table class="w-full text-sm text-left rtl:text-right text-gray-700">
         <thead class="text-xs text-white uppercase bg-gray-700">
             <tr>
                 <th scope="col" class="px-6 py-3">
-                    Date
+                    Réfeence
+                </th>
+                <th scope="col" class="px-6 py-3">
+                  Date
                 </th>
                 <th scope="col" class="px-6 py-3">
                     Status
@@ -20,6 +23,9 @@
             <tr *ngFor="let session of tSaleSession"
             (click)="goToSaleSession(session.id)"
             class="odd:bg-white even:bg-gray-100 hover:bg-gray-200 border-b cursor-pointer">
+                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap ">
+                  {{session.saleSessionReference ?? 'Pas de référence renseignée'}}
+                </th>
                 <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap ">
                     {{session.creationDate.toLocaleDateString()}}
                 </th>
@@ -38,6 +44,7 @@
                   <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap ">
                       Pas de session de vente
                   </th>
+                  <td></td>
                   <td></td>
                   <td></td>
                 </tr>
