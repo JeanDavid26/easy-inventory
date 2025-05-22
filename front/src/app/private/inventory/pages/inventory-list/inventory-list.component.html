@@ -1,8 +1,8 @@
-<div class="flex flex-col grow p-10">
+<div class="flex flex-col grow p-10 h-full overflow-hidden">
   <div class="flex py-3 justify-end">
     <app-button type="primary" (click)="goToInventoryDetail(0)">Ajouter un stock</app-button>
   </div>
-  <div class="relative overflow-x-auto shadow-md sm:rounded-lg ">
+  <div class="relative overflow-auto shadow-md sm:rounded-lg max-h-[calc(100vh-200px)]">
     <table class="w-full text-sm text-left rtl:text-right text-gray-700">
         <thead class="text-xs text-white uppercase bg-gray-700">
             <tr>
@@ -44,5 +44,3 @@
     </table>
   </div>
 </div>
-
-

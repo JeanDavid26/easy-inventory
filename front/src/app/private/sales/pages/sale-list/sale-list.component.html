@@ -1,9 +1,9 @@
-<div class="flex flex-col grow p-10">
+<div class="flex flex-col grow p-10 h-full overflow-hidden">
   <div class="flex py-3 justify-end">
     <app-button type="primary" (click)="openSession()">Lancer une session de vente</app-button>
   </div>
 
-  <div class="relative overflow-x-auto shadow-md sm:rounded-lg max-h-[70vh] overflow-y-auto">
+  <div class="relative overflow-auto shadow-md sm:rounded-lg max-h-[calc(100vh-200px)]">
     <table class="w-full text-sm text-left rtl:text-right text-gray-700">
         <thead class="text-xs text-white uppercase bg-gray-700">
             <tr>
@@ -16,26 +16,34 @@
                 <th scope="col" class="px-6 py-3">
                     Status
                 </th>
-
+                <th scope="col" class="px-6 py-3">
+                    Actions
+                </th>
             </tr>
         </thead>
         <tbody>
             <tr *ngFor="let session of tSaleSession"
-            (click)="goToSaleSession(session.id)"
-            class="odd:bg-white even:bg-gray-100 hover:bg-gray-200 border-b cursor-pointer">
-                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap ">
+            class="odd:bg-white even:bg-gray-100 hover:bg-gray-200 border-b">
+                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap cursor-pointer" (click)="goToSaleSession(session.id)">
                   {{session.saleSessionReference ?? 'Pas de référence renseignée'}}
                 </th>
-                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap ">
+                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap cursor-pointer" (click)="goToSaleSession(session.id)">
                     {{session.creationDate.toLocaleDateString()}}
                 </th>
-                <td class="px-6 py-4">
+                <td class="px-6 py-4 cursor-pointer" (click)="goToSaleSession(session.id)">
                   <ng-container *ngIf="session.status === 'ongoing'">
                     En cours
                   </ng-container>
                   <ng-container *ngIf="session.status === 'closed'">
                     Fermée
                   </ng-container>
+                </td>
+                <td class="px-6 py-4">
+                  <button class="text-red-600 hover:text-red-800" (click)="deleteSession(session.id, $event)">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                    </svg>
+                  </button>
                 </td>
             </tr>
             <ng-container *ngIf="tSaleSession.length === 0">

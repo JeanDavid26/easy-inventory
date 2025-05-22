@@ -68,6 +68,18 @@ export class SaleSessionDetailComponent {
     })
   }
 
+
+
+  public async deleteSession(): Promise<void> {
+      try {
+        await this._saleService.deleteSession(this.id);
+        this._toast.displayToast('sucess', 'Session de vente supprimée avec succès');
+        this._router.navigateByUrl('private/sales');
+      } catch (error) {
+        this._toast.displayToast('error', 'Erreur lors de la suppression de la session');
+      }
+  }
+
   public getTotalAmount(): number {
     return this.oSaleSession.tSale?.reduce((total, sale) => total + sale.totalAmount, 0) || 0;
   }
