@@ -25,7 +25,10 @@ export class CategoryManagerService {
 
   public async list (): Promise<Category[]> {
     return this._repo.find({
-      relations: [ 'tArticle' ]
+      relations: [ 'tArticle' ],
+      order: {
+        label: 'ASC'
+      }
     })
   }
 

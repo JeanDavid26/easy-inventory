@@ -10,7 +10,7 @@ export class SaleSessionManagerService {
 
   public async list (): Promise<SaleSession[]> {
     return this._repo.find({
-      
+      order : { creationDate : 'DESC' }
     })
   }
 

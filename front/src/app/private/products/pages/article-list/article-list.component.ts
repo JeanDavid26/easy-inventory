@@ -65,6 +65,7 @@ export class ArticleListComponent implements OnInit {
   public async initList(): Promise<void> {
     await this.loadCategories();
     this.tArticle = await this._articleService.list(['tInventoryLine']);
+    this.tArticle = this.tArticle.sort((a, b) => new Date(b.creationDate).getTime() - new Date(a.creationDate).getTime());
     this.filteredArticles = [...this.tArticle];
   }
 

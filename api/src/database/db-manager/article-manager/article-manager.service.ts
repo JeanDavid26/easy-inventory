@@ -12,7 +12,8 @@ export class ArticleManagerService {
       where: {
         id
       },
-      relations: [ 'oCategory', 'tInventoryLine' ]
+      relations: [ 'oCategory', 'tInventoryLine' ],
+      order : { creationDate : 'DESC' }
     })
 
     if (!article) {
