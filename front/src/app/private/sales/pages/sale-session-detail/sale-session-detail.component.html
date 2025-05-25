@@ -50,7 +50,8 @@
       Ajouter une nouvelle transaction
     </app-button>
   </div>
-  <div class="max-h-[500px] overflow-y-auto">
+  <div class="overflow-x-auto">
+    <div class="min-w-full overflow-y-auto" style="max-height: calc(100vh - 450px);">
     <table class="w-full text-sm text-left rtl:text-right text-gray-700">
       <thead class="text-xs text-white uppercase bg-gray-700">
           <tr>
@@ -97,6 +98,7 @@
           </ng-container>
       </tbody>
     </table>
+    </div>
   </div>
 </ng-container>
 
