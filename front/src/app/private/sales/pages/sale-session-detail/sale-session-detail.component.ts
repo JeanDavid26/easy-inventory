@@ -65,6 +65,7 @@ export class SaleSessionDetailComponent {
   public async closeSession() : Promise<void> {
     this._saleService.closeSession(this.id).then(()=> {
       this._router.navigateByUrl('private/sales')
+      this._toast.displayToast('sucess')
     })
   }
 
@@ -78,6 +79,12 @@ export class SaleSessionDetailComponent {
       } catch (error) {
         this._toast.displayToast('error', 'Erreur lors de la suppression de la session');
       }
+  }
+
+  public async uncloseSession() : Promise<void> {
+    await this._saleService.uncloseSession(this.oSaleSession.id)
+    await this.init();
+    this._toast.displayToast('sucess')
   }
 
   public getTotalAmount(): number {

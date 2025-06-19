@@ -41,6 +41,11 @@ export class SaleService {
     return lastValueFrom(this._httpClient.put<SaleSession>(route, {}))
   }
 
+  public uncloseSession(id : number) : Promise<void> {
+    const route = environment.urlApi + `sale/session/unclose/${id}`
+    return lastValueFrom(this._httpClient.put<void>(route, {}))
+  }
+
   public deleteSession(id : number) : Promise<void> {
     const route = environment.urlApi + `sale/session/${id}`
     return lastValueFrom(this._httpClient.delete<void>(route, {}))

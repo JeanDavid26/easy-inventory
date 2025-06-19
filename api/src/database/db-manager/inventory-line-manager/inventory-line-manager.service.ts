@@ -66,7 +66,7 @@ export class InventoryLineManagerService {
     return this._repo.save(stock)
   }
 
-  public async updateInventoryLine (articleId : number, quantity : number) : Promise<InventoryLine> {
+  public async updateInventoryLine (articleId : number, quantity : number, isAdding = false) : Promise<InventoryLine> {
     const oInventoryLine = await this._repo.findOne({
       where : {
         articleId
@@ -75,10 +75,18 @@ export class InventoryLineManagerService {
     if (!oInventoryLine) {
       throw new BadRequestException('Stock de quantité pour un article non trouvé')
     }
+    
+    if (isAdding) {
+      return this._repo.save({
+        id : oInventoryLine.id,
+        quantity : oInventoryLine.quantity + quantity
+      })
+    }
+
     if (oInventoryLine.quantity - quantity < 0) {
       throw new BadRequestException('Quantité inférieur à zéro')
     }
-    
+     
     return this._repo.save({
       id : oInventoryLine.id,
       quantity : oInventoryLine.quantity - quantity

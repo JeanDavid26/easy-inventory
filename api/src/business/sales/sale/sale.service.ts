@@ -10,6 +10,7 @@ import { InventoryLineManagerService } from 'src/database/db-manager/inventory-l
 import { UnpaidSaleManagerService } from 'src/database/db-manager/unpaid-sale-manager/unpaid-sale-manager.service'
 import { ArticleManagerService } from 'src/database/db-manager/article-manager/article-manager.service'
 import { UpdateSaleSessionDto } from './dto/update-sale-session.dto'
+import { SaleStatus } from 'src/database/@models/sale-status.enum'
 
 @Injectable()
 export class SaleService {
@@ -72,6 +73,21 @@ export class SaleService {
     })
   }
 
+  public async uncloseSession (id : number) : Promise<void> {
+    const oSaleSession = await this._saleSessionManagerService.get(id)
+    await Promise.all(oSaleSession.tSale.map(sale => this._undoSale(sale)))
+    await this._saleSessionManagerService.update(oSaleSession.id, {
+      status : SaleStatus.ONGOING
+    })
+  }
+  private async _undoSale (sale : Sale) : Promise<void> {
+    await Promise.all(
+      sale.tSaleLine.map((saleLine)=> {
+        return this._inventoryLineManagerService.updateInventoryLine(saleLine.articleId, saleLine.quantity, true)
+      })
+    )
+  }
+  
   private async _updateInventoryLine (articleId : number, quantity : number) : Promise<void> {
     const oArticle = await this._articleManagerService.get(articleId)
     if (!oArticle.isNotStorable) {

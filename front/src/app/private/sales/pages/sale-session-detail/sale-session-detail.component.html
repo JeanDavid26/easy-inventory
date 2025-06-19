@@ -39,6 +39,9 @@
         <app-button type="primary" (click)="closeSession()" *ngIf="oSaleSession.status === 'ongoing' && !isEditing">
           Clôturer la session de vente
         </app-button>
+        <app-button type="primary" (click)="uncloseSession()" *ngIf="oSaleSession.status === 'closed' &&!isEditing">
+          Modifier la session
+        </app-button>
         <app-button type="important" (click)="deleteSession()" *ngIf="!isEditing">
           Supprimer la session
         </app-button>

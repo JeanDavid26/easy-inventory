@@ -41,6 +41,11 @@ export class SaleController {
     return this._saleService.closeSession(Number(id))
   }
 
+  @Put('session/unclose/:id')
+  public async uncloseSession (@Param('id') id: number) : Promise<void> {
+    await this._saleService.uncloseSession(Number(id))
+  }
+
   @Delete('session/:id')
   public async softDeleteSaleSession (@Param('id') id:number) : Promise<SaleSession> {
     return this._saleSessionManagerService.delete(Number(id))
