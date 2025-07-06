@@ -4,11 +4,13 @@ import { Document } from 'src/database/entities/Document.entity'
 import { UploadDocumentDto } from './dto/upload-document.dto'
 import { FileService } from 'src/shared/services/file/file.service'
 import { Response } from 'express'
+import { InventoryManagerService } from 'src/database/db-manager/inventory-manager/inventory-manager.service'
 @Injectable()
 export class DocumentService {
   constructor (
     private _documentManagerService: DocumentManagerService,
     private _fileService: FileService,
+    private _inventoryManagerService : InventoryManagerService
   ) {}
 
   public async uploadDocument (
@@ -41,4 +43,12 @@ export class DocumentService {
 
     return buffer
   }
+
+  public async getInventoryContentReport (id : number) : Promise<Buffer> {
+
+    const oInventory = await this._inventoryManagerService.get(id)
+
+    return null
+  }
+
 }

@@ -44,6 +44,11 @@ export class DocumentController {
     return this._documentService.getContentFromDocument(documentId, res)
   }
 
+  @Get('inventory/:id/content-report')
+  public getInventoryContentReport (@Param('id') id:number) : Promise<Buffer> {
+    return this._documentService.getInventoryContentReport(id)
+  }
+
   @Delete(':id')
   public deleteDocument (@Param('id') id : number) : Promise<Document> {
     return this._documentManagerService.softDelete(Number(id))

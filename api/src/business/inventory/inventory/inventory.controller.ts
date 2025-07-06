@@ -27,7 +27,7 @@ export class InventoryController {
     id = Number(id)
     return this._inventoryManagerService.update(id, data)
   }
-
+  
   @Post()
   public insert (@Body() data: UpsertInventoryDto): Promise<Inventory> {
     return this._inventoryManagerService.insert(data)
