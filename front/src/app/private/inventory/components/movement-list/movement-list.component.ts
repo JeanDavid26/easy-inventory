@@ -15,26 +15,26 @@ import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
   styleUrl: './movement-list.component.scss'
 })
 export class MovementListComponent implements OnInit {
-  public oInventory : Inventory
-  public toInventoryMovement : InventoryMovement[] = []
-  public tSubsciption : Subscription[] = []
+  public oInventory: Inventory
+  public toInventoryMovement: InventoryMovement[] = []
+  public tSubsciption: Subscription[] = []
   public filteredMovements: InventoryMovement[] = [];
   public searchForm: FormGroup;
   public sortColumn: string | null = null;
   public sortDirection: 'asc' | 'desc' | null = null;
 
   constructor(
-    private _inventoryService : InventoryService,
-    private _inventoryMovementService : InventoryMovementService,
-    private _bcService : BreadcrumbService,
-    private _router : Router,
+    private _inventoryService: InventoryService,
+    private _inventoryMovementService: InventoryMovementService,
+    private _bcService: BreadcrumbService,
+    private _router: Router,
     private _fb: FormBuilder
-  ){
+  ) {
     this.oInventory = this._inventoryService.inventory.value
-    this._inventoryService.inventory.subscribe((inventory)=> {
+    this._inventoryService.inventory.subscribe((inventory) => {
       this.oInventory = inventory
-      if(this.oInventory){
-        this._inventoryMovementService.listByInventoryId(this.oInventory.id).then((toInventoryMovement)=> {
+      if (this.oInventory) {
+        this._inventoryMovementService.listByInventoryId(this.oInventory.id).then((toInventoryMovement) => {
           this.toInventoryMovement = toInventoryMovement
           this.filteredMovements = toInventoryMovement
         })
@@ -107,7 +107,7 @@ export class MovementListComponent implements OnInit {
     }
   }
 
-  goToMovementDetail(id : number) : void {
+  goToMovementDetail(id: number): void {
     this._router.navigateByUrl(`private/inventory/${this.oInventory.id}/movement/${id}`)
   }
 }

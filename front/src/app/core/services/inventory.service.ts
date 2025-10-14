@@ -9,38 +9,43 @@ import { BehaviorSubject, lastValueFrom } from "rxjs"
 })
 export class InventoryService {
 
-  public inventory : BehaviorSubject<Inventory> = new BehaviorSubject(null)
-  public hasAddedMovement : BehaviorSubject<boolean> = new BehaviorSubject(false)
+  public inventory: BehaviorSubject<Inventory> = new BehaviorSubject(null)
+  public hasAddedMovement: BehaviorSubject<boolean> = new BehaviorSubject(false)
   constructor(
-    private _httpClient : HttpClient
-  ){}
+    private _httpClient: HttpClient
+  ) { }
 
-  public async list () : Promise<Inventory[]> {
+  public async list(): Promise<Inventory[]> {
     const route = environment.urlApi + `inventory`
     return lastValueFrom(this._httpClient.get<Inventory[]>(route))
   }
 
-  public async get (id : number) : Promise<Inventory> {
+  public async get(id: number): Promise<Inventory> {
     const route = environment.urlApi + `inventory/${id}`
-    return lastValueFrom(this._httpClient.get<Inventory>(route)).then((inventory)=> {
+    return lastValueFrom(this._httpClient.get<Inventory>(route)).then((inventory) => {
       this.inventory.next(inventory)
       return inventory
     })
   }
 
-  public insert (data : Inventory) : Promise<Inventory> {
+  public insert(data: Inventory): Promise<Inventory> {
     const route = environment.urlApi + `inventory`
-    return lastValueFrom(this._httpClient.post<Inventory>(route, data)).then(async (inventory)=>{
+    return lastValueFrom(this._httpClient.post<Inventory>(route, data)).then(async (inventory) => {
       await this.get(inventory.id)
       return this.inventory.value
     })
   }
 
-  public update (id:number, data : Inventory) : Promise<Inventory> {
+  public update(id: number, data: Inventory): Promise<Inventory> {
     const route = environment.urlApi + `inventory/${id}`
-    return lastValueFrom(this._httpClient.put<Inventory>(route, data)).then(async (inventory)=>{
+    return lastValueFrom(this._httpClient.put<Inventory>(route, data)).then(async (inventory) => {
       await this.get(id)
       return this.inventory.value
     })
+  }
+
+  public async delete(id: number): Promise<void> {
+    const route = environment.urlApi + `inventory/${id}`
+    await lastValueFrom(this._httpClient.delete(route))
   }
 }

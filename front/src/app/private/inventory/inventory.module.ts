@@ -8,6 +8,7 @@ import { DocumentsComponent } from './components/documents/documents.component';
 import { MovementListComponent } from './components/movement-list/movement-list.component';
 import { MovementDetailComponent } from './components/movement-detail/movement-detail.component';
 import { MovementDetailOverviewComponent } from './components/movement-detail-overview/movement-detail-overview.component';
+import { SettingsComponent } from './components/settings/settings.component';
 @NgModule({
   declarations: [
     InventoryListComponent,
@@ -16,11 +17,12 @@ import { MovementDetailOverviewComponent } from './components/movement-detail-ov
     DocumentsComponent,
     MovementListComponent,
     MovementDetailComponent,
-    MovementDetailOverviewComponent
+    MovementDetailOverviewComponent,
+    SettingsComponent
   ],
   imports: [
     CommonModule,
     SharedModule,
   ]
 })
-export class InventoryModule { }
+export class InventoryModule {}
