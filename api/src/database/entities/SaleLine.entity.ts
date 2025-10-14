@@ -16,6 +16,9 @@ export class SaleLine extends BaseTable {
   @Column('decimal', { precision: 10, scale: 2, name: 'saleprice' })
   salePrice: number
 
+  @Column('decimal', { precision: 5, scale: 2, default: 0 })
+  discount: number 
+
   @ManyToOne(() => Article, (article) => article.id)
   @JoinColumn({ name: 'articleid' })
   oArticle : Article

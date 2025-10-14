@@ -5,7 +5,7 @@ import { FindOptionsWhere, Repository } from 'typeorm'
 
 @Injectable()
 export class ArticleManagerService {
-  constructor (@InjectRepository(Article) private _repo: Repository<Article>) {}
+  constructor (@InjectRepository(Article) private _repo: Repository<Article>) { }
 
   public async get (id: number): Promise<Article> {
     const article = await this._repo.findOne({
@@ -13,7 +13,7 @@ export class ArticleManagerService {
         id
       },
       relations: [ 'oCategory', 'tInventoryLine' ],
-      order : { creationDate : 'DESC' }
+      order: { creationDate: 'DESC' }
     })
 
     if (!article) {
@@ -22,17 +22,17 @@ export class ArticleManagerService {
     return article
   }
 
-  public async list (tRelation?: string[], bFilterStorable? : boolean): Promise<Article[]> {
-    
-    let where : FindOptionsWhere<Article> = null
+  public async list (tRelation?: string[], bFilterStorable?: boolean): Promise<Article[]> {
+
+    let where: FindOptionsWhere<Article> = null
     if (bFilterStorable) {
       where = {
-        isNotStorable : false
+        isNotStorable: false
       }
     }
     return this._repo.find({
       where,
-      relations: [ 'oCategory', ... tRelation ?? [] ]
+      relations: [ 'oCategory', ...tRelation ?? [] ]
     })
   }
 
