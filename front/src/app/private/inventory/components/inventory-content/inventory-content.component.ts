@@ -11,6 +11,7 @@ import { Category } from '../../../../@models/entities/Category.interface';
 import { InventoryLine } from '../../../../@models/entities/InventoryLine.interface';
 import { InventoryLineService } from '../../../../core/services/inventory-line.service';
 import { ToastService } from '../../../../shared/toast/toast.service';
+import Decimal from 'decimal.js';
 
 @Component({
   selector: 'app-inventory-content',
@@ -149,7 +150,7 @@ export class InventoryContentComponent implements OnInit {
       case 'quantity':
         return line.quantity;
       case 'value':
-        return line.oArticle.unitPrice * line.quantity;
+        return new Decimal(line.oArticle.unitPrice).times(line.quantity);
       default:
         return '';
     }

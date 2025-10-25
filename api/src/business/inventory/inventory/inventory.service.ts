@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common'
 import { InventoryLineManagerService } from 'src/database/db-manager/inventory-line-manager/inventory-line-manager.service'
 import { InventoryManagerService } from 'src/database/db-manager/inventory-manager/inventory-manager.service'
 import { Inventory } from 'src/database/entities/Inventory.entity'
-
+import { Decimal } from 'decimal.js'
 @Injectable()
 export class InventoryService {
   constructor (private _inventoryManagerService: InventoryManagerService, private _inventoryLineManagerService: InventoryLineManagerService) { }
@@ -39,13 +39,16 @@ export class InventoryService {
   }
 
   private _getValueQuantityInventory (oInventory: Inventory): { value: number, quantity: number } {
-    let value = 0
+    let value = new Decimal(0)
     let quantity = 0
     oInventory.tInventoryLine.forEach(inventoryLine => {
-      value += inventoryLine.oArticle?.unitPrice ?? 0 * inventoryLine.quantity
+      const quantityLine = new Decimal(inventoryLine.quantity)
+      const unitPrice = new Decimal(inventoryLine.oArticle?.unitPrice ?? 0)
+      const total = quantityLine.times(unitPrice)
+      value = value.plus(total)
       quantity += inventoryLine.quantity
     })
-    return { value, quantity }
+    return { value : value.toNumber(), quantity }
   }
 
 }

@@ -15,6 +15,7 @@ import { Subscription } from 'rxjs';
 import { PaymentMethodEnum } from '../../../../@models/enum/payment-method.enum';
 import { PaymentMethod } from '../../../../@models/entities/PaymentMethod.interface';
 import { PaymentMethodService } from '../../../../core/services/payment-method.service';
+import Decimal from 'decimal.js';
 @Component({
   selector: 'app-sale-detail',
   templateUrl: './sale-detail.component.html',
@@ -130,7 +131,6 @@ export class SaleDetailComponent {
         totalAmout: this.oSale.totalAmount
       })
       this.oSale.tSaleLine.forEach((saleLine) => {
-        console.log(saleLine)
         this.addSaleLine(saleLine)
       })
       this.oSale.tPayment.forEach((payment) => {
@@ -171,7 +171,9 @@ export class SaleDetailComponent {
       let totalAmout = null
       if (fgValue.articleId && fgValue.quantity) {
         const article = this.toArticle.find((article) => article.id === Number(fgValue.articleId))
-        totalAmout = (article.unitPrice * fgValue.quantity) * ((100 - fgValue.discount) / 100)
+        const baseTotal = new Decimal(article.unitPrice).times(fgValue.quantity)
+        const discountDecimal = new Decimal(100).minus(fgValue.discount).div(100)
+        totalAmout = baseTotal.times(discountDecimal).toNumber()
       }
       fg.get('salePrice').setValue(totalAmout, { emitEvent: false })
     }))
@@ -298,7 +300,7 @@ export class SaleDetailComponent {
       return '--'
     }
     const oArticle = this.toArticle.find((article) => article.id === saleLineValue.articleId)
-    return `${saleLineValue.quantity * oArticle.unitPrice}`
+    return `${new Decimal(saleLineValue.quantity).times(new Decimal(oArticle.unitPrice)).toFixed(2)}`
   }
 
   getArticleLabel(articleId: number) {
