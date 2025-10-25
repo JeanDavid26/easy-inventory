@@ -13,10 +13,16 @@ export class SaleLine extends BaseTable {
   @Column()
   quantity: number
 
-  @Column('decimal', { precision: 10, scale: 2, name: 'saleprice' })
+  @Column('decimal', { precision: 10, scale: 2, name: 'saleprice', transformer : {
+    from: (value: string) => parseFloat(value),
+    to: (value: number) => value
+  } })
   salePrice: number
 
-  @Column('decimal', { precision: 5, scale: 2, default: 0 })
+  @Column('decimal', { precision: 5, scale: 2, default: 0, transformer : {
+    from: (value: string) => parseFloat(value),
+    to: (value: number) => value
+  } })
   discount: number 
 
   @ManyToOne(() => Article, (article) => article.id)

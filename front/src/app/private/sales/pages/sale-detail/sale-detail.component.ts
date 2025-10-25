@@ -73,7 +73,6 @@ export class SaleDetailComponent {
     })
   }
 
-  // TODO: faire le côté front de la remise
   get formArraySaleLine(): FormArray {
     return this.formGroupSale?.get('tSaleLine') as FormArray
   }
@@ -131,6 +130,7 @@ export class SaleDetailComponent {
         totalAmout: this.oSale.totalAmount
       })
       this.oSale.tSaleLine.forEach((saleLine) => {
+        console.log(saleLine)
         this.addSaleLine(saleLine)
       })
       this.oSale.tPayment.forEach((payment) => {
@@ -164,13 +164,14 @@ export class SaleDetailComponent {
     const fg = this._fb.group({
       articleId: [oSaleLine?.articleId ?? null, Validators.required],
       quantity: [oSaleLine?.quantity ?? null, [Validators.required, this.quantityValidator.bind(this)]],
+      discount: [oSaleLine?.discount ?? 0, [this.percentageValidator.bind(this)]],
       salePrice: [oSaleLine?.salePrice ?? null, [Validators.required]]
     })
     this.tSubscription.push(fg.valueChanges.subscribe((fgValue) => {
       let totalAmout = null
       if (fgValue.articleId && fgValue.quantity) {
         const article = this.toArticle.find((article) => article.id === Number(fgValue.articleId))
-        totalAmout = article.unitPrice * fgValue.quantity
+        totalAmout = (article.unitPrice * fgValue.quantity) * ((100 - fgValue.discount) / 100)
       }
       fg.get('salePrice').setValue(totalAmout, { emitEvent: false })
     }))
@@ -190,6 +191,17 @@ export class SaleDetailComponent {
       }
     }
     return null;
+  }
+
+   percentageValidator(control: AbstractControl): { [key: string]: boolean } | null {
+    const value = control.getRawValue();
+    if(value > 100){
+      return { 'maxPercentage' : true}
+    }
+    if(value <0){
+      return { 'minPercentage' : true}
+    }
+    return null
   }
 
   amountValidator(control: AbstractControl): { [key: string]: boolean } | null {

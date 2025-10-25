@@ -9,4 +9,5 @@ export interface SaleLine extends BaseTable {
   salePrice?: number
   oArticle ?: Article
   oSale?: Sale
+  discount?: number
 }
