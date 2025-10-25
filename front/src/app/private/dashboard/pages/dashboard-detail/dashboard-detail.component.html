@@ -1,4 +1,20 @@
-<div class="flex flex-col p-4 space-y-4 h-full">
+<div class="flex flex-col p-4 space-y-6 h-full">
+  <!-- En-tête avec animation et style moderne -->
+  <div class="bg-gradient-to-r from-blue-50 to-white rounded-2xl shadow-lg p-6">
+    <div class="flex items-center space-x-8">
+      <div class="flex flex-col items-center">
+        <img [src]="'assets/LOGO ADMINISTRATION.png'" alt="Logo Administration" class="h-40 object-contain">
+      </div>
+      <div class="space-y-3">
+        <h1 class="text-3xl font-bold text-gray-800">AJEF Bibliothèque</h1>
+        <p class="text-lg text-gray-600">Bienvenue dans votre espace d'administration de stock</p>
+        <div class="flex items-center text-sm text-gray-500">
+          <i class="fas fa-clock mr-2"></i>
+          <span>Dernière mise à jour : {{ currentDate | date:'dd/MM/yyyy HH:mm' }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
     <div class="bg-white p-4 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300">

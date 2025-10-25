@@ -14,6 +14,7 @@ import Decimal from 'decimal.js';
   styleUrl: './dashboard-detail.component.scss'
 })
 export class DashboardDetailComponent {
+  currentDate: Date = new Date();
 
   totalArticles: number = 0;
   totalInventory: number = 0;
