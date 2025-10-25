@@ -7,6 +7,7 @@ import { ToastService } from '../../../../shared/toast/toast.service';
 import { BreadcrumbService } from '../../../../core/services/breadcrumb.service';
 import { tap } from 'rxjs';
 import { PaymentMethodEnum } from '../../../../@models/enum/payment-method.enum';
+import Decimal from 'decimal.js';
 
 @Component({
   selector: 'app-sale-session-detail',
@@ -92,7 +93,7 @@ export class SaleSessionDetailComponent {
   }
 
   public getTotalAmount(): number {
-    return this.oSaleSession.tSale?.reduce((total, sale) => total + sale.totalAmount, 0) || 0;
+    return this.oSaleSession.tSale?.reduce((total, sale) => new Decimal(total).add(sale.totalAmount).toNumber(), 0) || 0;
   }
 
   public getTotalCB(): number {
@@ -100,14 +101,14 @@ export class SaleSessionDetailComponent {
     for(const sale of this.oSaleSession.tSale){
       tPaymentFiltered.push(... sale.tPayment?.filter((obj)=> obj.paymentMethodId === PaymentMethodEnum.CB) ?? [])
     }
-    return tPaymentFiltered.reduce((total, sale) => total + sale.amount, 0) || 0;
+    return tPaymentFiltered.reduce((total, sale) => new Decimal(total).add(sale.amount).toNumber() , 0) || 0;
   }
   public getTotalCashCheck(): number {
     const tPaymentFiltered = []
     for(const sale of this.oSaleSession.tSale){
       tPaymentFiltered.push(... sale.tPayment?.filter((obj)=> obj.paymentMethodId === PaymentMethodEnum.ESPECE || obj.paymentMethodId === PaymentMethodEnum.CHEQUE) ?? [])
     }
-    return tPaymentFiltered.reduce((total, sale) => total + sale.amount, 0) || 0;
+    return tPaymentFiltered.reduce((total, sale) =>  new Decimal(total).add(sale.amount).toNumber(), 0) || 0;
   }
 
   public startEditing(): void {
