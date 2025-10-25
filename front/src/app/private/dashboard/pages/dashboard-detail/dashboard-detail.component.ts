@@ -40,14 +40,13 @@ export class DashboardDetailComponent {
   }
 
   async loadDashboardData() {
-    const [articleList, inventoryList, categoryList] = await Promise.all([
-      this.articleService.list(),
+    const [ inventoryList, categoryList] = await Promise.all([
       this.inventoryService.list(),
       this.categoryService.list(),
     ])
 
     this.totalInventory = inventoryList.length
-    this.totalArticles = articleList.length
+    this.totalArticles = inventoryList.reduce((acc, curr) => new Decimal(acc).add(curr.quantity).toNumber(),0)
     this.totalCategories = categoryList.length
     this.totalStockValue = inventoryList.reduce((acc, curr) => new Decimal(acc).add(curr.value).toNumber(),0)
   }

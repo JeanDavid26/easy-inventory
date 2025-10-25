@@ -23,20 +23,13 @@
     </div>
 
     <div class="bg-white p-4 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300">
-      <h2 class="text-lg font-semibold mb-2 text-gray-700">Valeur totale du stock</h2>
-      <p class="text-3xl font-bold text-green-600">{{ totalStockValue | currency:'EUR' }}</p>
-    </div>
-  </div>
-
-  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-    <div class="bg-white p-4 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300">
-      <h2 class="text-lg font-semibold mb-2 text-gray-700">Nombre de catégories</h2>
-      <p class="text-3xl font-bold text-cyan-600">{{ totalCategories }}</p>
-    </div>
-
-   <div class="bg-white p-4 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300">
       <h2 class="text-lg font-semibold mb-2 text-gray-700">Nombre de d'article</h2>
       <p class="text-3xl font-bold text-sky-600">{{ totalArticles }}</p>
+    </div>
+
+    <div class="bg-white p-4 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300">
+      <h2 class="text-lg font-semibold mb-2 text-gray-700">Valeur totale du stock</h2>
+      <p class="text-3xl font-bold text-green-600">{{ totalStockValue | currency:'EUR' }}</p>
     </div>
   </div>
 
