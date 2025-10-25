@@ -17,47 +17,47 @@ export class InventoryMovementService {
     private _movementTypeManagerService : MovementTypeManagerService
   ) {}
 
-  public async insertInventoryMovement (oData : InsertInventoryMovementDto) : Promise<InventoryMovement> {
-    const oMovementType = await this._movementTypeManagerService.get(oData.movementTypeId)
-    if (oMovementType.isInternal && !oData.sourceInventoryId && !oData.destinationInventoryId) {
+  public async insertInventoryMovement (data : InsertInventoryMovementDto) : Promise<InventoryMovement> {
+    const oMovementType = await this._movementTypeManagerService.get({ id : data.movementTypeId })
+    if (oMovementType.isInternal && !data.sourceInventoryId && !data.destinationInventoryId) {
       throw new BadRequestException('Un mouvement interne doit avoir une source et une destination')
     }
     
     const partialMovement : Partial<InventoryMovement> = {
-      movementTypeId : oData.movementTypeId,
-      destinationInventoryId : oData.destinationInventoryId,
-      sourceInventoryId : oData.sourceInventoryId ? oData.sourceInventoryId : null,
-      reference : oData.reference,
-      dateTime : oData.dateTime
+      movementTypeId : data.movementTypeId,
+      destinationInventoryId : data.destinationInventoryId,
+      sourceInventoryId : data.sourceInventoryId ? data.sourceInventoryId : null,
+      reference : data.reference,
+      dateTime : data.dateTime
     }
 
-    const inventoryMovementInserted = await this._inventoryMovementManagerService.insert(partialMovement)
+    const inventoryMovementInserted = await this._inventoryMovementManagerService.insert({ data: partialMovement })
 
-    for (const oMovementLineDto of oData.movementLines) {
+    for (const oMovementLineDto of data.movementLines) {
       if (oMovementType.isInternal === true) {
-        const oInventoryLineSource = await this._inventoryLineManagerService.getByInventoryIdAndArticleId(inventoryMovementInserted.sourceInventoryId, oMovementLineDto.articleId)
+        const oInventoryLineSource = await this._inventoryLineManagerService.getByInventoryIdAndArticleId({ inventoryId: inventoryMovementInserted.sourceInventoryId, articleId :oMovementLineDto.articleId })
         if (!oInventoryLineSource || oInventoryLineSource.quantity > oMovementLineDto.quantity) {
           throw new BadRequestException('La quanité est supérieur à la valuer en stock')
         }
         if (oInventoryLineSource.quantity - oMovementLineDto.quantity === 0) {
-          await this._inventoryLineManagerService.delete(oInventoryLineSource.id)
+          await this._inventoryLineManagerService.delete({ id : oInventoryLineSource.id })
         } else {
           const newQuantity = oInventoryLineSource.quantity - oMovementLineDto.quantity
-          await this._inventoryLineManagerService.update(oInventoryLineSource.id, { quantity : newQuantity })
+          await this._inventoryLineManagerService.update({ id: oInventoryLineSource.id, data : { quantity : newQuantity } })
         }
       }
       
-      const oInventoryLineDestination = await this._inventoryLineManagerService.getByInventoryIdAndArticleId(inventoryMovementInserted.destinationInventoryId, oMovementLineDto.articleId)
+      const oInventoryLineDestination = await this._inventoryLineManagerService.getByInventoryIdAndArticleId({ inventoryId:inventoryMovementInserted.destinationInventoryId, articleId : oMovementLineDto.articleId })
       if (!oInventoryLineDestination) {
-        await this._inventoryLineManagerService.insert({
+        await this._inventoryLineManagerService.insert({ data :{
           inventoryId : inventoryMovementInserted.destinationInventoryId,
           articleId : oMovementLineDto.articleId,
           quantity : oMovementLineDto.quantity
-        })
+        } })
       } else {
-        await this._inventoryLineManagerService.update(oInventoryLineDestination.id, {
+        await this._inventoryLineManagerService.update({ id :oInventoryLineDestination.id, data:  {
           quantity : oInventoryLineDestination.quantity + oMovementLineDto.quantity
-        })
+        } })
       }
 
       const partialMovementLine : Partial<MovementLine> = {
@@ -66,7 +66,7 @@ export class InventoryMovementService {
         movementId : inventoryMovementInserted.id
       }
 
-      await this._movementLineManagerService.insert(partialMovementLine)
+      await this._movementLineManagerService.insert({ data :partialMovementLine })
 
     }
     return inventoryMovementInserted

@@ -33,18 +33,18 @@ export class ArticleController {
     if (bFilterStorableQuery && bFilterStorableQuery === 'true') {
       bFilterStorable = true
     }
-    return this._articleManagerService.list(tRelation, bFilterStorable)
+    return this._articleManagerService.list({ tRelation, bFilterStorable })
   }
 
   @Get(':id')
   public get (@Param('id') id: number): Promise<Article> {
     id = Number(id)
-    return this._articleManagerService.get(id)
+    return this._articleManagerService.get({ id })
   }
 
   @Post()
   public insert (@Body() data: UpsertArticleDto): Promise<Article> {
-    return this._articleManagerService.insert(data)
+    return this._articleManagerService.insert({ data })
   }
 
   @Put(':id')
@@ -53,13 +53,13 @@ export class ArticleController {
     @Body() data: UpsertArticleDto,
   ): Promise<Article> {
     id = Number(id)
-    return this._articleManagerService.update(id, data)
+    return this._articleManagerService.update({ id, data })
   }
 
   @Delete(':id')
   public async softDelete (@Param('id') id: number): Promise<Article> {
     id = Number(id)
-    await this._inventoryLineManagerService.deleteByArticleId(id)
-    return this._articleManagerService.softDelete(id)
+    await this._inventoryLineManagerService.deleteByArticleId({ articleId : id })
+    return this._articleManagerService.softDelete({ id })
   }
 }

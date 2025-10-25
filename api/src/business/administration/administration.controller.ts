@@ -21,67 +21,67 @@ export class AdministrationController {
   // Movement Type
   @Get('movementtype')
   public listMovementType () : Promise<MovementType[]> {
-    return this._movementTypeManagerService.list()
+    return this._movementTypeManagerService.list({})
   }
 
   @Get('movementtype/:id')
   public getMovementType (@Param('id') id : number) : Promise<MovementType> {
     id = Number(id)
-    return this._movementTypeManagerService.get(id)
+    return this._movementTypeManagerService.get({ id })
   }
 
   @Post('movementtype')
-  public insertMovementType (@Body() oData : UpsertMovmentTypeDto) : Promise<MovementType> {
-    return this._movementTypeManagerService.insert(oData)
+  public insertMovementType (@Body() data : UpsertMovmentTypeDto) : Promise<MovementType> {
+    return this._movementTypeManagerService.insert({ data })
   }
 
   @Put('movementtype/:id')
-  public updateMovementType (@Param('id') id : number, @Body() oData : UpsertMovmentTypeDto) : Promise<MovementType> {
-    return this._movementTypeManagerService.update(id, oData)
+  public updateMovementType (@Param('id') id : number, @Body() data : UpsertMovmentTypeDto) : Promise<MovementType> {
+    return this._movementTypeManagerService.update({ id, data })
   }
 
   @Delete('movementtype/:id')
   public deleteMovementType (@Param('id') id : number) : Promise<void> {
-    return this._movementTypeManagerService.delete(id)
+    return this._movementTypeManagerService.delete({ id })
   }
 
   // Inventory Type
   @Get('inventorytype')
   public listInventoryType () : Promise<InventoryType[]> {
-    return this._inventoryTypeManagerService.list()
+    return this._inventoryTypeManagerService.list({})
   }
 
   @Get('inventorytype/:id')
   public getInventoryType (@Param('id') id : number) : Promise<InventoryType> {
     id = Number(id)
-    return this._inventoryTypeManagerService.get(id)
+    return this._inventoryTypeManagerService.get({ id })
   }
 
   @Post('inventorytype')
-  public insertInventoryType (@Body() oData : UpsertInventoryTypeDto) : Promise<InventoryType> {
-    return this._inventoryTypeManagerService.insert(oData)
+  public insertInventoryType (@Body() data : UpsertInventoryTypeDto) : Promise<InventoryType> {
+    return this._inventoryTypeManagerService.insert({ data })
   }
 
   @Put('inventorytype/:id')
-  public updateInventoryType (@Param('id') id : number, @Body() oData : UpsertInventoryTypeDto) : Promise<InventoryType> {
-    return this._inventoryTypeManagerService.update(Number(id), oData)
+  public updateInventoryType (@Param('id') id : number, @Body() data: UpsertInventoryTypeDto) : Promise<InventoryType> {
+    return this._inventoryTypeManagerService.update({ id : Number(id), data })
   }
 
   @Delete('inventorytype/:id')
   public deleteInventoryType (@Param('id') id : number) : Promise<void> {
-    return this._inventoryTypeManagerService.delete(id)
+    return this._inventoryTypeManagerService.delete({ id })
   }
 
   // PaiementMethod
 
   @Get('paiementmethod')
   public listPaiementMethod () : Promise<PaymentMethod[]> {
-    return this._paiementMethodManagerService.list()
+    return this._paiementMethodManagerService.list({})
   }
 
   @Get('paiementmethod/:id')
   public getPaiementMethod (@Param('id') id : number) : Promise<PaymentMethod> {
     id = Number(id)
-    return this._paiementMethodManagerService.get(id)
+    return this._paiementMethodManagerService.get({ id })
   }
 }

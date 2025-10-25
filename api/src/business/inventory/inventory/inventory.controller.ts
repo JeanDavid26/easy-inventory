@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, NotImplementedException, Param, Post, Put } from '@nestjs/common'
+import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common'
 import { InventoryManagerService } from 'src/database/db-manager/inventory-manager/inventory-manager.service'
 import { Inventory } from 'src/database/entities/Inventory.entity'
 import { UpsertInventoryDto } from '../dto/upsert-inventory.dto'
@@ -25,12 +25,12 @@ export class InventoryController {
   @Put(':id')
   public update (@Param(':id') id: number, @Body() data: UpsertInventoryDto): Promise<Inventory> {
     id = Number(id)
-    return this._inventoryManagerService.update(id, data)
+    return this._inventoryManagerService.update({ id, data })
   }
 
   @Post()
   public insert (@Body() data: UpsertInventoryDto): Promise<Inventory> {
-    return this._inventoryManagerService.insert(data)
+    return this._inventoryManagerService.insert({ data })
   }
 
   @Delete(':id')

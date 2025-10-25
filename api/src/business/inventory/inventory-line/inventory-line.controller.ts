@@ -12,22 +12,20 @@ export class InventoryLineController {
   public listInventoryLinesByInventoryId (
     @Param('inventoryId') inventoryId: number,
   ): Promise<InventoryLine[]> {
-    return this._inventoryLineManagerService.listByInventoryId(
-      Number(inventoryId),
+    return this._inventoryLineManagerService.listByInventoryId({ inventoryId : Number(inventoryId) }
     )
   }
 
   @Put(':id')
   public updateInventoryLine (@Param('id') id: string, @Body() data : { quantity : number }): Promise<InventoryLine> {
-    const idCasted = Number(id)
-    return this._inventoryLineManagerService.updateInventoryLineById(idCasted, data.quantity)
+    return this._inventoryLineManagerService.updateInventoryLineById({ id :Number(id), quantity : data.quantity })
   }
 
   @Delete(':id')
   public deleteInventoryLine (@Param('id') id: string): Promise<any> {
     const idCasted = Number(id)
     if (idCasted) {
-      return this._inventoryLineManagerService.hardDelete(Number(id))
+      return this._inventoryLineManagerService.hardDelete({ id : Number(id) })
     }
     throw new BadRequestException('Argument invalide')
   }

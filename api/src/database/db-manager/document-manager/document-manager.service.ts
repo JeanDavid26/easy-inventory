@@ -1,16 +1,21 @@
 import { Injectable, NotFoundException } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
+import { DatabaseManagerOptions } from 'src/database/@models/database-manager-options'
+import { DatabaseManager } from 'src/database/class/database-manager'
 import { Document } from 'src/database/entities/Document.entity'
 import { Repository } from 'typeorm'
 
 @Injectable()
-export class DocumentManagerService {
+export class DocumentManagerService extends DatabaseManager<Document> {
   constructor (
     @InjectRepository(Document) private _repo: Repository<Document>,
-  ) {}
+  ) {
+    super(_repo)
+  }
 
-  public async get (id: number): Promise<Document> {
-    const document = await this._repo.findOne({
+  public async get ({ id, options = {} }: { id: number, options?: DatabaseManagerOptions }): Promise<Document> {
+    const repo = this._getRepo(options)
+    const document = await repo.findOne({
       where: {
         id
       },
@@ -23,33 +28,38 @@ export class DocumentManagerService {
     return document
   }
 
-  public async list (): Promise<Document[]> {
-    return this._repo.find({})
+  public async list ({ options = {} }: { options?: DatabaseManagerOptions }): Promise<Document[]> {
+    const repo = this._getRepo(options)
+    return repo.find({})
   }
 
-  public async insert (data: Partial<Document>): Promise<Document> {
-    const reference = this._repo.create(data)
-    return this._repo.save(reference)
+  public async insert ({ data, options = {} }: { data: Partial<Document>, options?: DatabaseManagerOptions }): Promise<Document> {
+    const repo = this._getRepo(options)
+    const reference = repo.create(data)
+    return repo.save(reference)
   }
 
-  public async update (id: number, data: Partial<Document>): Promise<Document> {
+  public async update ({ id, data, options = {} }: { id: number, data: Partial<Document>, options?: DatabaseManagerOptions }): Promise<Document> {
+    const repo = this._getRepo(options)
     delete data.id
     data.id = id
-    const document = this._repo.create(data)
-    const documentSaved = await this._repo.save(document)
+    const document = repo.create(data)
+    const documentSaved = await repo.save(document)
     return documentSaved
   }
 
-  public async softDelete (id: number): Promise<Document> {
-    await this.get(id)
-    return this._repo.save({
+  public async softDelete ({ id, options = {} }: { id: number, options?: DatabaseManagerOptions }): Promise<Document> {
+    const repo = this._getRepo(options)
+    await this.get({ id, options })
+    return repo.save({
       id,
       deleteDate: new Date()
     })
   }
 
-  public async findByInventoryId (inventoryId: string): Promise<Document[]> {
-    return this._repo.find({
+  public async findByInventoryId ({ inventoryId, options = {} }:{inventoryId: string, options?: DatabaseManagerOptions}): Promise<Document[]> {
+    const repo = this._getRepo(options)
+    return repo.find({
       where: {
         inventoryId: Number(inventoryId)
       },

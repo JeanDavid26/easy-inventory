@@ -1,44 +1,53 @@
 import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
+import { DatabaseManagerOptions } from 'src/database/@models/database-manager-options'
+import { DatabaseManager } from 'src/database/class/database-manager'
 import { SaleSession } from 'src/database/entities/SaleSession.entity'
 import { Repository } from 'typeorm'
 
 @Injectable()
-export class SaleSessionManagerService {
+export class SaleSessionManagerService extends DatabaseManager<SaleSession> {
 
-  constructor (@InjectRepository(SaleSession) private _repo: Repository<SaleSession>) {}
+  constructor (@InjectRepository(SaleSession) private _repo: Repository<SaleSession>) {
+    super(_repo)
+  }
 
-  public async list (): Promise<SaleSession[]> {
-    return this._repo.find({
-      order : { creationDate : 'DESC' }
+  public async list ({ options = {} }: { options?: DatabaseManagerOptions }): Promise<SaleSession[]> {
+    const repo = this._getRepo(options)
+    return repo.find({
+      order: { creationDate: 'DESC' }
     })
   }
 
-  public async get (id: number): Promise<SaleSession> {
-    return this._repo.findOne({
+  public async get ({ id, options = {} }: { id: number, options?: DatabaseManagerOptions }): Promise<SaleSession> {
+    const repo = this._getRepo(options)
+    return repo.findOne({
       where: {
         id
       },
-      relations : [ 'tSale', 'tSale.tSaleLine', 'tSale.tSaleLine.oArticle', 'tSale.tPayment', 'tSale.tPayment.oPaymentMethod' ]
+      relations: [ 'tSale', 'tSale.tSaleLine', 'tSale.tSaleLine.oArticle', 'tSale.tPayment', 'tSale.tPayment.oPaymentMethod' ]
     })
   }
 
-  public async insert (data: Partial<SaleSession>): Promise<SaleSession> {
-    return this._repo.save(data)
+  public async insert ({ data, options = {} }: { data: Partial<SaleSession>, options?: DatabaseManagerOptions }): Promise<SaleSession> {
+    const repo = this._getRepo(options)
+    return repo.save(data)
   }
 
-  public async update (id: number, data: Partial<SaleSession>): Promise<SaleSession> {
+  public async update ({ id, data, options = {} }: { id: number, data: Partial<SaleSession>, options?: DatabaseManagerOptions }): Promise<SaleSession> {
+    const repo = this._getRepo(options)
     delete data.id
     data.id = id
-    return this._repo.save(data)
+    return repo.save(data)
   }
 
-  public async delete (id: number): Promise<SaleSession> {
-    await this.get(id)
+  public async delete ({ id, options = {} }:{ id: number, options? : DatabaseManagerOptions }): Promise<SaleSession> {
+    const repo = this._getRepo(options)
+    await this.get({ id, options })
     const data: Partial<SaleSession> = {
       id,
       deleteDate: new Date()
     }
-    return this._repo.save(data)
+    return repo.save(data)
   }
 }

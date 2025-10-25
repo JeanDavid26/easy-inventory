@@ -1,16 +1,21 @@
 import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
+import { DatabaseManagerOptions } from 'src/database/@models/database-manager-options'
+import { DatabaseManager } from 'src/database/class/database-manager'
 import { Inventory } from 'src/database/entities/Inventory.entity'
 import { Repository } from 'typeorm'
 
 @Injectable()
-export class InventoryManagerService {
+export class InventoryManagerService extends DatabaseManager<Inventory> {
   constructor (
     @InjectRepository(Inventory) private _repo: Repository<Inventory>,
-  ) {}
+  ) {
+    super(_repo)
+  }
 
-  public async get (id: number): Promise<Inventory> {
-    const qb = this._repo
+  public async get ({ id, options = {} }: { id: number, options?: DatabaseManagerOptions }): Promise<Inventory> {
+    const repo = this._getRepo(options)
+    const qb = repo
       .createQueryBuilder('inventory')
       .leftJoinAndSelect('inventory.tInventoryLine', 'tinventoryline')
       .leftJoinAndSelect('tinventoryline.oArticle', 'tinventoryline_oarticle')
@@ -20,8 +25,9 @@ export class InventoryManagerService {
     return qb.getOne()
   }
 
-  public async list (): Promise<Inventory[]> {
-    const qb = this._repo
+  public async list ({ options = {} }: { options?: DatabaseManagerOptions }): Promise<Inventory[]> {
+    const repo = this._getRepo(options)
+    const qb = repo
       .createQueryBuilder('inventory')
       .leftJoinAndSelect('inventory.tInventoryLine', 'tinventoryline')
       .leftJoinAndSelect('tinventoryline.oArticle', 'tinventoryline_oarticle')
@@ -29,22 +35,25 @@ export class InventoryManagerService {
     return qb.getMany()
   }
 
-  public async insert (data: Partial<Inventory>): Promise<Inventory> {
-    return this._repo.save(data)
+  public async insert ({ data, options = {} }: { data: Partial<Inventory>, options?: DatabaseManagerOptions }): Promise<Inventory> {
+    const repo = this._getRepo(options)
+    return repo.save(data)
   }
 
-  public async update (id: number, data: Partial<Inventory>): Promise<Inventory> {
+  public async update ({ id, data, options = {} }: { id: number, data: Partial<Inventory>, options?: DatabaseManagerOptions }): Promise<Inventory> {
+    const repo = this._getRepo(options)
     delete data.id
     data.id = id
-    return this._repo.save(data)
+    return repo.save(data)
   }
 
-  public async delete (id: number): Promise<Inventory> {
-    await this.get(id)
+  public async delete ({ id, options = {} }: { id: number, options?: DatabaseManagerOptions }): Promise<Inventory> {
+    const repo = this._getRepo(options)
+    await this.get({ id, options })
     const stock: Partial<Inventory> = {
       id,
       deleteDate: new Date()
     }
-    return this._repo.save(stock)
+    return repo.save(stock)
   }
 }

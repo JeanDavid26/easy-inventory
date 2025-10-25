@@ -8,7 +8,7 @@ export class InventoryService {
   constructor (private _inventoryManagerService: InventoryManagerService, private _inventoryLineManagerService: InventoryLineManagerService) { }
 
   public async list (): Promise<Inventory[]> {
-    const tInventory = (await this._inventoryManagerService.list()).map(inventory => {
+    const tInventory = (await this._inventoryManagerService.list({})).map(inventory => {
 
       const resValueQuantity = this._getValueQuantityInventory(inventory)
       return {
@@ -22,20 +22,20 @@ export class InventoryService {
   }
 
   public async get (id: number): Promise<Inventory> {
-    const inventory = await this._inventoryManagerService.get(id)
+    const inventory = await this._inventoryManagerService.get({ id })
     return inventory
   }
 
   public async delete (id: number): Promise<void> {
-    const inventory = await this._inventoryManagerService.get(id)
+    const inventory = await this._inventoryManagerService.get({ id })
     const tPromise = []
 
     for (const line of inventory.tInventoryLine) {
-      tPromise.push(this._inventoryLineManagerService.delete(line.id))
+      tPromise.push(this._inventoryLineManagerService.delete({ id : line.id }))
     }
 
     await Promise.all(tPromise)
-    await this._inventoryManagerService.delete(id)
+    await this._inventoryManagerService.delete({ id })
   }
 
   private _getValueQuantityInventory (oInventory: Inventory): { value: number, quantity: number } {

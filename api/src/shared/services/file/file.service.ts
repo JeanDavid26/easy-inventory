@@ -16,11 +16,11 @@ export class FileService {
     }
     const path = await this._writeFile(file)
     appFile.path = path
-    return this._appFileManagerService.insert(appFile)
+    return this._appFileManagerService.insert({ data : appFile })
   }
 
   public async getFileBuffer (id: number): Promise<Buffer> {
-    const appFile = await this._appFileManagerService.get(id)
+    const appFile = await this._appFileManagerService.get({ id })
     try {
       // Read the file into a buffer asynchronously
       const buffer = await fs.promises.readFile(appFile.path)

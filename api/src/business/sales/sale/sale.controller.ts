@@ -18,17 +18,17 @@ export class SaleController {
 
   @Get('session')
   public async listSaleSessions (): Promise<SaleSession[]> {
-    return this._saleSessionManagerService.list()
+    return this._saleSessionManagerService.list({})
   }
 
   @Get('session/:id')
   public async getSaleSessions (@Param('id') id: number): Promise<SaleSession> {
-    return this._saleSessionManagerService.get(id)
+    return this._saleSessionManagerService.get({ id })
   }
 
   @Post('session/open')
   public async openSession (): Promise<SaleSession> {
-    return this._saleSessionManagerService.insert({})
+    return this._saleSessionManagerService.insert({ data : {} })
   }
 
   @Put('session/:id')
@@ -48,7 +48,7 @@ export class SaleController {
 
   @Delete('session/:id')
   public async softDeleteSaleSession (@Param('id') id: number): Promise<SaleSession> {
-    return this._saleSessionManagerService.delete(Number(id))
+    return this._saleSessionManagerService.delete({ id :Number(id) })
   }
 
   @Get('recent-sales')
@@ -58,7 +58,7 @@ export class SaleController {
 
   @Get(':id')
   public async getSale (@Param('id') id: number): Promise<Sale> {
-    return this._saleManagerService.get(id)
+    return this._saleManagerService.get({ id })
   }
 
   @Post()
@@ -69,7 +69,7 @@ export class SaleController {
 
   @Delete(':id')
   public async removeSale (@Param('id') id: number): Promise<Sale> {
-    return this._saleManagerService.delete(id)
+    return this._saleManagerService.delete({ id })
   }
 
 }

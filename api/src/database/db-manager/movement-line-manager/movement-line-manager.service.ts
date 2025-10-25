@@ -1,41 +1,46 @@
 import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
+import { DatabaseManagerOptions } from 'src/database/@models/database-manager-options'
+import { DatabaseManager } from 'src/database/class/database-manager'
 import { MovementLine } from 'src/database/entities/MovementLine.entity'
 import { Repository } from 'typeorm'
 
 @Injectable()
-export class MovementLineManagerService {
+export class MovementLineManagerService extends DatabaseManager<MovementLine> {
   constructor (
     @InjectRepository(MovementLine) private _repo: Repository<MovementLine>,
-  ) {}
+  ) {
+    super(_repo)
+  }
 
-  public async get (id: number): Promise<MovementLine> {
-    return this._repo.findOne({
+  public async get ({ id, options = {} }: { id: number, options?: DatabaseManagerOptions }): Promise<MovementLine> {
+    const repo = this._getRepo(options)
+    return repo.findOne({
       where: {
         id
       }
     })
   }
 
-  public async insert (data: Partial<MovementLine>): Promise<MovementLine> {
-    return this._repo.save(data)
+  public async insert ({ data, options = {} }: { data: Partial<MovementLine>, options?: DatabaseManagerOptions }): Promise<MovementLine> {
+    const repo = this._getRepo(options)
+    return repo.save(data)
   }
 
-  public async update (
-    id: number,
-    data: Partial<MovementLine>,
-  ): Promise<MovementLine> {
+  public async update ({ id, data, options = {} }: { id: number, data: Partial<MovementLine>, options?: DatabaseManagerOptions }): Promise<MovementLine> {
+    const repo = this._getRepo(options)
     delete data.id
     data.id = id
-    return this._repo.save(data)
+    return repo.save(data)
   }
 
-  public async delete (id: number): Promise<MovementLine> {
-    await this.get(id)
+  public async delete ({ id, options = {} }: { id: number, options?: DatabaseManagerOptions }): Promise<MovementLine> {
+    const repo = this._getRepo(options)
+    await this.get({ id, options })
     const stock: Partial<MovementLine> = {
       id,
       deleteDate: new Date()
     }
-    return this._repo.save(stock)
+    return repo.save(stock)
   }
 }

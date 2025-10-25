@@ -11,3 +11,5 @@
 - [ ] Détaillé l'erreur pour la clôture de vente afin de voir qu'elle article pose problème
 
 - [ ] Pourquoi les ventes ne sont pas bon
+
+- [ ] Faire une classe parent pour les repos manager et mettre les interfaces d'optoins afin de gérer facilement les transactions dans toutes l'application (ongoing)

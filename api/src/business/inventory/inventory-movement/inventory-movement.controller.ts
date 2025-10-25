@@ -13,24 +13,24 @@ export class InventoryMovementController {
   ) {}
 
   @Post()
-  public insertInventoryMovement (@Body() oData : InsertInventoryMovementDto) : Promise<InventoryMovement> {
-    return this._inventoryMovementService.insertInventoryMovement(oData)
+  public insertInventoryMovement (@Body() data : InsertInventoryMovementDto) : Promise<InventoryMovement> {
+    return this._inventoryMovementService.insertInventoryMovement(data)
   }
 
   @Get('recent-movements')
   public getRecentMovements () : Promise<InventoryMovement[]> {
-    return this._inventoryMovementManagerService.getRecentMovements()
+    return this._inventoryMovementManagerService.getRecentMovements({})
   }
 
   @Get(':id')
   public getInventoryMovementById (@Param('id') id : number) : Promise<InventoryMovement> {
     id = Number(id)
-    return this._inventoryMovementManagerService.get(id)
+    return this._inventoryMovementManagerService.get({ id })
   }
 
   @Get('list-inventory/:inventoryId')
   public listInventoryMovementByInventoryId (@Param('inventoryId') inventoryId : number) : Promise<InventoryMovement[]> {
-    return this._inventoryMovementManagerService.listByInventoryId(inventoryId)
+    return this._inventoryMovementManagerService.listByInventoryId({ inventoryId })
   }
 
 }

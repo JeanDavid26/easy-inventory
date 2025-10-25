@@ -12,6 +12,7 @@ export class AuthController {
   @Public()
   @HttpCode(HttpStatus.OK)
   @Post('signin')
+  // eslint-disable-next-line @typescript-eslint/naming-convention
   signIn (@Body() signInDto: SignInDto): Promise<{ access_token: string }> {
     return this._authService.signIn(signInDto.email, signInDto.password)
   }

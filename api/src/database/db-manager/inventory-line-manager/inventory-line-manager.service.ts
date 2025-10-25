@@ -1,16 +1,21 @@
 import { BadRequestException, Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
+import { DatabaseManagerOptions } from 'src/database/@models/database-manager-options'
+import { DatabaseManager } from 'src/database/class/database-manager'
 import { InventoryLine } from 'src/database/entities/InventoryLine.entity'
 import { DeleteResult, Repository } from 'typeorm'
 
 @Injectable()
-export class InventoryLineManagerService {
+export class InventoryLineManagerService extends DatabaseManager<InventoryLine> {
   constructor (
     @InjectRepository(InventoryLine) private _repo: Repository<InventoryLine>,
-  ) {}  
+  ) {
+    super(_repo)
+  }  
 
-  public async listByInventoryId (inventoryId: number): Promise<InventoryLine[]> {
-    return this._repo.find({
+  public async listByInventoryId ({ inventoryId, options = {} }: { inventoryId: number, options?: DatabaseManagerOptions }): Promise<InventoryLine[]> {
+    const repo = this._getRepo(options)
+    return repo.find({
       where: {
         inventoryId
       },
@@ -18,16 +23,18 @@ export class InventoryLineManagerService {
     })
   }
 
-  public async get (id: number): Promise<InventoryLine> {
-    return this._repo.findOne({
+  public async get ({ id, options = {} }: { id: number, options?: DatabaseManagerOptions }): Promise<InventoryLine> {
+    const repo = this._getRepo(options)
+    return repo.findOne({
       where: {
         id
       }
     })
   }
 
-  public async getByInventoryIdAndArticleId (inventoryId : number, articleId : number) : Promise<InventoryLine> {
-    return this._repo.findOne({
+  public async getByInventoryIdAndArticleId ({ inventoryId, articleId, options = {} }: { inventoryId: number, articleId: number, options?: DatabaseManagerOptions }): Promise<InventoryLine> {
+    const repo = this._getRepo(options)
+    return repo.findOne({
       where : {
         articleId,
         inventoryId
@@ -35,49 +42,53 @@ export class InventoryLineManagerService {
     })
   }
 
-  public async deleteByArticleId (articleId : number) : Promise<DeleteResult> {
-    return this._repo.delete({ articleId })
+  public async deleteByArticleId ({ articleId, options = {} }: { articleId: number, options?: DatabaseManagerOptions }): Promise<DeleteResult> {
+    const repo = this._getRepo(options)
+    return repo.delete({ articleId })
   }
 
-  public async insert (data: Partial<InventoryLine>): Promise<InventoryLine> {
-    return this._repo.save(data)
+  public async insert ({ data, options = {} }: { data: Partial<InventoryLine>, options?: DatabaseManagerOptions }): Promise<InventoryLine> {
+    const repo = this._getRepo(options)
+    return repo.save(data)
   }
 
-  public async update ( 
-    id: number,
-    data: Partial<InventoryLine>,
-  ): Promise<InventoryLine> {
+  public async update ({ id, data, options = {} }: { id: number, data: Partial<InventoryLine>, options?: DatabaseManagerOptions }): Promise<InventoryLine> {
+    const repo = this._getRepo(options)
     delete data.id
     data.id = id
-    return this._repo.save(data)
+    return repo.save(data)
   }
 
-  public async hardDelete (id: number) : Promise<DeleteResult> {
-    await this.get(id)
-    return this._repo.delete(id)
+  public async hardDelete ({ id, options = {} }: { id: number, options?: DatabaseManagerOptions }): Promise<DeleteResult> {
+    const repo = this._getRepo(options)
+    await this.get({ id, options })
+    return repo.delete(id)
   }
 
-  public async delete (id: number): Promise<InventoryLine> {
-    await this.get(id)
+  public async delete ({ id, options = {} }: { id: number, options?: DatabaseManagerOptions }): Promise<InventoryLine> {
+    const repo = this._getRepo(options)
+    await this.get({ id, options })
     const stock: Partial<InventoryLine> = {
       id,
       deleteDate: new Date()
     }
-    return this._repo.save(stock)
+    return repo.save(stock)
   }
 
-  public async updateInventoryLine (articleId : number, quantity : number, isAdding = false) : Promise<InventoryLine> {
-    const oInventoryLine = await this._repo.findOne({
+  public async updateInventoryLine ({ articleId, quantity, isAdding = false, options = {} }: {articleId: number, quantity: number, isAdding?: boolean, options?: DatabaseManagerOptions }) : Promise<InventoryLine> {
+    const repo = this._getRepo(options)
+    const oInventoryLine = await repo.findOne({
       where : {
         articleId
       }
     })
+
     if (!oInventoryLine) {
       throw new BadRequestException('Stock de quantité pour un article non trouvé')
     }
     
     if (isAdding) {
-      return this._repo.save({
+      return repo.save({
         id : oInventoryLine.id,
         quantity : oInventoryLine.quantity + quantity
       })
@@ -87,14 +98,15 @@ export class InventoryLineManagerService {
       throw new BadRequestException('Quantité inférieur à zéro')
     }
      
-    return this._repo.save({
+    return repo.save({
       id : oInventoryLine.id,
       quantity : oInventoryLine.quantity - quantity
     })
   }
 
-  public async updateInventoryLineById (id : number, quantity : number) : Promise<InventoryLine> {
-    const oInventoryLine = await this._repo.findOne({
+  public async updateInventoryLineById ({ id, quantity, options = {} }: { id: number, quantity: number, options?: DatabaseManagerOptions }): Promise<InventoryLine> {
+    const repo = this._getRepo(options)
+    const oInventoryLine = await repo.findOne({
       where : {
         id
       }
@@ -106,7 +118,7 @@ export class InventoryLineManagerService {
       throw new BadRequestException('Quantité inférieur à zéro')
     }
     
-    return this._repo.save({
+    return repo.save({
       id,
       quantity : quantity
     })

@@ -51,6 +51,6 @@ export class DocumentController {
 
   @Delete(':id')
   public deleteDocument (@Param('id') id : number) : Promise<Document> {
-    return this._documentManagerService.softDelete(Number(id))
+    return this._documentManagerService.softDelete({ id :Number(id) })
   }
 }

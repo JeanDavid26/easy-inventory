@@ -23,17 +23,17 @@ export class DocumentService {
       inventoryId: body.inventoryId,
       label: body.label
     }
-    return this._documentManagerService.insert(documentPartial)
+    return this._documentManagerService.insert({ data :documentPartial })
   }
 
   public async getDocumentsByInventoryId (
     inventoryId: string,
   ): Promise<Document[]> {
-    return this._documentManagerService.findByInventoryId(inventoryId)
+    return this._documentManagerService.findByInventoryId({ inventoryId })
   }
 
   public async getContentFromDocument (documentId: number, res : Response): Promise<Buffer> {
-    const document = await this._documentManagerService.get(documentId)
+    const document = await this._documentManagerService.get({ id : documentId })
     const buffer = await this._fileService.getBufferFromPath(document.oAppFile.path)
     res.setHeader('Access-Control-Expose-Headers', 'Content-Disposition')
     res.setHeader('Content-Disposition', `filename=Visuel Document`)
@@ -46,8 +46,8 @@ export class DocumentService {
 
   public async getInventoryContentReport (id : number) : Promise<Buffer> {
 
-    const oInventory = await this._inventoryManagerService.get(id)
-
+    const oInventory = await this._inventoryManagerService.get({ id })
+    console.log(oInventory)
     return null
   }
 

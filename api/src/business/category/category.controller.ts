@@ -17,17 +17,17 @@ export class CategoryController {
   @Get(':id')
   public get (@Param('id') id: number): Promise<Category> {
     id = Number(id)
-    return this._categoryManagerService.get(id)
+    return this._categoryManagerService.get({ id })
   }
 
   @Get()
   public list (): Promise<Category[]> {
-    return this._categoryManagerService.list()
+    return this._categoryManagerService.list({})
   }
 
   @Post()
   public insert (@Body() data: UpsertCategoryDto): Promise<Category> {
-    return this._categoryManagerService.insert(data)
+    return this._categoryManagerService.insert({ data })
   }
 
   @Put(':id')
@@ -36,11 +36,11 @@ export class CategoryController {
     @Body() data: UpsertCategoryDto,
   ): Promise<Category> {
     id = Number(id)
-    return this._categoryManagerService.update(parseInt(id as any), data)
+    return this._categoryManagerService.update({ id : parseInt(id as any), data })
   }
 
   @Delete(':id')
   public softDelete (@Param('id') id: number): Promise<Category> {
-    return this._categoryManagerService.softDelete(id)
+    return this._categoryManagerService.softDelete({ id })
   }
 }
