@@ -66,6 +66,10 @@ export class SaleSessionDetailComponent {
     this._saleService.closeSession(this.id).then(()=> {
       this._router.navigateByUrl('private/sales')
       this._toast.displayToast('sucess')
+    }).catch(err => {
+      console.log(err?.error ?? undefined)
+      this._toast.displayToast('error', err?.error?.message ?? undefined)
+      console.dir(err, { depth : null})
     })
   }
 

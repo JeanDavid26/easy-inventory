@@ -8,7 +8,7 @@ export class DatabaseManager<T extends ObjectLiteral> {
     this._repository = repository
   }
 
-  protected _getRepo (options?: DatabaseManagerOptions): any {
+  protected _getRepo (options?: DatabaseManagerOptions): Repository<T> {
 
     if (options?.entityTransactionManager) {
       return options.entityTransactionManager.getRepository(this._repository.target)

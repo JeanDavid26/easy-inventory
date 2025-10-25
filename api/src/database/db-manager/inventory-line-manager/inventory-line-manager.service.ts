@@ -80,7 +80,8 @@ export class InventoryLineManagerService extends DatabaseManager<InventoryLine> 
     const oInventoryLine = await repo.findOne({
       where : {
         articleId
-      }
+      },
+      relations: [ 'oArticle', 'oInventory' ]
     })
 
     if (!oInventoryLine) {
@@ -95,7 +96,7 @@ export class InventoryLineManagerService extends DatabaseManager<InventoryLine> 
     }
 
     if (oInventoryLine.quantity - quantity < 0) {
-      throw new BadRequestException('Quantité inférieur à zéro')
+      throw new BadRequestException(`L'article "${oInventoryLine.oArticle.referenceCode}" dans le stock "${oInventoryLine.oInventory.label}" aura une quantité inférieur à zéro`)
     }
      
     return repo.save({

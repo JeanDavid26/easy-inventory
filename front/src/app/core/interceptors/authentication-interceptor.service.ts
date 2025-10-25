@@ -26,13 +26,13 @@ export class AuthenticationInterceptor implements HttpInterceptor {
       .pipe(
         catchError((err, _caught) => {
           if (err instanceof HttpErrorResponse) {
-            if (err.status === 401 || err.status === 400 ) {
+            if (err.status === 401) {
               this._authService.signOut()
             }
           }
           console.log(err)
-          const error = new Error(err)
-          return throwError(() => error)
+
+          return throwError(() => err)
         })
       )
   }
