@@ -103,10 +103,18 @@ export class SaleSessionDetailComponent {
     }
     return tPaymentFiltered.reduce((total, sale) => new Decimal(total).add(sale.amount).toNumber() , 0) || 0;
   }
-  public getTotalCashCheck(): number {
+  public getTotalCash(): number {
     const tPaymentFiltered = []
     for(const sale of this.oSaleSession.tSale){
-      tPaymentFiltered.push(... sale.tPayment?.filter((obj)=> obj.paymentMethodId === PaymentMethodEnum.ESPECE || obj.paymentMethodId === PaymentMethodEnum.CHEQUE) ?? [])
+      tPaymentFiltered.push(... sale.tPayment?.filter((obj)=> obj.paymentMethodId === PaymentMethodEnum.ESPECE ) ?? [])
+    }
+    return tPaymentFiltered.reduce((total, sale) =>  new Decimal(total).add(sale.amount).toNumber(), 0) || 0;
+  }
+
+   public getTotalCheck(): number {
+    const tPaymentFiltered = []
+    for(const sale of this.oSaleSession.tSale){
+      tPaymentFiltered.push(... sale.tPayment?.filter((obj)=> obj.paymentMethodId === PaymentMethodEnum.CHEQUE) ?? [])
     }
     return tPaymentFiltered.reduce((total, sale) =>  new Decimal(total).add(sale.amount).toNumber(), 0) || 0;
   }

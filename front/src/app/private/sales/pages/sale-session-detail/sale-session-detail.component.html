@@ -28,7 +28,8 @@
         <p>Nombre de transactions : {{oSaleSession.tSale?.length || 0}}</p>
         <p>Total : {{getTotalAmount() | round}}€</p>
         <p>Total CB : {{getTotalCB() | round}}€</p>
-        <p>Totale espéce/chèque: {{getTotalCashCheck() | round}}€</p>
+        <p>Totale espéce: {{getTotalCash() | round}}€</p>
+        <p>Totale chèque: {{getTotalCheck() | round}}€</p>
       </div>
 
       <div class="flex gap-2">
