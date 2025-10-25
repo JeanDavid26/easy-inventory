@@ -7,8 +7,7 @@ import { SharedModule } from '../shared/shared.module';
 import { ProductsModule } from './products/products.module';
 import { AdministrationModule } from './administration/administration.module';
 import { SalesModule } from './sales/sales.module';
-
-
+import { DashboardModule } from './dashboard/dashboard.module';
 
 @NgModule({
   declarations: [
@@ -21,7 +20,8 @@ import { SalesModule } from './sales/sales.module';
     ProductsModule,
     SharedModule,
     AdministrationModule,
-    SalesModule
+    SalesModule,
+    DashboardModule
   ]
 })
 export class PrivateModule { }

@@ -22,10 +22,12 @@ import { MovementDetailOverviewComponent } from './inventory/components/movement
 import { SaleListComponent } from './sales/pages/sale-list/sale-list.component';
 import { SaleSessionDetailComponent } from './sales/pages/sale-session-detail/sale-session-detail.component';
 import { SaleDetailComponent } from './sales/pages/sale-detail/sale-detail.component';
+import { DashboardDetailComponent } from './dashboard/pages/dashboard-detail/dashboard-detail.component';
 
 const routes: Routes = [
   { path: '', component: NavBarComponent, children: [
-    { path: '',   redirectTo: '/private/inventory', pathMatch: 'full' },
+    { path: '',   redirectTo: '/private/dashboard', pathMatch: 'full' },
+    { path : 'dashboard', component : DashboardDetailComponent },
     { path : 'products', component : ProductsNavComponent, children : [
       { path : '', redirectTo : 'article', pathMatch : 'full'},
       { path : 'category', component : CategoryListComponent },
