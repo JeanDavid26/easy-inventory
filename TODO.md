@@ -1,10 +1,16 @@
 ## TODO 
 
-- [ ] Dashbord (logo / ajef) nb stock / nb article / valeur total des stocks
+- [x] Dashbord (logo / ajef) nb stock / nb article / valeur total des stocks
 
 - [x] Vente ajouter la possibilité d'avoir un montant de remise par article
 
 - [ ] Gestion des stocks ajouter la suppression des stocks
+
+- [ ] Fond de caisse de départ
+
+- [ ] Gestion des impayées
+
+- [ ] Select dans le transfert de sotck qui se mets en bas on peut pas selectionner ce que l'on veut
 
 - [x] Gestion des stocks ajusté le calcul des prix des stock
 

@@ -7,4 +7,7 @@ export class UpdateSaleSessionDto {
 
   @IsOptional()
   creationDate : Date
+
+  @IsOptional()
+  changeFund: number
 } 

@@ -25,6 +25,13 @@
           </div>
         </div>
 
+         <div class="flex items-center gap-2 mb-2">
+          <p *ngIf="!isEditing">Fond de caisse : {{oSaleSession.changeFund ?? 'Non définie'}}</p>
+          <div *ngIf="isEditing" class="flex items-center gap-2">
+            <app-input type="number"  [(ngModel)]="editChangeFund" label="Fond de caisse"></app-input>
+          </div>
+        </div>
+
         <p>Nombre de transactions : {{oSaleSession.tSale?.length || 0}}</p>
         <p>Total : {{getTotalAmount() | round}}€</p>
         <p>Total CB : {{getTotalCB() | round}}€</p>

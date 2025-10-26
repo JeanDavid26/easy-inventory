@@ -17,6 +17,12 @@ export class SaleSession extends BaseTable {
     default: SaleStatus.ONGOING
   })
   status: string
+
+  @Column('decimal', { nullable : true, precision: 5, scale: 2, transformer : {
+    from: (value: string) => parseFloat(value),
+    to: (value: number) => value
+  } })
+  changeFund: number
  
   @OneToMany(() => Sale, sale => sale.oSaleSession)
   tSale : Sale[]

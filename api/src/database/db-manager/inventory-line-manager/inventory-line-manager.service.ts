@@ -96,7 +96,14 @@ export class InventoryLineManagerService extends DatabaseManager<InventoryLine> 
     }
 
     if (oInventoryLine.quantity - quantity < 0) {
-      throw new BadRequestException(`L'article "${oInventoryLine.oArticle.referenceCode}" dans le stock "${oInventoryLine.oInventory.label}" aura une quantité inférieur à zéro`)
+      throw new BadRequestException(`L'article "${oInventoryLine.oArticle.referenceCode}" dans le stock "${oInventoryLine.oInventory.label}" aura une quantité inférieur à zéro`, {
+        cause : {
+          inventoryLineId :oInventoryLine.id,
+          inventoryId : oInventoryLine.inventoryId,
+          articleId: oInventoryLine.articleId,
+          reference: oInventoryLine.oArticle.referenceCode
+        }
+      })
     }
      
     return repo.save({
@@ -115,6 +122,7 @@ export class InventoryLineManagerService extends DatabaseManager<InventoryLine> 
     if (!oInventoryLine) {
       throw new BadRequestException('Stock de quantité pour un article non trouvé')
     }
+
     if (quantity < 0) {
       throw new BadRequestException('Quantité inférieur à zéro')
     }

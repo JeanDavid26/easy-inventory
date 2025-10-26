@@ -22,6 +22,7 @@ export class SaleSessionDetailComponent {
   public isEditing: boolean = false;
   public editDate: Date;
   public editReference: string;
+  public editChangeFund : number
 
   constructor(
     private _router : Router,
@@ -123,6 +124,7 @@ export class SaleSessionDetailComponent {
     this.isEditing = true;
     this.editDate = new Date(this.oSaleSession.creationDate);
     this.editReference = this.oSaleSession.saleSessionReference || '';
+    this.editChangeFund = this.oSaleSession.changeFund ?? null
   }
 
   public cancelEditing(): void {
@@ -135,13 +137,15 @@ export class SaleSessionDetailComponent {
     try {
       const updatedSession = await this._saleService.updateSaleSession(this.id, {
         creationDate: this.editDate,
+        changeFund : this.editChangeFund,
         saleSessionReference: this.editReference
       });
 
       this.oSaleSession = {
         ...this.oSaleSession,
         creationDate: updatedSession.creationDate,
-        saleSessionReference: updatedSession.saleSessionReference
+        saleSessionReference: updatedSession.saleSessionReference,
+        changeFund: updatedSession.changeFund
       };
 
       this.isEditing = false;
