@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, computed } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SaleSession } from '../../../../@models/entities/SaleSession.interface';
 import { Sale } from '../../../../@models/entities/Sale.interface';
@@ -118,6 +118,10 @@ export class SaleSessionDetailComponent {
       tPaymentFiltered.push(... sale.tPayment?.filter((obj)=> obj.paymentMethodId === PaymentMethodEnum.CHEQUE) ?? [])
     }
     return tPaymentFiltered.reduce((total, sale) =>  new Decimal(total).add(sale.amount).toNumber(), 0) || 0;
+  }
+
+  public getFinalFund() : number{
+    return new Decimal(this.oSaleSession.changeFund ?? 0).add(this.getTotalCash()).toNumber()
   }
 
   public startEditing(): void {

@@ -32,6 +32,10 @@
           </div>
         </div>
 
+       <div class="flex items-center gap-2 mb-2">
+          <p> Total caisse : {{getFinalFund()}} €</p>
+        </div>
+
         <p>Nombre de transactions : {{oSaleSession.tSale?.length || 0}}</p>
         <p>Total : {{getTotalAmount() | round}}€</p>
         <p>Total CB : {{getTotalCB() | round}}€</p>
