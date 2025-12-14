@@ -23,6 +23,7 @@ import { SaleListComponent } from './sales/pages/sale-list/sale-list.component';
 import { SaleSessionDetailComponent } from './sales/pages/sale-session-detail/sale-session-detail.component';
 import { SaleDetailComponent } from './sales/pages/sale-detail/sale-detail.component';
 import { DashboardDetailComponent } from './dashboard/pages/dashboard-detail/dashboard-detail.component';
+import { SettingsComponent } from './inventory/components/settings/settings.component';
 
 const routes: Routes = [
   { path: '', component: NavBarComponent, children: [
@@ -41,7 +42,8 @@ const routes: Routes = [
       { path : 'movement', component : MovementListComponent},
       { path : 'movement/0', component : MovementDetailComponent},
       { path : 'movement/:idMovement', component : MovementDetailOverviewComponent},
-      { path : 'documents', component : DocumentsComponent }
+      { path : 'documents', component : DocumentsComponent },
+      { path: 'settings', component : SettingsComponent}
     ] },
     { path : 'sales', component : SaleListComponent },
     { path : 'sales/:id', component : SaleSessionDetailComponent },

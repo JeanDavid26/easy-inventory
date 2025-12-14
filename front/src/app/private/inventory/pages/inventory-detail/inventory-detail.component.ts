@@ -34,7 +34,8 @@ export class InventoryDetailComponent {
         this.linksData = [
           { label : 'Stock', link : ['private','inventory', inventory.id.toString()  , 'content']},
           { label : 'Mouvement de stock', link : ['private','inventory', inventory.id.toString(), 'movement']},
-          { label : 'Document', link : ['private','inventory', inventory.id.toString(), 'documents']}
+          { label : 'Document', link : ['private','inventory', inventory.id.toString(), 'documents']},
+          { label : 'Paramètres', link : ['private', 'inventory', inventory.id.toString(), 'settings']}
         ]
         this.setActiveLink(this._router.url);
         this._router.events.pipe(

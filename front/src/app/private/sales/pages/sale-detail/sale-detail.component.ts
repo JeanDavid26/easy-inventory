@@ -210,11 +210,11 @@ export class SaleDetailComponent {
     let totalAmount = 0
     for (const controlToCheck of this.formArrayPayment.controls) {
       if (controlToCheck !== control.parent) {
-        totalAmount = new Decimal(control.value).add(totalAmount).toNumber()
+        totalAmount = new Decimal(control.value ?? 0).add(totalAmount).toNumber()
       }
     }
 
-    if (new Decimal(control.value).add(totalAmount).toNumber() > this.totalFinal) {
+    if (new Decimal(control.value ?? 0).add(totalAmount).toNumber() > this.totalFinal) {
       return { 'maxAmount': true }
     }
     return null

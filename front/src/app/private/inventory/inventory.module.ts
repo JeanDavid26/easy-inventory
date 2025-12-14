@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { InventoryListComponent } from './pages/inventory-list/inventory-list.component';
 import { SharedModule } from '../../shared/shared.module';
 import { InventoryDetailComponent } from './pages/inventory-detail/inventory-detail.component';
@@ -22,6 +23,7 @@ import { SettingsComponent } from './components/settings/settings.component';
   ],
   imports: [
     CommonModule,
+    FormsModule,
     SharedModule,
   ]
 })
