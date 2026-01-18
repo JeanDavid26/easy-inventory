@@ -7,6 +7,7 @@ import { ArticleLineData, SaleData, SaleSessionReportDataset } from './models/sa
 import { PaymentMethodEnum } from 'src/database/@models/payment-method.enum'
 import { SaleSession } from 'src/database/entities/SaleSession.entity'
 import { PdfGeneratorService } from './pdf-generator/pdf-generator.service'
+import { ImageConverterUtil } from 'src/shared/utils/image-converter.util'
 
 @Injectable()
 export class DocumentGenerationService {
@@ -93,8 +94,9 @@ export class DocumentGenerationService {
     })
   
     return {
+      logo: ImageConverterUtil.encodeImageToBase64('src/assets/logo.png'),
       company : {
-        name : 'Bibliothèque AJEF'
+        name : 'Église Montplaisir'
       },
       sales : tSaleData,
       totals : {
