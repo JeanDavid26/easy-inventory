@@ -58,4 +58,9 @@ export class DocumentController {
   async generateSaleResume (@Param('idSaleSession') idSaleSession: string, @Res() res: Response) :Promise<any> {
     return this._documentGenerationService.generateSaleSessionReport(Number(idSaleSession), res)
   }
+
+  @Get('inventory-state/:inventoryId')
+  async generateInventoryState (@Param('inventoryId') inventoryId: string, @Res() res: Response) :Promise<any> {
+    return this._documentGenerationService.generateInventoryState(Number(inventoryId), res)
+  }
 }

@@ -7,7 +7,6 @@ import { Document } from 'src/database/entities/Document.entity'
 import { v4 as uuidv4 } from 'uuid'
 import * as path from 'path'
 import { DocumentManagerService } from 'src/database/db-manager/document-manager/document-manager.service'
-import { Response } from 'express'
 @Injectable()
 export class DocumentService {
   constructor (

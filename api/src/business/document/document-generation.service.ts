@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common'
 import { Response } from 'express'
 import { Decimal } from 'decimal.js'
 import { SaleSessionManagerService } from 'src/database/db-manager/sale-session-manager/sale-session-manager.service'
+import { InventoryManagerService } from 'src/database/db-manager/inventory-manager/inventory-manager.service'
 import { ArticleLineData, SaleData, SaleSessionReportDataset } from './models/sale-session-report-dataset.model'
 import { PaymentMethodEnum } from 'src/database/@models/payment-method.enum'
 import { SaleSession } from 'src/database/entities/SaleSession.entity'
@@ -12,6 +13,7 @@ export class DocumentGenerationService {
 
   constructor (
     private _saleSessionManagerService : SaleSessionManagerService,
+    private _inventoryManagerService : InventoryManagerService,
     private _pdfGeneratorService : PdfGeneratorService
   ) {}
 
@@ -24,6 +26,18 @@ export class DocumentGenerationService {
     
     res.setHeader('Content-Type', 'application/pdf')
     res.setHeader('Content-Disposition', `attachment; filename="rapport-session-${oSaleSession.id}.pdf"`)
+    res.send(pdfBuffer)
+  }
+
+  async generateInventoryState (inventoryId : number, res: Response) : Promise<void> {
+    const oInventory = await this._inventoryManagerService.get({ id : inventoryId })
+
+    const dataset = this._mapInventoryDataset(oInventory)
+    
+    const pdfBuffer = await this._pdfGeneratorService.generatePdf('inventory-state', dataset)
+    
+    res.setHeader('Content-Type', 'application/pdf')
+    res.setHeader('Content-Disposition', `attachment; filename="etat-stock-${oInventory.id}.pdf"`)
     res.send(pdfBuffer)
   }
 
@@ -94,6 +108,41 @@ export class DocumentGenerationService {
       totalSales: `${new Decimal(cashTotal).add(checkTotal).add(cardTotal).toFixed(2)} €`,
       saleNumber: saleSessionReference 
 
+    }
+  }
+
+  private _mapInventoryDataset (oInventory: any) {
+    let totalValue = new Decimal(0)
+    let totalItems = 0
+
+    const lines = oInventory.tInventoryLine.map(({ oArticle, quantity }) => {
+      const unitPrice = new Decimal(oArticle.unitPrice)
+      const quantityDecimal = new Decimal(quantity)
+      const lineTotal = unitPrice.times(quantityDecimal)
+      
+      totalValue = totalValue.plus(lineTotal)
+      totalItems += quantity
+
+      return {
+        referenceCode: oArticle.referenceCode,
+        label: oArticle.label,
+        category: oArticle.oCategory?.label || 'N/A',
+        unitPrice: `${unitPrice.toFixed(2).replace('.', ',')} €`,
+        quantity: quantity.toString(),
+        total: `${lineTotal.toFixed(2).replace('.', ',')} €`
+      }
+    }).sort((a, b) => a.referenceCode.localeCompare(b.referenceCode))
+
+    const now = new Date()
+    const formattedDate = `${now.toLocaleDateString('fr-FR')} à ${now.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })}`
+
+    return {
+      inventoryLabel: oInventory.label,
+      inventoryType: oInventory.oInventoryType?.label || 'Standard',
+      currentDate: formattedDate,
+      lines,
+      totalItems,
+      totalValue: `${totalValue.toFixed(2).replace('.', ',')} €`
     }
   }
 

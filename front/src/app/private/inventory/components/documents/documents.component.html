@@ -13,7 +13,7 @@
   </div>
 
   <!-- Barre de recherche -->
-  <div class="mb-4">
+  <div class="mb-4 flex justify-between items-center gap-4">
     <form [formGroup]="searchForm" class="w-full sm:w-1/3 relative">
       <input type="text"
              formControlName="searchTerm"
@@ -25,6 +25,10 @@
         </svg>
       </div>
     </form>
+    <button (click)="generateInventoryState()"
+            class="px-4 py-2.5 bg-green-600 text-white text-sm font-medium rounded-lg hover:bg-green-700 transition-colors">
+      Imprimer État du Stock
+    </button>
   </div>
 
   <!-- Tableau avec défilement -->

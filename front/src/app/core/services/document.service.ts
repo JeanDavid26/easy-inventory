@@ -85,6 +85,32 @@ export class DocumentService {
       })
   }
 
+   public generateInventoryState (inventoryId: number): Promise<{ fileURL : string, contentType : string }> {
+    let route = Location.joinWithSlash(environment.urlApi, `document/inventory-state/${inventoryId}`)
+
+    return this._httpClient.get(route, {
+      responseType: 'blob',
+      observe: 'response'
+    }).toPromise()
+      .then(res => {
+        let fileName = 'dlFile'
+        const cd = res.headers.get('content-disposition')
+        const contentType = res.headers.get('content-type')
+
+        if (cd && cd !== '') {
+          const match = cd.match(/filename\s*=\s*([^ \s*]+)/)
+          if (match) {
+            fileName = match[1]
+          }
+        }
+        const blob = new Blob([ res.body ], { type : contentType })
+
+        const fileURL = URL.createObjectURL(blob)
+        return { fileURL, contentType }
+
+      })
+  }
+
   public generateSaleSessionReport (idSaleSession: number): Promise<{ fileURL : string, contentType : string }> {
     let route = Location.joinWithSlash(environment.urlApi, `document/sale-session/${idSaleSession}`)
 

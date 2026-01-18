@@ -140,4 +140,13 @@ export class DocumentsComponent implements OnInit {
 
     });
   }
+
+  async generateInventoryState(): Promise<void> {
+    try {
+      const result = await this.documentService.generateInventoryState(this.inventoryId);
+      window.open(result.fileURL);
+    } catch (error) {
+      console.error('Erreur lors de la génération de l\'état du stock:', error);
+    }
+  }
 }
