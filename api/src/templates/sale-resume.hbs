@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fiche de vente {{saleNumber}}</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: Arial, sans-serif;
+      font-size: 11px;
+      padding: 20px;
+    }
+    
+    .header {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 20px;
+      border: 2px solid #000;
+    }
+    
+    .header-left {
+      border-right: 2px solid #000;
+      padding: 10px;
+      width: 50%;
+    }
+    
+    .header-left img {
+      width: 80px;
+      margin-bottom: 10px;
+    }
+    
+    .header-left p {
+      margin: 2px 0;
+    }
+    
+    .header-right {
+      padding: 10px;
+      width: 50%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      font-size: 20px;
+      font-weight: bold;
+      font-style: italic;
+    }
+    
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 10px;
+    }
+    
+    th, td {
+      border: 1px solid #000;
+      padding: 5px;
+      text-align: left;
+    }
+    
+    th {
+      background-color: #f0f0f0;
+      font-weight: bold;
+      text-align: center;
+      font-size: 10px;
+    }
+    
+    td.center {
+      text-align: center;
+    }
+    
+    td.right {
+      text-align: right;
+    }
+    
+    /* Alternance des couleurs par groupe client */
+    tr.groupe-pair {
+      background-color: #e8f4f8;
+    }
+    
+    tr.groupe-impair {
+      background-color: #ffffff;
+    }
+    
+    .totals-row {
+      background-color: #fff !important;
+      font-weight: bold;
+    }
+    
+    .totals-row td:first-child {
+      text-align: right;
+      padding-right: 10px;
+    }
+    
+    .footer-section {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 10px;
+    }
+    
+    .footer-left {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+    
+    .footer-item {
+      display: flex;
+      justify-content: space-between;
+      border: 1px solid #000;
+      padding: 5px 10px;
+      min-width: 300px;
+    }
+    
+    .footer-right {
+      border: 1px solid #000;
+      padding: 10px;
+      background-color: #f9f5e8;
+      text-align: right;
+    }
+    
+    .footer-right .label {
+      font-size: 9px;
+      font-style: italic;
+    }
+    
+    .footer-right .total {
+      font-size: 14px;
+      font-weight: bold;
+      margin-top: 5px;
+    }
+    
+    .final-total {
+      text-align: center;
+      border: 1px solid #000;
+      padding: 8px;
+      margin-top: 10px;
+      font-weight: bold;
+      color: red;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <div class="header-left">
+      {{#if logo}}
+      <img src="{{logo}}" alt="Logo">
+      {{/if}}
+      <p><strong>{{company.name}}</strong></p>
+      <p>{{company.address}}</p>
+      <p>Contact :</p>
+      <p>{{company.email}}</p>
+    </div>
+    <div class="header-right">
+      <div>AJEF</div>
+      <div>Bibliothèque</div>
+      <div>Vente: {{saleNumber}}</div>
+    </div>
+  </div>
+
+  <table>
+    <thead>
+      <tr>
+        <th style="width: 8%;">Réf:</th>
+        <th style="width: 30%;">Articles</th>
+        <th style="width: 10%;">Prix<br>Unitaires</th>
+        <th style="width: 5%;">Qt</th>
+        <th style="width: 10%;">Total<br>Articles</th>
+        <th style="width: 10%;">Total<br>Espèces</th>
+        <th style="width: 10%;">Total<br>Chèques</th>
+        <th style="width: 10%;">Total<br>CB</th>
+        <th style="width: 7%;">Impayés</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#each sales}}
+        {{#each tArticleLine}}
+        <tr class="{{#if (isEven @../index)}}groupe-pair{{else}}groupe-impair{{/if}}">
+          <td>{{reference}}</td>
+          <td>{{name}}</td>
+          <td class="right">{{unitPrice}}</td>
+          <td class="center">{{quantity}}</td>
+          {{#if @last}}
+          <td class="right">{{../itemTotal}}</td>
+          <td class="right">{{#if ../cashTotal}}{{../cashTotal}}{{/if}}</td>
+          <td class="right">{{#if ../chequeTotal}}{{../chequeTotal}}{{/if}}</td>
+          <td class="right">{{#if ../cardTotal}}{{../cardTotal}}{{/if}}</td>
+          <td class="right">{{#if ../unpaid}}{{../unpaid}}{{/if}}</td>
+          {{else}}
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+          {{/if}}
+        </tr>
+        {{/each}}
+      {{/each}}
+      
+      <tr class="totals-row">
+        <td colspan="3" style="text-align: right; padding-right: 20px;">TOTAUX</td>
+        <td class="center">////////</td>
+        <td class="right">{{totals.items}}</td>
+        <td class="right">{{totals.cash}}</td>
+        <td class="right">{{totals.cheques}}</td>
+        <td class="right">{{totals.card}}</td>
+        <td>&nbsp;</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="footer-section">
+    <div class="footer-left">
+      <div class="footer-item">
+        <span>Fond de caisse départ +</span>
+        <strong>{{startingCash}}</strong>
+      </div>
+      <div class="footer-item">
+        <span>{{saleCode}}</span>
+        <strong>{{codeAmount}}</strong>
+      </div>
+    </div>
+    
+    <div class="footer-right">
+      <div class="label">Total des Ventes</div>
+      <div class="label" style="font-size: 8px;">(Esp+Chq+CB+Paybox)</div>
+      <div class="total">{{totalSales}}</div>
+    </div>
+  </div>
+
+  <div class="final-total">
+    Total caisse après vente&nbsp;&nbsp;&nbsp;{{cashAfterSale}}
+  </div>
+</body>
+</html>

@@ -33,5 +33,8 @@ jobs:
           echo "POSTGRES_USER=${{ secrets.POSTGRES_USER }}" >> .env
           echo "POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }}" >> .env
           echo "POSTGRES_DB=easyinventory" >> .env
+          echo "PUPPETEER_PATH=/usr/bin/chromium" >> .env
+          echo "TEMPLATES_PATH=/usr/src/app/dist/templates" >> .env
+          echo "STORAGE_PATH=/usr/src/app/storage" >> .env
           
           docker compose up -d --build

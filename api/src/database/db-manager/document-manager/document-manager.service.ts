@@ -7,6 +7,8 @@ import { Repository } from 'typeorm'
 
 @Injectable()
 export class DocumentManagerService extends DatabaseManager<Document> {
+
+  private _relations = [ 'oInventory', 'oSaleSession' ]
   constructor (
     @InjectRepository(Document) private _repo: Repository<Document>,
   ) {
@@ -19,7 +21,7 @@ export class DocumentManagerService extends DatabaseManager<Document> {
       where: {
         id
       },
-      relations : [ 'oAppFile' ]
+      relations : this._relations
     })
 
     if (!document) {
@@ -30,7 +32,17 @@ export class DocumentManagerService extends DatabaseManager<Document> {
 
   public async list ({ options = {} }: { options?: DatabaseManagerOptions }): Promise<Document[]> {
     const repo = this._getRepo(options)
-    return repo.find({})
+    return repo.find()
+  }
+
+  public async listInventoryDocument ({ inventoryId, options = {} }: { inventoryId: number, options?: DatabaseManagerOptions }): Promise<Document[]> {
+    const repo = this._getRepo(options)
+    return repo.find({ where : { inventoryId }, relations : this._relations })
+  }
+
+  public async listSaleSessionDocument ({ saleSessionId, options = {} }: { saleSessionId: number, options?: DatabaseManagerOptions }): Promise<Document[]> {
+    const repo = this._getRepo(options)
+    return repo.find({ where : { saleSessionId }, relations: this._relations })
   }
 
   public async insert ({ data, options = {} }: { data: Partial<Document>, options?: DatabaseManagerOptions }): Promise<Document> {
@@ -56,14 +68,5 @@ export class DocumentManagerService extends DatabaseManager<Document> {
       deleteDate: new Date()
     })
   }
-
-  public async findByInventoryId ({ inventoryId, options = {} }:{inventoryId: string, options?: DatabaseManagerOptions}): Promise<Document[]> {
-    const repo = this._getRepo(options)
-    return repo.find({
-      where: {
-        inventoryId: Number(inventoryId)
-      },
-      relations : [ 'oAppFile' ]
-    })
-  }
+  
 }

@@ -61,10 +61,11 @@ export class DocumentsComponent implements OnInit {
       this.filteredDocuments = [...this.documents];
     } else {
       this.filteredDocuments = this.documents.filter(document =>
-        document.label?.toLowerCase().includes(searchTerm)
+        document.metadata.label.toLowerCase().includes(searchTerm)
       );
     }
   }
+
 
   public sortDocuments(column: string): void {
     if (this.sortColumn === column) {
@@ -111,7 +112,7 @@ export class DocumentsComponent implements OnInit {
     for (let i = 0; i < files.length; i++) {
       const file = files[i];
       const document: Partial<Document> = {
-        label: file.name,
+        metadata: {label :file.name},
         inventoryId: this.inventoryId
       };
       try {

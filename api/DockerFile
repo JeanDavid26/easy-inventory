@@ -20,23 +20,37 @@ RUN apk update && \
     g++ \
     && npm install -g npm@latest
 
+ # Ajoute ces fonts dans le Dockerfile
+RUN apk add --no-cache \
+    ttf-dejavu \
+    ttf-liberation \
+    fontconfig
+
 RUN apk add libreoffice
 RUN apk add openjdk8-jre
 
 # Set the working directory inside the container
 WORKDIR /usr/src/app
 
+RUN mkdir -p /usr/src/app/storage
+
 # Copy the package.json and package-lock.json files
 COPY package*.json ./
 
-# Install dependencies
+# Install dependencies as root
 RUN npm install
+
+# Change owner after installation
+RUN chown -R node:node /usr/src/app
 
 # Copy the rest of the application files
 COPY . .
 
 # Build the NestJS application
 RUN npm run build
+
+# Switch to node user for runtime
+USER node
 
 # Expose the application port
 EXPOSE 3000

@@ -2,6 +2,7 @@ import { Entity, PrimaryGeneratedColumn, OneToMany, Column } from 'typeorm'
 import { BaseTable } from './BaseTable'
 import { SaleStatus } from '../@models/sale-status.enum'
 import { Sale } from './Sale.entity'
+import { Document } from './Document.entity'
 
 @Entity({ schema: 'easyinventory', name: 'salesession' })
 export class SaleSession extends BaseTable {
@@ -26,4 +27,7 @@ export class SaleSession extends BaseTable {
  
   @OneToMany(() => Sale, sale => sale.oSaleSession)
   tSale : Sale[]
+
+  @OneToMany(() => Document, document => document.oSaleSession)
+  tDocument : Document[]
 }

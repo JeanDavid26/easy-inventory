@@ -1,9 +1,12 @@
-import { IsNotEmpty } from 'class-validator';
+import { IsNotEmpty, IsOptional } from 'class-validator'
 
 export class UploadDocumentDto {
   @IsNotEmpty()
-  label: string;
+  label: string
 
-  @IsNotEmpty()
-  inventoryId: number;
+  @IsOptional()
+  inventoryId?: number | null
+
+  @IsOptional()
+  saleSessionId?: number | null
 }

@@ -8,9 +8,10 @@ import { APP_FILTER, APP_GUARD } from '@nestjs/core'
 import { TranslateValidatorErrorFilter } from './shared/filter/translate-validator-error/translate-validator-error.filter'
 import { AuthModule } from './auth/auth.module'
 import { AuthGuard } from './auth/services/auth.guard'
+import { StorageModule } from './storage/storage.module'
 
 @Module({
-  imports: [ SharedModule, DbManagerModule, BusinessModule, AuthModule ],
+  imports: [ SharedModule, DbManagerModule, BusinessModule, AuthModule, StorageModule ],
   controllers: [ AppController ],
   providers: [
     AppService,

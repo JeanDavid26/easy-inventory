@@ -1,4 +1,4 @@
 export const environment = {
-  urlApi : "https://easyinventory.fr/api/",
+  urlApi : "http://localhost:3000/api/",
   production : 'production'
 };

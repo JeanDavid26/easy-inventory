@@ -5,9 +5,10 @@ import { Sale } from '../../../../@models/entities/Sale.interface';
 import { SaleService } from '../../../../core/services/sale.service';
 import { ToastService } from '../../../../shared/toast/toast.service';
 import { BreadcrumbService } from '../../../../core/services/breadcrumb.service';
-import { tap } from 'rxjs';
+import { saveAs } from 'file-saver'
 import { PaymentMethodEnum } from '../../../../@models/enum/payment-method.enum';
 import Decimal from 'decimal.js';
+import { DocumentService } from '../../../../core/services/document.service';
 
 @Component({
   selector: 'app-sale-session-detail',
@@ -29,7 +30,8 @@ export class SaleSessionDetailComponent {
     private _toast : ToastService,
     private _activatedRoute : ActivatedRoute,
     private _saleService : SaleService,
-    private _bcService  : BreadcrumbService
+    private _bcService  : BreadcrumbService,
+    private _documentService : DocumentService
   ) {
     this.init().then(()=> {
       this._bcService.setBreadCrumb([
@@ -158,4 +160,15 @@ export class SaleSessionDetailComponent {
       this._toast.displayToast('error', 'Erreur lors de la mise à jour de la session');
     }
   }
+
+
+    public generateSaleReport() : void {
+  this._documentService.generateSaleReport(this.id).then((res) => {
+      if (res.contentType === 'application/pdf' || res.contentType.match('image')?.length > 0) {
+        window.open(res.fileURL)
+      } else {
+        saveAs(res.fileURL, `zebi.pdf`)
+      }})
+  }
+
 }

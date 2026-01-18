@@ -9,8 +9,6 @@ import { Category } from '../entities/Category.entity'
 import { Inventory } from '../entities/Inventory.entity'
 import { UserManagerService } from './user-manager/user-manager.service'
 import { User } from '../entities/User.entity'
-import { AppFileManagerService } from './app-file-manager/app-file-manager.service'
-import { AppFile } from '../entities/AppFile.entity'
 import { DocumentManagerService } from './document-manager/document-manager.service'
 import { Document } from '../entities/Document.entity'
 import { InventoryLine } from '../entities/InventoryLine.entity'
@@ -52,7 +50,6 @@ import { UnpaidSaleManagerService } from './unpaid-sale-manager/unpaid-sale-mana
       InventoryMovement,
       MovementLine,
       User,
-      AppFile,
       Document,
       InventoryType,
       MovementType,
@@ -69,7 +66,6 @@ import { UnpaidSaleManagerService } from './unpaid-sale-manager/unpaid-sale-mana
     ArticleManagerService,
     InventoryManagerService,
     UserManagerService,
-    AppFileManagerService,
     DocumentManagerService,
     InventoryLineManagerService,
     InventoryMovementManagerService,
@@ -88,7 +84,6 @@ import { UnpaidSaleManagerService } from './unpaid-sale-manager/unpaid-sale-mana
     ArticleManagerService,
     InventoryManagerService,
     UserManagerService,
-    AppFileManagerService,
     DocumentManagerService,
     SaleManagerService,
     SaleLineManagerService,
