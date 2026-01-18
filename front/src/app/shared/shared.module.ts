@@ -10,7 +10,7 @@ import { DatePickerComponent } from './components/date-picker/date-picker.compon
 import { ToastComponent } from './toast/toast/toast.component';
 import { InputErrorDirective } from './form-validation/input-error.directive';
 import { InputComponent } from './components/input/input.component';
-
+import { LoaderComponent } from './components/loader/loader.component';
 
 import localeFr from '@angular/common/locales/fr';
 import { RoundPipe } from './pipes/round/round.pipe';
@@ -38,7 +38,8 @@ registerLocaleData(localeFr);
     RouterModule,
     NgxEchartsModule.forRoot({
       echarts: () => import('echarts')
-    })
+    }),
+    LoaderComponent
   ],
   exports : [
     ReactiveFormsModule,
@@ -53,7 +54,8 @@ registerLocaleData(localeFr);
     FontAwesomeModule,
     RoundPipe,
     SelectComponent,
-    NgxEchartsModule
+    NgxEchartsModule,
+    LoaderComponent
   ],
   providers :[
     { provide: LOCALE_ID, useValue: 'fr-FR' }
