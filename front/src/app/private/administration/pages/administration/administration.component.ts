@@ -9,13 +9,13 @@ import { BreadcrumbService } from '../../../../core/services/breadcrumb.service'
 export class AdministrationComponent {
 
   constructor(
-    private _breadcrumbService : BreadcrumbService
-  ){
+    private _breadcrumbService: BreadcrumbService
+  ) {
     this._breadcrumbService.setBreadCrumb(
       [
         {
-          label : 'Administration',
-          link : 'private/administration'
+          label: 'Administration',
+          link: 'private/administration'
         }
       ]
     )

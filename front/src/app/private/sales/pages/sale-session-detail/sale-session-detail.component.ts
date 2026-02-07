@@ -33,7 +33,15 @@ export class SaleSessionDetailComponent {
     private _bcService  : BreadcrumbService,
     private _documentService : DocumentService
   ) {
-    this.init().then(()=> {
+    const resolvedSession = this._activatedRoute.snapshot.data['saleSession'];
+    if (resolvedSession) {
+      this.oSaleSession = resolvedSession;
+      this.id = resolvedSession.id;
+      this.oSaleSession.tSale.forEach((sale) => {
+        sale.displayTablePayment = sale.tPayment.map(obj => obj.oPaymentMethod.label).join(', ');
+        sale.displayTableRef = sale.tSaleLine.map((obj) => obj.oArticle?.referenceCode ?? '').join(', ');
+        sale.displayTableRefLabel = sale.tSaleLine.map((obj) => obj.oArticle?.label ?? '').join(', ');
+      });
       this._bcService.setBreadCrumb([
         {
           label : 'Ventes',
@@ -43,24 +51,10 @@ export class SaleSessionDetailComponent {
           label : `Session du ${new Date(this.oSaleSession.creationDate).toLocaleDateString()}`,
           link : 'sales'
         }
-      ])
-    })
+      ]);
+    }
   }
 
-  public async init () : Promise<void> {
-    const idString = this._activatedRoute.snapshot.params['id']
-    if(!idString){
-      this._toast.displayToast('error')
-      return
-    }
-    this.id = Number(idString)
-    this.oSaleSession = await this._saleService.getSaleSession(this.id)
-    this.oSaleSession.tSale.forEach((sale) => {
-      sale.displayTablePayment = sale.tPayment.map(obj => obj.oPaymentMethod.label).join(', ')
-      sale.displayTableRef = sale.tSaleLine.map((obj) => obj.oArticle?.referenceCode ?? '').join(', ')
-      sale.displayTableRefLabel = sale.tSaleLine.map((obj) => obj.oArticle?.label ?? '').join(', ')
-    })
-  }
 
   public goToSaleDetail(id : number) :void {
     this._router.navigateByUrl(`private/sales/${this.oSaleSession.id}/sale/${id}`)
@@ -90,9 +84,31 @@ export class SaleSessionDetailComponent {
   }
 
   public async uncloseSession() : Promise<void> {
-    await this._saleService.uncloseSession(this.oSaleSession.id)
-    await this.init();
-    this._toast.displayToast('sucess')
+    await this._saleService.uncloseSession(this.oSaleSession.id);
+    await this.refreshSession();
+    this._toast.displayToast('sucess');
+  }
+
+  public async refreshSession(): Promise<void> {
+    const session = await this._saleService.getSaleSession(this.id);
+    if (session) {
+      this.oSaleSession = session;
+      this.oSaleSession.tSale.forEach((sale) => {
+        sale.displayTablePayment = sale.tPayment.map(obj => obj.oPaymentMethod.label).join(', ');
+        sale.displayTableRef = sale.tSaleLine.map((obj) => obj.oArticle?.referenceCode ?? '').join(', ');
+        sale.displayTableRefLabel = sale.tSaleLine.map((obj) => obj.oArticle?.label ?? '').join(', ');
+      });
+      this._bcService.setBreadCrumb([
+        {
+          label : 'Ventes',
+          link : 'sales'
+        },
+        {
+          label : `Session du ${new Date(this.oSaleSession.creationDate).toLocaleDateString()}`,
+          link : 'sales'
+        }
+      ]);
+    }
   }
 
   public getTotalAmount(): number {

@@ -24,6 +24,7 @@ export type SaleSessionReportDataset = {
   }
   saleNumber?: string
   sales: SaleData[],
+  saleDate : string
   totals: {
     items?: string
     cash?: string

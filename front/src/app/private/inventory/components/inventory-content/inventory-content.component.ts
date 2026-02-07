@@ -12,6 +12,7 @@ import { InventoryLine } from '../../../../@models/entities/InventoryLine.interf
 import { InventoryLineService } from '../../../../core/services/inventory-line.service';
 import { ToastService } from '../../../../shared/toast/toast.service';
 import Decimal from 'decimal.js';
+import { DocumentService } from '../../../../core/services/document.service';
 
 @Component({
   selector: 'app-inventory-content',
@@ -37,7 +38,8 @@ export class InventoryContentComponent implements OnInit {
     private _toastService: ToastService,
     private _router: Router,
     private _fb: FormBuilder,
-    private _categoryService: CategoryService
+    private _categoryService: CategoryService,
+    private _documentService: DocumentService
   ) {
     this.inventory = this._inventoryService.inventory.value;
     this._inventoryService.inventory.subscribe((inventory) => {
@@ -199,6 +201,15 @@ export class InventoryContentComponent implements OnInit {
     } catch (error) {
       // Gérer l'erreur et afficher un message
       console.error('Erreur lors de la mise à jour de la quantité:', error);
+    }
+  }
+
+   async generateInventoryState(): Promise<void> {
+    try {
+      const result = await this._documentService.generateInventoryState(this.inventory.id);
+      window.open(result.fileURL);
+    } catch (error) {
+      console.error('Erreur lors de la génération de l\'état du stock:', error);
     }
   }
 }

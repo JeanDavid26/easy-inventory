@@ -24,6 +24,7 @@ import { SaleSessionDetailComponent } from './sales/pages/sale-session-detail/sa
 import { SaleDetailComponent } from './sales/pages/sale-detail/sale-detail.component';
 import { DashboardDetailComponent } from './dashboard/pages/dashboard-detail/dashboard-detail.component';
 import { SettingsComponent } from './inventory/components/settings/settings.component';
+import { SaleSessionDetailResolver } from './sales/pages/sale-session-detail/sale-session-detail.resolver';
 
 const routes: Routes = [
   { path: '', component: NavBarComponent, children: [
@@ -46,7 +47,7 @@ const routes: Routes = [
       { path: 'settings', component : SettingsComponent}
     ] },
     { path : 'sales', component : SaleListComponent },
-    { path : 'sales/:id', component : SaleSessionDetailComponent },
+    { path : 'sales/:id', component : SaleSessionDetailComponent, resolve: { saleSession: SaleSessionDetailResolver } },
     { path : 'sales/:id/sale/:idSale', component : SaleDetailComponent },
     { path : 'administration', component : AdministrationComponent},
     { path : 'administration/movement-type', component : MovementTypeListComponent},

@@ -42,7 +42,7 @@ export class DocumentGenerationService {
     res.send(pdfBuffer)
   }
 
-  private _mapDataset ({ tSale, changeFund, saleSessionReference } : SaleSession) : SaleSessionReportDataset {
+  private _mapDataset ({ tSale, changeFund, saleSessionReference, creationDate } : SaleSession) : SaleSessionReportDataset {
     let cashTotal = 0
     let checkTotal = 0
     let cardTotal = 0 
@@ -98,6 +98,7 @@ export class DocumentGenerationService {
       company : {
         name : 'Église Montplaisir'
       },
+      saleDate : creationDate.toLocaleDateString('fr-FR'),
       sales : tSaleData,
       totals : {
         card : `${cardTotal.toFixed(2)} €`,

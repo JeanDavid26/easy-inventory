@@ -281,9 +281,8 @@ export class SaleDetailComponent {
     oSaleDto.totalAmount = this.totalFinal
     oSaleDto.saleSessionId = this.saleSessionId
     if (this.id === 0) {
-      this._saleService.addSale(oSaleDto).then(() => {
-        this._router.navigateByUrl(`private/sales/${this.saleSessionId}`)
-      })
+      await this._saleService.addSale(oSaleDto)
+      this._router.navigateByUrl(`private/sales/${this.saleSessionId}`)
     }
   }
 
