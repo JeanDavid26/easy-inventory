@@ -101,23 +101,23 @@ export class SaleDetailComponent {
     })
 
     this.tSubscription.push(this.formArraySaleLine.valueChanges.subscribe((tSaleLine) => {
-      let total = 0
+      let total = new Decimal(0)
       for (const saleLine of tSaleLine) {
         if (saleLine.salePrice) {
-          total += Number(saleLine.salePrice)
+          total = total.plus(new Decimal(saleLine.salePrice))
         }
       }
-      this.totalFinal = total
+      this.totalFinal = total.toDecimalPlaces(2).toNumber()
     }))
 
     this.tSubscription.push(this.formArrayPayment.valueChanges.subscribe((tPayment) => {
-      let total = 0
+      let total = new Decimal(0)
       for (const payment of tPayment) {
         if (payment.amount) {
-          total += Number(payment.amount)
+          total = total.plus(new Decimal(payment.amount))
         }
       }
-      this.totalAmountMultiple = total
+      this.totalAmountMultiple = total.toDecimalPlaces(2).toNumber()
     }))
 
     if (this.id === 0) {
@@ -235,7 +235,7 @@ export class SaleDetailComponent {
   }
 
   validatePayments() {
-    if (this.totalAmountMultiple !== this.totalFinal) {
+    if (!new Decimal(this.totalAmountMultiple).equals(new Decimal(this.totalFinal))) {
       this._toast.displayToast('warning', 'Montant inexacte, veuillez vérifier les réglements !')
       return
     }

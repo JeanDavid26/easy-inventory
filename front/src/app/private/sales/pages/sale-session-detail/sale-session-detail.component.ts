@@ -178,13 +178,11 @@ export class SaleSessionDetailComponent {
   }
 
 
-    public generateSaleReport() : void {
-  this._documentService.generateSaleReport(this.id).then((res) => {
-      if (res.contentType === 'application/pdf' || res.contentType.match('image')?.length > 0) {
-        window.open(res.fileURL)
-      } else {
-        saveAs(res.fileURL, `zebi.pdf`)
-      }})
+  public generateSaleReport() : void {
+    const ref = this.oSaleSession?.saleSessionReference || `session-${this.id}`
+    this._documentService.generateSaleReport(this.id).then((res) => {
+      saveAs(res.fileURL, `${ref}.pdf`)
+    })
   }
 
 }
