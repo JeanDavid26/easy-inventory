@@ -3,7 +3,7 @@ export type ArticleLineData = {
   name?: string
   unitPrice?: string
   quantity?: number
-  
+  lineTotal?: string
 }
 export type SaleData={
   clientId : number

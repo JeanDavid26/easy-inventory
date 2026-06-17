@@ -79,8 +79,8 @@ export class PdfGeneratorService {
     
       // 3. Créer une page et injecter le HTML
       const page = await browser.newPage()
-      await page.setContent(html, { 
-        waitUntil: 'networkidle0' // Attend que tout soit chargé
+      await page.setContent(html, {
+        waitUntil: 'load'
       })
     
       // 4. Générer le PDF

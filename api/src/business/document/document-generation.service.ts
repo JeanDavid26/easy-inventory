@@ -66,11 +66,14 @@ export class DocumentGenerationService {
       const quantity = sale.tSaleLine.reduce((acc, curr)=> {
         return new Decimal(acc).add(curr.quantity).toNumber()
       }, 0)
+      const saleItemTotal = sale.tSaleLine.reduce((acc, curr) => {
+        return new Decimal(acc).add(curr.salePrice).toNumber()
+      }, 0)
       cashTotal = new Decimal(cashTotal).add(saleCashTotal).toNumber()
       checkTotal = new Decimal(checkTotal).add(saleCheckTotal).toNumber()
       cardTotal = new Decimal(cardTotal).add(saleCardTotal).toNumber()
       unpaidTotal = new Decimal(unpaidTotal).add(saleUnpaidTotal).toNumber()
-      totalQuantity = new Decimal(totalQuantity).add(quantity).toNumber()
+      totalQuantity = new Decimal(totalQuantity).add(saleItemTotal).toNumber()
 
       const saleData : SaleData = {
         clientId : index,
@@ -79,14 +82,15 @@ export class DocumentGenerationService {
             reference : oArticle.referenceCode,
             name : oArticle.label,
             unitPrice : `${salePrice} €`,
-            quantity
+            quantity,
+            lineTotal : `${new Decimal(salePrice).times(quantity).toFixed(2)} €`
           }
-          return articleLineData 
+          return articleLineData
         }),
         cardTotal : `${saleCardTotal.toFixed(2)} €`,
         chequeTotal : `${saleCheckTotal.toFixed(2)} €`,
         cashTotal : `${saleCashTotal.toFixed(2)} €`,
-        itemTotal : quantity.toString(),
+        itemTotal : `${saleItemTotal.toFixed(2)} €`,
         unpaid : `${saleUnpaidTotal.toFixed(2)} €`
       }
 
@@ -104,7 +108,7 @@ export class DocumentGenerationService {
         card : `${cardTotal.toFixed(2)} €`,
         cash : `${cashTotal.toFixed(2)} €`,
         cheques : `${checkTotal.toFixed(2)} €`,
-        items : totalQuantity.toString()
+        items : `${new Decimal(totalQuantity).toFixed(2)} €`
       },
       startingCash : `${changeFund} €`,
       cashAfterSale : `${new Decimal(changeFund).add(cashTotal).toFixed(2)} €`,

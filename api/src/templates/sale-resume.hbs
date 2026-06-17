@@ -183,14 +183,13 @@
           <td>{{name}}</td>
           <td class="right">{{unitPrice}}</td>
           <td class="center">{{quantity}}</td>
+          <td class="right">{{lineTotal}}</td>
           {{#if @last}}
-          <td class="right">{{../itemTotal}}</td>
           <td class="right">{{#if ../cashTotal}}{{../cashTotal}}{{/if}}</td>
           <td class="right">{{#if ../chequeTotal}}{{../chequeTotal}}{{/if}}</td>
           <td class="right">{{#if ../cardTotal}}{{../cardTotal}}{{/if}}</td>
           <td class="right">{{#if ../unpaid}}{{../unpaid}}{{/if}}</td>
           {{else}}
-          <td>&nbsp;</td>
           <td>&nbsp;</td>
           <td>&nbsp;</td>
           <td>&nbsp;</td>
