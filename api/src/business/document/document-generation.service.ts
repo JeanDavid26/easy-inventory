@@ -34,11 +34,34 @@ export class DocumentGenerationService {
     const oInventory = await this._inventoryManagerService.get({ id : inventoryId })
 
     const dataset = this._mapInventoryDataset(oInventory)
-    
+
     const pdfBuffer = await this._pdfGeneratorService.generatePdf('inventory-state', dataset)
-    
+
     res.setHeader('Content-Type', 'application/pdf')
     res.setHeader('Content-Disposition', `attachment; filename="etat-stock-${oInventory.id}.pdf"`)
+    res.send(pdfBuffer)
+  }
+
+  async generateAllInventoriesState (res: Response) : Promise<void> {
+    const tInventory = await this._inventoryManagerService.list({})
+
+    const inventories = tInventory.map(inv => this._mapInventoryDataset(inv))
+
+    const grandTotalItems = inventories.reduce((acc, inv) => acc + inv.totalItems, 0)
+    const grandTotalValue = inventories
+      .reduce((acc, inv) => new Decimal(acc).plus(new Decimal(inv.totalValue.replace(/[^\d,]/g, '').replace(',', '.'))), new Decimal(0))
+      .toFixed(2)
+      .replace('.', ',')
+
+    const now = new Date()
+    const currentDate = `${now.toLocaleDateString('fr-FR')} à ${now.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })}`
+
+    const dataset = { inventories, grandTotalItems, grandTotalValue, currentDate }
+
+    const pdfBuffer = await this._pdfGeneratorService.generatePdf('all-inventories-state', dataset)
+
+    res.setHeader('Content-Type', 'application/pdf')
+    res.setHeader('Content-Disposition', 'attachment; filename="etat-tous-les-stocks.pdf"')
     res.send(pdfBuffer)
   }
 

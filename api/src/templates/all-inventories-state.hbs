@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>État de tous les stocks</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      font-size: 10px;
+      color: #000;
+    }
+
+    .inventory-section {
+      padding: 15px;
+    }
+
+    .inventory-section + .inventory-section {
+      page-break-before: always;
+    }
+
+    .section-banner {
+      background-color: #1a1a2e;
+      color: #fff;
+      padding: 14px 20px;
+      margin-bottom: 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .section-banner h2 {
+      font-size: 16px;
+      font-weight: bold;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    .section-banner .section-meta {
+      font-size: 9px;
+      opacity: 0.85;
+      text-align: right;
+    }
+
+    .global-header {
+      text-align: center;
+      padding: 12px 15px 10px;
+      border-bottom: 2px solid #000;
+      margin-bottom: 0;
+    }
+
+    .global-header h1 {
+      font-size: 18px;
+      font-weight: bold;
+      margin-bottom: 4px;
+    }
+
+    .global-header .subtitle {
+      font-size: 9px;
+      color: #555;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 5px;
+    }
+
+    thead {
+      background-color: #f0f0f0;
+    }
+
+    th {
+      border: 1px solid #000;
+      padding: 7px 8px;
+      text-align: left;
+      font-weight: bold;
+      font-size: 10px;
+    }
+
+    td {
+      border: 1px solid #ccc;
+      padding: 6px 8px;
+      font-size: 10px;
+    }
+
+    tbody tr:nth-child(even) {
+      background-color: #f9f9f9;
+    }
+
+    .col-ref      { width: 12%; }
+    .col-label    { width: 35%; }
+    .col-category { width: 15%; }
+    .col-price    { width: 12%; text-align: right; }
+    .col-quantity { width: 12%; text-align: center; }
+    .col-total    { width: 14%; text-align: right; }
+    .col-count    { width: 10%; text-align: center; }
+
+    .section-footer {
+      margin-top: 12px;
+      border-top: 2px solid #000;
+      padding-top: 8px;
+      display: flex;
+      justify-content: space-between;
+      font-size: 10px;
+    }
+
+    .section-footer .summary {
+      font-weight: bold;
+    }
+
+    .grand-total-section {
+      padding: 15px;
+      page-break-before: always;
+    }
+
+    .grand-total-banner {
+      background-color: #2d5016;
+      color: #fff;
+      padding: 14px 20px;
+      margin-bottom: 16px;
+    }
+
+    .grand-total-banner h2 {
+      font-size: 16px;
+      font-weight: bold;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    .grand-total-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+    }
+
+    .grand-total-table th,
+    .grand-total-table td {
+      border: 1px solid #000;
+      padding: 8px 10px;
+      font-size: 11px;
+    }
+
+    .grand-total-table th {
+      background-color: #f0f0f0;
+    }
+
+    .grand-total-table .total-row td {
+      font-weight: bold;
+      background-color: #e8f4e8;
+    }
+  </style>
+</head>
+<body>
+
+  {{#each inventories}}
+  <div class="inventory-section">
+
+    {{#if @first}}
+    <div class="global-header">
+      <h1>ÉTAT DE TOUS LES STOCKS</h1>
+      <div class="subtitle">Édité le {{../currentDate}}</div>
+    </div>
+    {{/if}}
+
+    <div class="section-banner">
+      <h2>{{inventoryLabel}}</h2>
+      <div class="section-meta">
+        <div>Type: {{inventoryType}}</div>
+        <div>{{totalItems}} article(s) — {{totalValue}} €</div>
+      </div>
+    </div>
+
+    <table>
+      <thead>
+        <tr>
+          <th class="col-ref">Référence</th>
+          <th class="col-label">Désignation</th>
+          <th class="col-category">Catégorie</th>
+          <th class="col-price">P.U. €</th>
+          <th class="col-quantity">Quantité</th>
+          <th class="col-total">Total €</th>
+          <th class="col-count">Comptage</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{#each lines}}
+        <tr>
+          <td class="col-ref">{{this.referenceCode}}</td>
+          <td class="col-label">{{this.label}}</td>
+          <td class="col-category">{{this.category}}</td>
+          <td class="col-price">{{this.unitPrice}}</td>
+          <td class="col-quantity">{{this.quantity}}</td>
+          <td class="col-total">{{this.total}}</td>
+          <td class="col-count"></td>
+        </tr>
+        {{/each}}
+      </tbody>
+    </table>
+
+    <div class="section-footer">
+      <div class="summary">
+        <div>Nombre d'articles: <strong>{{totalItems}}</strong></div>
+        <div>Valeur totale: <strong>{{totalValue}} €</strong></div>
+      </div>
+    </div>
+
+  </div>
+  {{/each}}
+
+  <div class="grand-total-section">
+    <div class="grand-total-banner">
+      <h2>Récapitulatif général</h2>
+    </div>
+
+    <table class="grand-total-table">
+      <thead>
+        <tr>
+          <th>Stock</th>
+          <th style="text-align: center;">Nb articles</th>
+          <th style="text-align: right;">Valeur totale</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{#each inventories}}
+        <tr>
+          <td>{{inventoryLabel}}</td>
+          <td style="text-align: center;">{{totalItems}}</td>
+          <td style="text-align: right;">{{totalValue}} €</td>
+        </tr>
+        {{/each}}
+        <tr class="total-row">
+          <td>TOTAL GÉNÉRAL</td>
+          <td style="text-align: center;">{{grandTotalItems}}</td>
+          <td style="text-align: right;">{{grandTotalValue}} €</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+</body>
+</html>

@@ -85,6 +85,21 @@ export class DocumentService {
       })
   }
 
+  public generateAllInventoriesState (): Promise<{ fileURL : string, contentType : string }> {
+    const route = Location.joinWithSlash(environment.urlApi, `document/all-inventories-state`)
+
+    return this._httpClient.get(route, {
+      responseType: 'blob',
+      observe: 'response'
+    }).toPromise()
+      .then(res => {
+        const contentType = res.headers.get('content-type')
+        const blob = new Blob([ res.body ], { type : contentType })
+        const fileURL = URL.createObjectURL(blob)
+        return { fileURL, contentType }
+      })
+  }
+
    public generateInventoryState (inventoryId: number): Promise<{ fileURL : string, contentType : string }> {
     let route = Location.joinWithSlash(environment.urlApi, `document/inventory-state/${inventoryId}`)
 

@@ -63,4 +63,9 @@ export class DocumentController {
   async generateInventoryState (@Param('inventoryId') inventoryId: string, @Res() res: Response) :Promise<any> {
     return this._documentGenerationService.generateInventoryState(Number(inventoryId), res)
   }
+
+  @Get('all-inventories-state')
+  async generateAllInventoriesState (@Res() res: Response) :Promise<any> {
+    return this._documentGenerationService.generateAllInventoriesState(res)
+  }
 }
