@@ -2,6 +2,7 @@ import { Entity, Column, ManyToOne, OneToMany, JoinColumn } from 'typeorm'
 import { SaleSession } from './SaleSession.entity'
 import { Payment } from './Payment.entity'
 import { SaleLine } from './SaleLine.entity'
+import { DonLine } from './DonLine.entity'
 import { BaseTable } from './BaseTable'
 import { UnpaidSale } from './UnpaidSale.entity'
 
@@ -26,4 +27,7 @@ export class Sale extends BaseTable {
 
   @OneToMany(() => Payment, payment => payment.oSale)
   tPayment: Payment[]
+
+  @OneToMany(() => DonLine, donLine => donLine.oSale)
+  tDonLine: DonLine[]
 }

@@ -1,5 +1,6 @@
 import { BadRequestException, Injectable } from '@nestjs/common'
 import { PaymentManagerService } from 'src/database/db-manager/payment-manager/payment-manager.service'
+import { DonLineManagerService } from 'src/database/db-manager/don-line-manager/don-line-manager.service'
 import { SaleLineManagerService } from 'src/database/db-manager/sale-line-manager/sale-line-manager.service'
 import { SaleManagerService } from 'src/database/db-manager/sale-manager/sale-manager.service'
 import { InsertSaleDto } from './dto/insert-sale.dto'
@@ -23,6 +24,7 @@ export class SaleService {
     private _inventoryLineManagerService: InventoryLineManagerService,
     private _unpaidSaleManagerSerivce: UnpaidSaleManagerService,
     private _paymentManagerService: PaymentManagerService,
+    private _donLineManagerService: DonLineManagerService,
     private _articleManagerService: ArticleManagerService,
     private readonly _dataSource: DataSource,
   ) { }
@@ -57,7 +59,15 @@ export class SaleService {
         }, options : { entityTransactionManager } })
       })
 
-      await Promise.all([ ...tSaleLinePromises, ...tPayementPromises, ...tUnpaidSalePromises ])
+      const tDonLinePromises = (data.tDonLine ?? []).map((donLine) => {
+        return this._donLineManagerService.insert({ data: {
+          saleId: oSale.id,
+          label: donLine.label || 'Don',
+          amount: Number(donLine.amount)
+        }, options: { entityTransactionManager } })
+      })
+
+      await Promise.all([ ...tSaleLinePromises, ...tPayementPromises, ...tUnpaidSalePromises, ...tDonLinePromises ])
 
       return oSale
     })

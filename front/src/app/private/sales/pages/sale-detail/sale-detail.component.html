@@ -55,10 +55,29 @@
                   </tr>
                 </ng-container>
 
-                <tr
-                class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap ">
+                <ng-container formArrayName="tDonLine">
+                  <tr class="odd:bg-yellow-50 border-b italic"
+                    *ngFor="let donLine of formArrayDonLine.controls; let i = index"
+                    [formGroupName]="i">
+                    <th scope="row" class="px-6 py-4 font-medium text-gray-700 whitespace-nowrap">
+                      <app-input formControlName="label" label="Libellé (don)"></app-input>
+                    </th>
+                    <td></td>
+                    <td></td>
+                    <td class="font-bold px-6 py-4">
+                      <app-input type="number" formControlName="amount" label="Montant €"></app-input>
+                    </td>
+                    <td class="text-center">
+                      <fa-icon class="w-10 h-10 flex justify-center items-center text-black rounded-full hover:bg-gray-300 cursor-pointer transition-colors duration-300" [icon]="faXmark" (click)="removeDonLine(i)"></fa-icon>
+                    </td>
+                  </tr>
+                </ng-container>
 
-                    <td colspan="4" class="text-center"><app-button type="normal" (click)="addSaleLine()">Ajouter une ligne</app-button></td>
+                <tr class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+                    <td colspan="4" class="text-center flex gap-2 justify-center py-2">
+                      <app-button type="normal" (click)="addSaleLine()">Ajouter une ligne article</app-button>
+                      <app-button type="normal" (click)="addDonLine()">Ajouter un don</app-button>
+                    </td>
                 </tr>
               </tbody>
             </table>

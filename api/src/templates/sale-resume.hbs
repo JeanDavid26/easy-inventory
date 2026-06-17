@@ -136,6 +136,11 @@
       margin-top: 5px;
     }
     
+    .don-row td {
+      font-style: italic;
+      color: #555;
+    }
+
     .final-total {
       text-align: center;
       border: 1px solid #000;
@@ -178,11 +183,11 @@
     <tbody>
       {{#each sales}}
         {{#each tArticleLine}}
-        <tr class="{{#if (isEven @../index)}}groupe-pair{{else}}groupe-impair{{/if}}">
-          <td>{{reference}}</td>
-          <td>{{name}}</td>
-          <td class="right">{{unitPrice}}</td>
-          <td class="center">{{quantity}}</td>
+        <tr class="{{#if (isEven @../index)}}groupe-pair{{else}}groupe-impair{{/if}}{{#if isDon}} don-row{{/if}}">
+          <td>{{#unless isDon}}{{reference}}{{/unless}}</td>
+          <td>{{#if isDon}}<em>{{name}}</em>{{else}}{{name}}{{/if}}</td>
+          <td class="right">{{#unless isDon}}{{unitPrice}}{{/unless}}</td>
+          <td class="center">{{#unless isDon}}{{quantity}}{{/unless}}</td>
           <td class="right">{{lineTotal}}</td>
           {{#if @last}}
           <td class="right">{{#if ../cashTotal}}{{../cashTotal}}{{/if}}</td>

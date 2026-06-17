@@ -82,6 +82,10 @@ export class SaleDetailComponent {
     return this.formGroupSale?.get('tPayment') as FormArray
   }
 
+  get formArrayDonLine(): FormArray {
+    return this.formGroupSale?.get('tDonLine') as FormArray
+  }
+
   public async init(): Promise<void> {
     this.id = Number(this._activatedRoute.snapshot.params['idSale'])
     this.saleSessionId = Number(this._activatedRoute.snapshot.params['id'])
@@ -97,18 +101,23 @@ export class SaleDetailComponent {
     this.formGroupSale = this._fb.group({
       totalAmout: null,
       tSaleLine: this._fb.array([]),
+      tDonLine: this._fb.array([]),
       tPayment: this._fb.array([])
     })
 
-    this.tSubscription.push(this.formArraySaleLine.valueChanges.subscribe((tSaleLine) => {
+    const recomputeTotal = () => {
       let total = new Decimal(0)
-      for (const saleLine of tSaleLine) {
-        if (saleLine.salePrice) {
-          total = total.plus(new Decimal(saleLine.salePrice))
-        }
+      for (const saleLine of this.formArraySaleLine.value) {
+        if (saleLine.salePrice) total = total.plus(new Decimal(saleLine.salePrice))
+      }
+      for (const donLine of this.formArrayDonLine.value) {
+        if (donLine.amount) total = total.plus(new Decimal(donLine.amount))
       }
       this.totalFinal = total.toDecimalPlaces(2).toNumber()
-    }))
+    }
+
+    this.tSubscription.push(this.formArraySaleLine.valueChanges.subscribe(() => recomputeTotal()))
+    this.tSubscription.push(this.formArrayDonLine.valueChanges.subscribe(() => recomputeTotal()))
 
     this.tSubscription.push(this.formArrayPayment.valueChanges.subscribe((tPayment) => {
       let total = new Decimal(0)
@@ -132,6 +141,9 @@ export class SaleDetailComponent {
       })
       this.oSale.tSaleLine.forEach((saleLine) => {
         this.addSaleLine(saleLine)
+      })
+      this.oSale.tDonLine?.forEach((donLine) => {
+        this.addDonLine(donLine)
       })
       this.oSale.tPayment.forEach((payment) => {
         this.addPayment(payment)
@@ -253,8 +265,20 @@ export class SaleDetailComponent {
     this.formArrayPayment.push(fg)
   }
 
+  public addDonLine(donLine?: { label?: string, amount?: number }): void {
+    const fg = this._fb.group({
+      label: [donLine?.label ?? 'Don'],
+      amount: [donLine?.amount ?? null, [Validators.required]]
+    })
+    this.formArrayDonLine.push(fg)
+  }
+
   public removeSaleLine(index: number): void {
     this.formArraySaleLine.removeAt(index)
+  }
+
+  public removeDonLine(index: number): void {
+    this.formArrayDonLine.removeAt(index)
   }
 
   public removePayment(index: number): void {
@@ -262,12 +286,12 @@ export class SaleDetailComponent {
   }
 
   public setPayments(): void {
-    if (this.formArraySaleLine.length === 0) {
+    if (this.formArraySaleLine.length === 0 && this.formArrayDonLine.length === 0) {
       this._toast.displayToast('warning', 'Veuillez renseignez 1 ligne minimum')
       return
     }
 
-    if (this.formArraySaleLine.invalid) {
+    if (this.formArraySaleLine.invalid || this.formArrayDonLine.invalid) {
       this._toast.displayToast('warning', 'Des champs sont mal renseignés')
       return
     }
@@ -280,6 +304,7 @@ export class SaleDetailComponent {
     const oSaleDto = this.formGroupSale.getRawValue()
     oSaleDto.totalAmount = this.totalFinal
     oSaleDto.saleSessionId = this.saleSessionId
+    oSaleDto.tDonLine = this.formArrayDonLine.getRawValue()
     if (this.id === 0) {
       await this._saleService.addSale(oSaleDto)
       this._router.navigateByUrl(`private/sales/${this.saleSessionId}`)

@@ -1,4 +1,5 @@
 import { BaseTable } from "./BaseTable.interface";
+import { DonLine } from "./DonLine.interface";
 import { Payment } from "./Payment.interface";
 import { SaleLine } from "./SaleLine.interface";
 import { SaleSession } from "./SaleSession.interface";
@@ -9,6 +10,7 @@ export interface Sale extends BaseTable {
   totalAmount?: number
   oSaleSession?: SaleSession
   tSaleLine?: SaleLine[]
+  tDonLine?: DonLine[]
   tPayment?: Payment[]
   displayTableRef? : string
   displayTableRefLabel? : string

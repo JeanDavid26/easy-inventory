@@ -25,7 +25,7 @@ export class SaleSessionManagerService extends DatabaseManager<SaleSession> {
       where: {
         id
       },
-      relations: [ 'tSale', 'tSale.tSaleLine', 'tSale.tSaleLine.oArticle', 'tSale.tPayment', 'tSale.tPayment.oPaymentMethod' ]
+      relations: [ 'tSale', 'tSale.tSaleLine', 'tSale.tSaleLine.oArticle', 'tSale.tPayment', 'tSale.tPayment.oPaymentMethod', 'tSale.tDonLine' ]
     })
   }
 

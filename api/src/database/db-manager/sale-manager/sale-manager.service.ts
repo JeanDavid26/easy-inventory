@@ -17,7 +17,7 @@ export class SaleManagerService extends DatabaseManager<Sale> {
       where: {
         id
       },
-      relations : [ 'tSaleLine', 'tPayment' ]
+      relations : [ 'tSaleLine', 'tSaleLine.oArticle', 'tPayment', 'tDonLine' ]
     })
   }
 

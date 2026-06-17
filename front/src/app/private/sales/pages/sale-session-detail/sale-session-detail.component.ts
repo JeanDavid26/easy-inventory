@@ -40,7 +40,9 @@ export class SaleSessionDetailComponent {
       this.oSaleSession.tSale.forEach((sale) => {
         sale.displayTablePayment = sale.tPayment.map(obj => obj.oPaymentMethod.label).join(', ');
         sale.displayTableRef = sale.tSaleLine.map((obj) => obj.oArticle?.referenceCode ?? '').join(', ');
-        sale.displayTableRefLabel = sale.tSaleLine.map((obj) => obj.oArticle?.label ?? '').join(', ');
+        const articleLabels = sale.tSaleLine.map((obj) => obj.oArticle?.label ?? '');
+        const donLabels = (sale.tDonLine ?? []).map((obj) => obj.label ?? 'Don');
+        sale.displayTableRefLabel = [ ...articleLabels, ...donLabels ].join(', ');
       });
       this._bcService.setBreadCrumb([
         {
@@ -96,7 +98,9 @@ export class SaleSessionDetailComponent {
       this.oSaleSession.tSale.forEach((sale) => {
         sale.displayTablePayment = sale.tPayment.map(obj => obj.oPaymentMethod.label).join(', ');
         sale.displayTableRef = sale.tSaleLine.map((obj) => obj.oArticle?.referenceCode ?? '').join(', ');
-        sale.displayTableRefLabel = sale.tSaleLine.map((obj) => obj.oArticle?.label ?? '').join(', ');
+        const articleLabels = sale.tSaleLine.map((obj) => obj.oArticle?.label ?? '');
+        const donLabels = (sale.tDonLine ?? []).map((obj) => obj.label ?? 'Don');
+        sale.displayTableRefLabel = [ ...articleLabels, ...donLabels ].join(', ');
       });
       this._bcService.setBreadCrumb([
         {

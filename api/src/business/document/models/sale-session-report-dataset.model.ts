@@ -4,6 +4,7 @@ export type ArticleLineData = {
   unitPrice?: string
   quantity?: number
   lineTotal?: string
+  isDon?: boolean
 }
 export type SaleData={
   clientId : number

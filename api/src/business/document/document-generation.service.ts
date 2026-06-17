@@ -96,20 +96,26 @@ export class DocumentGenerationService {
       checkTotal = new Decimal(checkTotal).add(saleCheckTotal).toNumber()
       cardTotal = new Decimal(cardTotal).add(saleCardTotal).toNumber()
       unpaidTotal = new Decimal(unpaidTotal).add(saleUnpaidTotal).toNumber()
-      totalQuantity = new Decimal(totalQuantity).add(saleItemTotal).toNumber()
+      const tDonTotal = (sale.tDonLine ?? []).reduce((acc, curr) => new Decimal(acc).add(curr.amount).toNumber(), 0)
+      totalQuantity = new Decimal(totalQuantity).add(tDonTotal).toNumber()
+
+      const tArticleLines : ArticleLineData[] = sale.tSaleLine.map(({ oArticle, salePrice, quantity }) => ({
+        reference : oArticle.referenceCode,
+        name : oArticle.label,
+        unitPrice : `${salePrice} €`,
+        quantity,
+        lineTotal : `${new Decimal(salePrice).times(quantity).toFixed(2)} €`
+      }))
+
+      const tDonLines : ArticleLineData[] = (sale.tDonLine ?? []).map(({ label, amount }) => ({
+        name : label,
+        lineTotal : `${new Decimal(amount).toFixed(2)} €`,
+        isDon : true
+      }))
 
       const saleData : SaleData = {
         clientId : index,
-        tArticleLine : sale.tSaleLine.map(({ oArticle, salePrice, quantity })=>{
-          const articleLineData : ArticleLineData = {
-            reference : oArticle.referenceCode,
-            name : oArticle.label,
-            unitPrice : `${salePrice} €`,
-            quantity,
-            lineTotal : `${new Decimal(salePrice).times(quantity).toFixed(2)} €`
-          }
-          return articleLineData
-        }),
+        tArticleLine : [ ...tArticleLines, ...tDonLines ],
         cardTotal : `${saleCardTotal.toFixed(2)} €`,
         chequeTotal : `${saleCheckTotal.toFixed(2)} €`,
         cashTotal : `${saleCashTotal.toFixed(2)} €`,

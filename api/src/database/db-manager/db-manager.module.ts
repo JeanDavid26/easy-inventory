@@ -33,6 +33,8 @@ import { SaleSessionManagerService } from './sale-session-manager/sale-session-m
 import { PaymentManagerService } from './payment-manager/payment-manager.service'
 import { UnpaidSale } from '../entities/UnpaidSale.entity'
 import { UnpaidSaleManagerService } from './unpaid-sale-manager/unpaid-sale-manager.service'
+import { DonLine } from '../entities/DonLine.entity'
+import { DonLineManagerService } from './don-line-manager/don-line-manager.service'
 
 @Module({
   imports: [
@@ -58,7 +60,8 @@ import { UnpaidSaleManagerService } from './unpaid-sale-manager/unpaid-sale-mana
       SaleSession,
       SaleLine,
       Sale,
-      UnpaidSale
+      UnpaidSale,
+      DonLine
     ])
   ],
   providers: [
@@ -77,7 +80,8 @@ import { UnpaidSaleManagerService } from './unpaid-sale-manager/unpaid-sale-mana
     SaleLineManagerService,
     SaleSessionManagerService,
     PaymentManagerService,
-    UnpaidSaleManagerService
+    UnpaidSaleManagerService,
+    DonLineManagerService
   ],
   exports: [
     CategoryManagerService,
@@ -95,7 +99,8 @@ import { UnpaidSaleManagerService } from './unpaid-sale-manager/unpaid-sale-mana
     PaiementMethodManagerService,
     SaleSessionManagerService,
     PaymentManagerService,
-    UnpaidSaleManagerService
+    UnpaidSaleManagerService,
+    DonLineManagerService
   ]
 })
 export class DbManagerModule {}
