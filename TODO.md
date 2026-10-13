@@ -2,11 +2,13 @@
 
 - [x] Dashbord (logo / ajef) nb stock / nb article / valeur total des stocks
 
+- [x] Dashbord best-sellers et ventes par catégorie (par période)
+
 - [x] Vente ajouter la possibilité d'avoir un montant de remise par article
 
-- [ ] Gestion des stocks ajouter la suppression des stocks
+- [x] Gestion des stocks ajouter la suppression des stocks
 
-- [ ] Select dans le transfert de sotck qui se mets en bas on peut pas selectionner ce que l'on veut
+- [x] Select dans le transfert de sotck qui se mets en bas on peut pas selectionner ce que l'on veut
 
 - [x] Fond de caisse de départ
 
