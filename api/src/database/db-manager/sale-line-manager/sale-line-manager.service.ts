@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm'
 import { DatabaseManagerOptions } from 'src/database/@models/database-manager-options'
 import { DatabaseManager } from 'src/database/class/database-manager'
 import { SaleLine } from 'src/database/entities/SaleLine.entity'
-import { Repository } from 'typeorm'
+import { Repository, SelectQueryBuilder } from 'typeorm'
 
 @Injectable()
 export class SaleLineManagerService extends DatabaseManager<SaleLine> {
@@ -42,5 +42,56 @@ export class SaleLineManagerService extends DatabaseManager<SaleLine> {
       deleteDate: new Date()
     }
     return repo.save(stock)
+  }
+
+  public async getBestSellers ({ from, to, limit = 10, options = {} }: { from?: Date, to?: Date, limit?: number, options?: DatabaseManagerOptions }): Promise<{ articleId: number, label: string, referenceCode: string, quantity: number }[]> {
+    const rows = await this._statsQuery({ from, to, options })
+      .select('article.id', 'articleId')
+      .addSelect('article.label', 'label')
+      .addSelect('article.referenceCode', 'referenceCode')
+      .addSelect('SUM(saleLine.quantity)', 'quantity')
+      .groupBy('article.id')
+      .addGroupBy('article.label')
+      .addGroupBy('article.referenceCode')
+      .orderBy('SUM(saleLine.quantity)', 'DESC')
+      .limit(limit)
+      .getRawMany()
+    return rows.map(row => ({ articleId: Number(row.articleId), label: row.label, referenceCode: row.referenceCode, quantity: Number(row.quantity) }))
+  }
+
+  public async getQuantityByCategory ({ from, to, options = {} }: { from?: Date, to?: Date, options?: DatabaseManagerOptions }): Promise<{ categoryId: number, label: string, quantity: number }[]> {
+    const rows = await this._statsQuery({ from, to, options })
+      .leftJoin('article.oCategory', 'category')
+      .select('category.id', 'categoryId')
+      .addSelect('category.label', 'label')
+      .addSelect('SUM(saleLine.quantity)', 'quantity')
+      .groupBy('category.id')
+      .addGroupBy('category.label')
+      .orderBy('SUM(saleLine.quantity)', 'DESC')
+      .getRawMany()
+    return rows.map(row => ({ categoryId: row.categoryId ? Number(row.categoryId) : null, label: row.label ?? 'Sans catégorie', quantity: Number(row.quantity) }))
+  }
+
+  // Lignes de vente prises en compte dans les statistiques : sessions ouvertes ou clôturées, impayés inclus,
+  // en excluant tout ce qui est supprimé (session, vente, ligne). Les articles et catégories supprimés depuis
+  // restent comptés car leurs ventes ont bien eu lieu. La période porte sur la date de la session.
+  private _statsQuery ({ from, to, options }: { from?: Date, to?: Date, options?: DatabaseManagerOptions }): SelectQueryBuilder<SaleLine> {
+    const qb = this._getRepo(options)
+      .createQueryBuilder('saleLine')
+      .withDeleted()
+      .innerJoin('saleLine.oSale', 'sale')
+      .innerJoin('sale.oSaleSession', 'saleSession')
+      .innerJoin('saleLine.oArticle', 'article')
+      .where('saleLine.deleteDate IS NULL')
+      .andWhere('sale.deleteDate IS NULL')
+      .andWhere('saleSession.deleteDate IS NULL')
+
+    if (from) {
+      qb.andWhere('saleSession.creationDate >= :from', { from })
+    }
+    if (to) {
+      qb.andWhere('saleSession.creationDate <= :to', { to })
+    }
+    return qb
   }
 }

@@ -1,8 +1,8 @@
-import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common'
+import { BadRequestException, Body, Controller, Delete, Get, Param, Post, Put, Query } from '@nestjs/common'
 import { SaleSessionManagerService } from 'src/database/db-manager/sale-session-manager/sale-session-manager.service'
 import { Sale } from 'src/database/entities/Sale.entity'
 import { SaleSession } from 'src/database/entities/SaleSession.entity'
-import { SaleService } from './sale.service'
+import { SaleService, SaleStats } from './sale.service'
 import { InsertSaleDto } from './dto/insert-sale.dto'
 import { SaleManagerService } from 'src/database/db-manager/sale-manager/sale-manager.service'
 import { UpdateSaleSessionDto } from './dto/update-sale-session.dto'
@@ -54,6 +54,16 @@ export class SaleController {
   @Get('recent-sales')
   public async getRecentSales (): Promise<number[]> {
     return this._saleService.getRecentSales()
+  }
+
+  @Get('stats')
+  public async getStats (@Query('from') from?: string, @Query('to') to?: string): Promise<SaleStats> {
+    const dFrom = from ? new Date(from) : undefined
+    const dTo = to ? new Date(to) : undefined
+    if ((dFrom && isNaN(dFrom.getTime())) || (dTo && isNaN(dTo.getTime()))) {
+      throw new BadRequestException('Période invalide.')
+    }
+    return this._saleService.getStats(dFrom, dTo)
   }
 
   @Get(':id')

@@ -143,4 +143,17 @@ export class SaleService {
       ...body
     } })
   }
+
+  public async getStats (from?: Date, to?: Date): Promise<SaleStats> {
+    const [ tBestSeller, tCategory ] = await Promise.all([
+      this._saleLineManagerService.getBestSellers({ from, to }),
+      this._saleLineManagerService.getQuantityByCategory({ from, to })
+    ])
+    return { tBestSeller, tCategory }
+  }
+}
+
+export type SaleStats = {
+  tBestSeller: { articleId: number, label: string, referenceCode: string, quantity: number }[]
+  tCategory: { categoryId: number, label: string, quantity: number }[]
 }

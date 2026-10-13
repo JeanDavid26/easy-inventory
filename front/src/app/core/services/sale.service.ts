@@ -6,6 +6,7 @@ import { environment } from "../../../environments/environment";
 import { lastValueFrom } from "rxjs";
 import { Sale } from "../../@models/entities/Sale.interface";
 import { SaleLine } from "../../@models/entities/SaleLine.interface";
+import { SaleStats } from "../../@models/interfaces/sale-stats.interface";
 
 @Injectable({
   providedIn : 'root'
@@ -69,6 +70,14 @@ export class SaleService {
   public getRecentSales () : Promise<number[]> {
     const route = environment.urlApi + 'sale/recent-sales'
     return lastValueFrom(this._httpClient.get<number[]>(route))
+  }
+
+  public getStats (from? : Date, to? : Date) : Promise<SaleStats> {
+    const route = environment.urlApi + 'sale/stats'
+    const params : Record<string, string> = {}
+    if (from) { params['from'] = from.toISOString() }
+    if (to) { params['to'] = to.toISOString() }
+    return lastValueFrom(this._httpClient.get<SaleStats>(route, { params }))
   }
 
 }
