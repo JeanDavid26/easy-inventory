@@ -1,4 +1,4 @@
-import { Component, forwardRef, Input, OnInit, ElementRef, ViewChild, Renderer2, HostListener } from '@angular/core';
+import { Component, forwardRef, Input, OnInit, OnDestroy, ElementRef, ViewChild, Renderer2, HostListener } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 @Component({
   selector: 'app-select',
@@ -10,7 +10,7 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
     multi: true
   }]
 })
-export class SelectComponent implements ControlValueAccessor, OnInit {
+export class SelectComponent implements ControlValueAccessor, OnInit, OnDestroy {
 
   // Example list of options
   @Input() tOptions : any[] =[]
@@ -40,9 +40,17 @@ export class SelectComponent implements ControlValueAccessor, OnInit {
 
   constructor(private renderer: Renderer2, private elementRef: ElementRef) {}
 
+  // Écoute en phase de capture pour suivre aussi le scroll des conteneurs parents
+  private onAnyScroll = () => this.positionDropdown();
+
   ngOnInit(): void {
     this.filteredOptions = this.tOptions;
     this.showSearch = this.tOptions.length > 10;
+    window.addEventListener('scroll', this.onAnyScroll, true);
+  }
+
+  ngOnDestroy(): void {
+    window.removeEventListener('scroll', this.onAnyScroll, true);
   }
 
   // Toggle dropdown visibility
@@ -67,12 +75,39 @@ export class SelectComponent implements ControlValueAccessor, OnInit {
   }
 
   positionDropdown() {
+    if (!this.dropdownOpen || !this.dropdownList || !this.selectWrapper) {
+      return;
+    }
     const wrapperRect = this.selectWrapper.nativeElement.getBoundingClientRect();
     const dropdownEl = this.dropdownList.nativeElement;
+    const gap = 4;
+    const viewportMargin = 8;
+    const preferredMaxHeight = 384; // équivalent max-h-96
+
+    const spaceBelow = window.innerHeight - wrapperRect.bottom - gap - viewportMargin;
+    const spaceAbove = wrapperRect.top - gap - viewportMargin;
+    const contentHeight = Math.min(dropdownEl.scrollHeight, preferredMaxHeight);
+
+    // Ouvre vers le haut si la place manque en dessous et qu'il y en a plus au-dessus
+    const openAbove = spaceBelow < contentHeight && spaceAbove > spaceBelow;
+    const maxHeight = Math.max(Math.min(openAbove ? spaceAbove : spaceBelow, preferredMaxHeight), 0);
 
     this.renderer.setStyle(dropdownEl, 'left', `${wrapperRect.left}px`);
     this.renderer.setStyle(dropdownEl, 'width', `${wrapperRect.width}px`);
-    this.renderer.setStyle(dropdownEl, 'top', `${wrapperRect.bottom}px`);
+    this.renderer.setStyle(dropdownEl, 'max-height', `${maxHeight}px`);
+    if (openAbove) {
+      this.renderer.setStyle(dropdownEl, 'top', 'auto');
+      this.renderer.setStyle(dropdownEl, 'bottom', `${window.innerHeight - wrapperRect.top + gap}px`);
+    } else {
+      this.renderer.setStyle(dropdownEl, 'bottom', 'auto');
+      this.renderer.setStyle(dropdownEl, 'top', `${wrapperRect.bottom + gap}px`);
+    }
+  }
+
+  // Repositionne la liste si la fenêtre est redimensionnée
+  @HostListener('window:resize')
+  onViewportChange() {
+    this.positionDropdown();
   }
 
   // Select an option and close the dropdown
