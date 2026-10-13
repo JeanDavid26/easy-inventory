@@ -25,9 +25,7 @@
         </svg>
       </div>
     </form>
-    <app-button type="primary" (click)="generateInventoryState()">
-      Imprimer État du Stock
-    </app-button>
+    <app-button type="primary" [icon]="icons.print" (click)="generateInventoryState()">Imprimer l'état du stock</app-button>
   </div>
 
   <!-- Tableau avec défilement -->
@@ -36,9 +34,9 @@
       <table class="w-full text-sm text-left rtl:text-right text-gray-700">
         <thead class="text-xs text-white uppercase bg-gray-700 sticky top-0 z-10">
           <tr>
-            <th scope="col" class="px-6 py-3 cursor-pointer" (click)="sortDocuments('label')">
-              Nom du document
-              <span class="ml-1">{{ sortColumn === 'label' ? (sortDirection === 'asc' ? '▲' : sortDirection === 'desc' ? '▼' : '◆') : '◆' }}</span>
+            <th scope="col" class="px-6 py-3 cursor-pointer select-none group" (click)="sortDocuments('label')"
+              [attr.aria-sort]="sortColumn === 'label' && sortDirection ? (sortDirection === 'asc' ? 'ascending' : 'descending') : null">
+              <span class="inline-flex items-center gap-1.5 whitespace-nowrap">Nom du document<app-sort-icon [direction]="sortColumn === 'label' ? sortDirection : null"></app-sort-icon></span>
             </th>
             <th scope="col" class="px-6 py-3">Actions</th>
           </tr>

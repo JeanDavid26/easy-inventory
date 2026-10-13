@@ -1,3 +1,4 @@
+import { Icons } from '../../../../shared/icons';
 import { Component } from '@angular/core';
 import { InventoryType } from '../../../../@models/entities/InventoryType.interface';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -12,6 +13,8 @@ import { ToastService } from '../../../../shared/toast/toast.service';
   styleUrl: './inventory-type-detail.component.scss'
 })
 export class InventoryTypeDetailComponent {
+  readonly icons = Icons
+
 
   public id :number
   public invenotryType : InventoryType = null

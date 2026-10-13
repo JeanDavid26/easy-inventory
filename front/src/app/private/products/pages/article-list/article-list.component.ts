@@ -1,3 +1,5 @@
+import { compareForSort } from '../../../../shared/utils/compare-for-sort';
+import { Icons } from '../../../../shared/icons';
 import { Component, OnInit } from '@angular/core';
 import { ArticleService } from '../../../../core/services/article.service';
 import { Router } from '@angular/router';
@@ -15,6 +17,8 @@ import { ToastService } from '../../../../shared/toast/toast.service';
   styleUrls: ['./article-list.component.scss']
 })
 export class ArticleListComponent implements OnInit {
+  readonly icons = Icons
+
 
   public tArticle: Article[] = [];
   public filteredArticles: Article[] = [];
@@ -111,9 +115,8 @@ export class ArticleListComponent implements OnInit {
       this.filteredArticles.sort((a, b) => {
         const valueA = this.getValueForSort(a, column);
         const valueB = this.getValueForSort(b, column);
-        if (valueA < valueB) return this.sortDirection === 'asc' ? -1 : 1;
-        if (valueA > valueB) return this.sortDirection === 'asc' ? 1 : -1;
-        return 0;
+        const result = compareForSort(valueA, valueB);
+        return this.sortDirection === 'asc' ? result : -result;
       });
     }
   }

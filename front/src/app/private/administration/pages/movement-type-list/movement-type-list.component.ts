@@ -1,3 +1,4 @@
+import { Icons } from '../../../../shared/icons';
 import { Component } from '@angular/core';
 import { MovementType } from '../../../../@models/entities/MovementType.interface';
 import { MovementTypeService } from '../../../../core/services/movement-type.service';
@@ -10,6 +11,8 @@ import { BreadcrumbService } from '../../../../core/services/breadcrumb.service'
   styleUrl: './movement-type-list.component.scss'
 })
 export class MovementTypeListComponent {
+  readonly icons = Icons
+
 
   public tMovementType : MovementType[] = []
 

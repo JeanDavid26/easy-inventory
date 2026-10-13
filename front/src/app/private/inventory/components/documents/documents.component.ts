@@ -1,3 +1,5 @@
+import { compareForSort } from '../../../../shared/utils/compare-for-sort';
+import { Icons } from '../../../../shared/icons';
 import { Component, Input, OnInit } from '@angular/core';
 import { DocumentService } from '../../../../core/services/document.service';
 import { Document } from '../../../../@models/entities/Document.interface';
@@ -11,6 +13,8 @@ import { saveAs } from 'file-saver'
   styleUrl: './documents.component.scss'
 })
 export class DocumentsComponent implements OnInit {
+  readonly icons = Icons
+
   public inventoryId: number;
   documents: Document[] = [];
   public filteredDocuments: Document[] = [];
@@ -82,9 +86,8 @@ export class DocumentsComponent implements OnInit {
       this.filteredDocuments.sort((a, b) => {
         const valueA = a[column as keyof Document];
         const valueB = b[column as keyof Document];
-        if (valueA < valueB) return this.sortDirection === 'asc' ? -1 : 1;
-        if (valueA > valueB) return this.sortDirection === 'asc' ? 1 : -1;
-        return 0;
+        const result = compareForSort(valueA, valueB);
+        return this.sortDirection === 'asc' ? result : -result;
       });
     }
   }

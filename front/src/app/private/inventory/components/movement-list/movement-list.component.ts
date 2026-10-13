@@ -1,3 +1,5 @@
+import { compareForSort } from '../../../../shared/utils/compare-for-sort';
+import { Icons } from '../../../../shared/icons';
 import { Component, OnInit } from '@angular/core';
 import { InventoryService } from '../../../../core/services/inventory.service';
 import { BreadcrumbService } from '../../../../core/services/breadcrumb.service';
@@ -15,6 +17,8 @@ import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
   styleUrl: './movement-list.component.scss'
 })
 export class MovementListComponent implements OnInit {
+  readonly icons = Icons
+
   public oInventory: Inventory
   public toInventoryMovement: InventoryMovement[] = []
   public tSubsciption: Subscription[] = []
@@ -91,9 +95,8 @@ export class MovementListComponent implements OnInit {
       this.filteredMovements.sort((a, b) => {
         const valueA = this.getValueForSort(a, column);
         const valueB = this.getValueForSort(b, column);
-        if (valueA < valueB) return this.sortDirection === 'asc' ? -1 : 1;
-        if (valueA > valueB) return this.sortDirection === 'asc' ? 1 : -1;
-        return 0;
+        const result = compareForSort(valueA, valueB);
+        return this.sortDirection === 'asc' ? result : -result;
       });
     }
   }

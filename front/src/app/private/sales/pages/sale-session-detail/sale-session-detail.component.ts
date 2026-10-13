@@ -1,3 +1,4 @@
+import { Icons } from '../../../../shared/icons';
 import { Component, computed } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SaleSession } from '../../../../@models/entities/SaleSession.interface';
@@ -16,6 +17,8 @@ import { DocumentService } from '../../../../core/services/document.service';
   styleUrl: './sale-session-detail.component.scss'
 })
 export class SaleSessionDetailComponent {
+  readonly icons = Icons
+
 
   public id : number
   public oSaleSession : SaleSession

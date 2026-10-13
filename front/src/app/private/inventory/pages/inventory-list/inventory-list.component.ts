@@ -1,3 +1,4 @@
+import { Icons } from '../../../../shared/icons';
 import { Component } from '@angular/core';
 import { Inventory } from '../../../../@models/entities/Inventory.interface';
 import { InventoryService } from '../../../../core/services/inventory.service';
@@ -12,6 +13,8 @@ import { DocumentService } from '../../../../core/services/document.service';
   styleUrl: './inventory-list.component.scss'
 })
 export class InventoryListComponent {
+  readonly icons = Icons
+
 
   public tInventory : Inventory[] = []
 

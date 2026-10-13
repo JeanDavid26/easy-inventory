@@ -30,11 +30,10 @@
         </div>
       </form>
     </div>
-    <app-button type="primary" (click)="generateInventoryState()">
-      Imprimer État du Stock
-    </app-button>
-    <app-button type="primary" (click)="addMovementStock()"
-      >Ajouter un mouvement de stock</app-button>
+    <div class="flex flex-shrink-0 gap-2 whitespace-nowrap">
+      <app-button [icon]="icons.print" (click)="generateInventoryState()">Imprimer l'état du stock</app-button>
+      <app-button type="primary" [icon]="icons.add" (click)="addMovementStock()">Nouveau mouvement</app-button>
+    </div>
   </div>
 
   <!-- Tableau avec défilement -->
@@ -49,83 +48,38 @@
           <tr>
             <th
               scope="col"
-              class="px-6 py-3 cursor-pointer"
+              class="px-6 py-3 cursor-pointer select-none group"
               (click)="sortInventoryLines('referenceCode')"
-            >
-              Code de référence
-              <span class="ml-1">{{
-                sortColumn === "referenceCode"
-                  ? sortDirection === "asc"
-                    ? "▲"
-                    : sortDirection === "desc"
-                    ? "▼"
-                    : "◆"
-                  : "◆"
-              }}</span>
+              [attr.aria-sort]="sortColumn === 'referenceCode' && sortDirection ? (sortDirection === 'asc' ? 'ascending' : 'descending') : null">
+              <span class="inline-flex items-center gap-1.5 whitespace-nowrap">Code de référence<app-sort-icon [direction]="sortColumn === 'referenceCode' ? sortDirection : null"></app-sort-icon></span>
             </th>
             <th
               scope="col"
-              class="px-6 py-3 cursor-pointer"
+              class="px-6 py-3 cursor-pointer select-none group"
               (click)="sortInventoryLines('label')"
-            >
-              Désignation
-              <span class="ml-1">{{
-                sortColumn === "label"
-                  ? sortDirection === "asc"
-                    ? "▲"
-                    : sortDirection === "desc"
-                    ? "▼"
-                    : "◆"
-                  : "◆"
-              }}</span>
+              [attr.aria-sort]="sortColumn === 'label' && sortDirection ? (sortDirection === 'asc' ? 'ascending' : 'descending') : null">
+              <span class="inline-flex items-center gap-1.5 whitespace-nowrap">Désignation<app-sort-icon [direction]="sortColumn === 'label' ? sortDirection : null"></app-sort-icon></span>
             </th>
             <th
               scope="col"
-              class="px-6 py-3 cursor-pointer"
+              class="px-6 py-3 cursor-pointer select-none group"
               (click)="sortInventoryLines('category')"
-            >
-              Catégorie
-              <span class="ml-1">{{
-                sortColumn === "category"
-                  ? sortDirection === "asc"
-                    ? "▲"
-                    : sortDirection === "desc"
-                    ? "▼"
-                    : "◆"
-                  : "◆"
-              }}</span>
+              [attr.aria-sort]="sortColumn === 'category' && sortDirection ? (sortDirection === 'asc' ? 'ascending' : 'descending') : null">
+              <span class="inline-flex items-center gap-1.5 whitespace-nowrap">Catégorie<app-sort-icon [direction]="sortColumn === 'category' ? sortDirection : null"></app-sort-icon></span>
             </th>
             <th
               scope="col"
-              class="px-6 py-3 cursor-pointer"
+              class="px-6 py-3 cursor-pointer select-none group"
               (click)="sortInventoryLines('quantity')"
-            >
-              Quantité
-              <span class="ml-1">{{
-                sortColumn === "quantity"
-                  ? sortDirection === "asc"
-                    ? "▲"
-                    : sortDirection === "desc"
-                    ? "▼"
-                    : "◆"
-                  : "◆"
-              }}</span>
+              [attr.aria-sort]="sortColumn === 'quantity' && sortDirection ? (sortDirection === 'asc' ? 'ascending' : 'descending') : null">
+              <span class="inline-flex items-center gap-1.5 whitespace-nowrap">Quantité<app-sort-icon [direction]="sortColumn === 'quantity' ? sortDirection : null"></app-sort-icon></span>
             </th>
             <th
               scope="col"
-              class="px-6 py-3 cursor-pointer"
+              class="px-6 py-3 cursor-pointer select-none group"
               (click)="sortInventoryLines('value')"
-            >
-              Valeur
-              <span class="ml-1">{{
-                sortColumn === "value"
-                  ? sortDirection === "asc"
-                    ? "▲"
-                    : sortDirection === "desc"
-                    ? "▼"
-                    : "◆"
-                  : "◆"
-              }}</span>
+              [attr.aria-sort]="sortColumn === 'value' && sortDirection ? (sortDirection === 'asc' ? 'ascending' : 'descending') : null">
+              <span class="inline-flex items-center gap-1.5 whitespace-nowrap">Valeur<app-sort-icon [direction]="sortColumn === 'value' ? sortDirection : null"></app-sort-icon></span>
             </th>
             <th></th>
           </tr>
@@ -158,8 +112,8 @@
                     [formControl]="editQuantityControl"
                     class="w-24"
                   ></app-input>
-                  <app-button type="primary" (click)="saveQuantity(inventoryLine.id)">Valider</app-button>
-                  <app-button (click)="cancelEditing()">Annuler</app-button>
+                  <app-button type="primary" size="sm" (click)="saveQuantity(inventoryLine.id)">Valider</app-button>
+                  <app-button size="sm" (click)="cancelEditing()">Annuler</app-button>
                 </div>
               </ng-template>
             </td>
@@ -170,26 +124,20 @@
               <div class="flex items-center gap-2">
                 @if (!editingRow[inventoryLine.id]) {
                   <app-button
-                    type="normal"
-                    class="!p-2"
+                    type="secondary"
+                    size="icon"
+                    [icon]="icons.edit"
                     (click)="startEditing(inventoryLine)"
                     title="Modifier la quantité"
-                  >
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
-                    </svg>
-                  </app-button>
+                  ></app-button>
                 }
                 <app-button
-                  type="important"
-                  class="!p-2"
+                  type="danger"
+                  size="icon"
+                  [icon]="icons.delete"
                   (click)="supprimerInventoryLine(inventoryLine.id)"
                   title="Supprimer l'article"
-                >
-                  <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                  </svg>
-                </app-button>
+                ></app-button>
               </div>
             </td>
           </tr>

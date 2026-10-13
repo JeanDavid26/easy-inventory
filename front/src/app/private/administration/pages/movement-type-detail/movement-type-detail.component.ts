@@ -1,3 +1,4 @@
+import { Icons } from '../../../../shared/icons';
 import { Component } from '@angular/core';
 import { BreadcrumbService } from '../../../../core/services/breadcrumb.service';
 import { MovementType } from '../../../../@models/entities/MovementType.interface';
@@ -12,6 +13,8 @@ import { ToastService } from '../../../../shared/toast/toast.service';
   styleUrl: './movement-type-detail.component.scss'
 })
 export class MovementTypeDetailComponent {
+  readonly icons = Icons
+
 
   public id :number
   public movementType : MovementType = null

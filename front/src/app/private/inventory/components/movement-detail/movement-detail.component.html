@@ -30,8 +30,8 @@
 <hr class="h-px my-8 bg-gray-200 border-0">
 <div>
   <ng-container *ngIf="stepDisplayed === 1">
-    <div class="w-full flex flex-row justify-end gap-5 mb-5">
-      <app-button type="primary" (click)="validateStep1()">Suivant</app-button>
+    <div class="w-full flex flex-row justify-end gap-2 mb-5">
+      <app-button type="primary" [icon]="icons.next" (click)="validateStep1()">Suivant</app-button>
     </div>
 
     <form class="flex flex-col gap-3 grow-0" [formGroup]="formMovementInformation" *ngIf="formMovementInformation">
@@ -64,9 +64,9 @@
   </ng-container>
 
   <ng-container *ngIf="stepDisplayed === 2">
-    <div class="w-full flex flex-row justify-between gap-5 mb-5">
-      <app-button (click)="retourStep1()">Retour</app-button>
-      <app-button type="primary" (click)="validateStep2()">Suivant</app-button>
+    <div class="w-full flex flex-row justify-between gap-2 mb-5">
+      <app-button [icon]="icons.back" (click)="retourStep1()">Retour</app-button>
+      <app-button type="primary" [icon]="icons.next" (click)="validateStep2()">Suivant</app-button>
     </div>
     <form [formGroup]="formMovementInformation">
       <ng-container *ngIf="movmentTypeSelected.isInternal === true">
@@ -107,7 +107,7 @@
                       <tr
                       class="odd:bg-white even:bg-gray-50 border-b">
 
-                          <td colspan="2" class="text-center"><app-button (click)="addMovementLine()">Ajouter une ligne</app-button></td>
+                          <td colspan="2" class="text-center"><app-button size="sm" [icon]="icons.add" (click)="addMovementLine()">Ajouter une ligne</app-button></td>
                       </tr>
                     </ng-container>
                 </tbody>
@@ -152,7 +152,7 @@
                     <ng-container >
                       <tr
                       class="odd:bg-white even:bg-gray-50 border-b">
-                          <td colspan="2" class="text-center"><app-button (click)="addMovementLine()">Ajouter une ligne</app-button></td>
+                          <td colspan="2" class="text-center"><app-button size="sm" [icon]="icons.add" (click)="addMovementLine()">Ajouter une ligne</app-button></td>
                       </tr>
                     </ng-container>
                 </tbody>
@@ -165,9 +165,9 @@
   </ng-container>
 
   <ng-container *ngIf="stepDisplayed === 3">
-    <div class="w-full flex flex-row justify-between gap-5 mb-5">
-      <app-button (click)="retourStep2()">Retour</app-button>
-      <app-button type="primary" (click)="enregistrer()">Finaliser le mouvement</app-button>
+    <div class="w-full flex flex-row justify-between gap-2 mb-5">
+      <app-button [icon]="icons.back" (click)="retourStep2()">Retour</app-button>
+      <app-button type="primary" [icon]="icons.validate" (click)="enregistrer()">Finaliser le mouvement</app-button>
     </div>
     <div class="p-4 bg-white shadow-md rounded-lg">
       <h3 class="text-lg font-semibold text-gray-800">Résumé du Mouvement</h3>

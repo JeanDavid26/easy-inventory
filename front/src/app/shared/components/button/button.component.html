@@ -1,3 +1,4 @@
-<button [ngClass]="getClasses()">
+<button [attr.type]="htmlType" [disabled]="disabled" [ngClass]="getClasses()">
+  <fa-icon *ngIf="icon" [icon]="icon"></fa-icon>
   <ng-content></ng-content>
 </button>

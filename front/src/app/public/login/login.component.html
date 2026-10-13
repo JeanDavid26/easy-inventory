@@ -12,7 +12,7 @@
                     <app-input label="Email" formControlName="email" [required]="true"></app-input>
                     <app-input label="Mot de passe" formControlName="password" type="password" [required]="true"></app-input>
                     <div class="flex justify-center">
-                      <app-button (click)="signIn()">Se connecter</app-button>
+                      <app-button type="primary" htmlType="submit" (click)="signIn()">Se connecter</app-button>
                     </div>
                     <p class="text-sm font-light text-gray-500 ">
                         Pas de compte ? <a routerLink="/public/create-account" class="font-medium text-primary-600 hover:underline">Créer un compte</a>

@@ -1,3 +1,4 @@
+import { Icons } from '../../../../shared/icons';
 import { Component } from '@angular/core';
 import { Article } from '../../../../@models/entities/Article.interface';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -14,6 +15,8 @@ import { ToastService } from '../../../../shared/toast/toast.service';
   styleUrl: './article-detail.component.scss'
 })
 export class ArticleDetailComponent {
+  readonly icons = Icons
+
   public id :number
   public article : Article = null
   public form : FormGroup

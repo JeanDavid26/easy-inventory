@@ -75,8 +75,8 @@
 
                 <tr class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
                     <td colspan="4" class="text-center flex gap-2 justify-center py-2">
-                      <app-button type="normal" (click)="addSaleLine()">Ajouter une ligne article</app-button>
-                      <app-button type="normal" (click)="addDonLine()">Ajouter un don</app-button>
+                      <app-button size="sm" [icon]="icons.add" (click)="addSaleLine()">Ajouter un article</app-button>
+                      <app-button size="sm" [icon]="icons.add" (click)="addDonLine()">Ajouter un don</app-button>
                     </td>
                 </tr>
               </tbody>
@@ -84,7 +84,7 @@
           </div>
         </div>
         <div class="flex justify-end p-5">
-          <app-button type="primary" (click)="setPayments()">Réglement {{totalFinal ?? 0 | round}} €</app-button >
+          <app-button type="primary" (click)="setPayments()">Règlement {{totalFinal ?? 0 | round}} €</app-button>
         </div>
       </div>
     </form>
@@ -183,14 +183,14 @@
                       <tr
                       class="odd:bg-white even:bg-gray-50 border-b p-2">
 
-                          <td colspan="3" class="text-center"><app-button type="normal" (click)="addPayment()">Ajouter un paiement</app-button></td>
+                          <td colspan="3" class="text-center"><app-button size="sm" [icon]="icons.add" (click)="addPayment()">Ajouter un paiement</app-button></td>
                       </tr>
                     </tbody>
                 </table>
 
               </div>
               <div class="flex justify-end p-5">
-                <app-button type="primary" (click)="validatePayments()">Valider réglement {{ totalAmountMultiple | round}} €</app-button >
+                <app-button type="primary" [icon]="icons.validate" (click)="validatePayments()">Valider le règlement {{ totalAmountMultiple | round}} €</app-button>
               </div>
             </div>
 
@@ -258,10 +258,10 @@
       </div>
       <div>
         <ng-container *ngIf="this.id === 0">
-          <app-button (click)="save()">Enregistrer</app-button>
+          <app-button type="primary" (click)="save()">Enregistrer</app-button>
         </ng-container>
         <ng-container *ngIf="this.id !== 0 && this.oSaleSession.status === 'ongoing'">
-          <app-button (click)="supprimer()">Supprimer</app-button>
+          <app-button type="danger" [icon]="icons.delete" (click)="supprimer()">Supprimer</app-button>
         </ng-container>
       </div>
     </div>

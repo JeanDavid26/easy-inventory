@@ -14,7 +14,7 @@
                   <app-input label="Prénom" formControlName="firstName" [required]="true"></app-input>
                   <app-input label="Nom" formControlName="lastName" [required]="true"></app-input>
                   <div class="flex justify-center">
-                    <app-button (click)="signUp()">S'inscrire</app-button>
+                    <app-button type="primary" htmlType="submit" (click)="signUp()">S'inscrire</app-button>
                   </div>
                   <p class="text-sm font-light text-gray-500 ">
                       Vous avez déjà un compte ? <a routerLink="/public/login" class="font-medium text-primary-600 hover:underline ">Se connecter</a>

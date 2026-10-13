@@ -1,4 +1,12 @@
 import { Component, Input } from '@angular/core';
+import { IconDefinition } from '@fortawesome/fontawesome-svg-core';
+
+// primary   : action principale de la page (une seule par zone)
+// secondary : actions secondaires (annuler, retour, imprimer, ajouter une ligne...)
+// danger    : actions destructives (supprimer)
+// 'normal' et 'important' sont conservés comme alias de secondary et danger
+export type ButtonType = 'primary' | 'secondary' | 'danger' | 'normal' | 'important'
+export type ButtonSize = 'md' | 'sm' | 'icon'
 
 @Component({
   selector: 'app-button',
@@ -6,62 +14,58 @@ import { Component, Input } from '@angular/core';
   styleUrl: './button.component.scss'
 })
 export class ButtonComponent {
-  @Input() type : 'primary' | 'normal' | 'important' | 'danger'
+  @Input() type : ButtonType = 'secondary'
+  @Input() size : ButtonSize = 'md'
+  @Input() icon? : IconDefinition
+  // 'submit' uniquement pour les formulaires validés avec Entrée (connexion, inscription)
+  @Input() htmlType : 'button' | 'submit' = 'button'
+  @Input() disabled : boolean = false
 
-  primaryClasses = [
-    'text-white',
-    'bg-blue-500',
-    'hover:bg-blue-600',
-    'font-bold',
-    'py-2',
-    'px-4',
-    'rounded'
-  ];
-
-  normalClasses = [
-    'text-gray-900',
-    'border',
+  private baseClasses = [
+    'inline-flex',
+    'items-center',
+    'justify-center',
+    'gap-2',
+    'whitespace-nowrap',
+    'rounded-lg',
+    'font-medium',
+    'transition-colors',
     'focus:outline-none',
-    'font-bold',
-    'py-2',
-    'px-4',
-    'rounded',
-    'bg-gray-800',
-    'text-white',
-    'border-gray-600',
-    'hover:bg-gray-700',
-    'hover:border-gray-600',
-    'focus:ring-gray-700'
+    'focus:ring-2',
+    'focus:ring-offset-1',
+    'disabled:opacity-50',
+    'disabled:cursor-not-allowed'
   ];
 
-  importantClasses = [
-    'text-white',
-    'bg-red-500',
-    'hover:bg-red-600',
-    'font-bold',
-    'py-2',
-    'px-4',
-    'rounded'
-  ];
+  private typeClasses: Record<'primary' | 'secondary' | 'danger', string[]> = {
+    primary: [ 'text-white', 'bg-blue-600', 'border', 'border-blue-600', 'hover:bg-blue-700', 'focus:ring-blue-300' ],
+    secondary: [ 'text-gray-700', 'bg-white', 'border', 'border-gray-300', 'hover:bg-gray-50', 'focus:ring-gray-200' ],
+    danger: [ 'text-red-600', 'bg-white', 'border', 'border-red-300', 'hover:bg-red-50', 'focus:ring-red-200' ],
+  };
 
-  dangerClasses = [
-    'text-white',
-    'bg-red-500',
-    'hover:bg-red-600',
-  ]
+  private sizeClasses: Record<ButtonSize, string[]> = {
+    md: [ 'text-sm', 'px-4', 'py-2.5' ],
+    sm: [ 'text-sm', 'px-3', 'py-1.5' ],
+    icon: [ 'text-sm', 'w-9', 'h-9' ],
+  };
 
-  getClasses() {
+  getClasses() : string[] {
+    return [
+      ...this.baseClasses,
+      ...this.typeClasses[this.resolveType()],
+      ...this.sizeClasses[this.size]
+    ];
+  }
+
+  private resolveType() : 'primary' | 'secondary' | 'danger' {
     switch (this.type) {
       case 'primary':
-        return this.primaryClasses;
-      case 'normal':
-        return this.normalClasses;
-      case 'important':
-        return this.importantClasses;
+        return 'primary';
       case 'danger':
-        return this.dangerClasses;
+      case 'important':
+        return 'danger';
       default:
-        return this.normalClasses;
+        return 'secondary';
     }
   }
 }

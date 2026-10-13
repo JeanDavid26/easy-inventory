@@ -1,3 +1,5 @@
+import { compareForSort } from '../../../../shared/utils/compare-for-sort';
+import { Icons } from '../../../../shared/icons';
 import { Component, OnInit } from '@angular/core';
 import { CategoryService } from '../../../../core/services/category.service';
 import { Router } from '@angular/router';
@@ -12,6 +14,8 @@ import { debounceTime, distinctUntilChanged } from 'rxjs';
   styleUrls: ['./category-list.component.scss']
 })
 export class CategoryListComponent implements OnInit {
+  readonly icons = Icons
+
 
   public tCategory: Category[] = [];
   public filteredCategories: Category[] = [];
@@ -98,9 +102,8 @@ export class CategoryListComponent implements OnInit {
             valueA = a[column as keyof Category];
             valueB = b[column as keyof Category];
         }
-        if (valueA < valueB) return this.sortDirection === 'asc' ? -1 : 1;
-        if (valueA > valueB) return this.sortDirection === 'asc' ? 1 : -1;
-        return 0;
+        const result = compareForSort(valueA, valueB);
+        return this.sortDirection === 'asc' ? result : -result;
       });
     }
   }

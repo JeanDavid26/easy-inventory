@@ -15,6 +15,7 @@ import { LoaderComponent } from './components/loader/loader.component';
 import localeFr from '@angular/common/locales/fr';
 import { RoundPipe } from './pipes/round/round.pipe';
 import { SelectComponent } from './components/select/select.component';
+import { SortIconComponent } from './components/sort-icon/sort-icon.component';
 import { NgxEchartsModule } from 'ngx-echarts';
 
 registerLocaleData(localeFr);
@@ -29,13 +30,15 @@ registerLocaleData(localeFr);
     InputErrorDirective,
     InputComponent,
     RoundPipe,
-    SelectComponent
+    SelectComponent,
+    SortIconComponent
   ],
   imports: [
     CommonModule,
     ReactiveFormsModule,
     FormsModule,
     RouterModule,
+    FontAwesomeModule,
     NgxEchartsModule.forRoot({
       echarts: () => import('echarts')
     }),
@@ -54,6 +57,7 @@ registerLocaleData(localeFr);
     FontAwesomeModule,
     RoundPipe,
     SelectComponent,
+    SortIconComponent,
     NgxEchartsModule,
     LoaderComponent
   ],

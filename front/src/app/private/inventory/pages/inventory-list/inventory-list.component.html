@@ -1,7 +1,7 @@
 <div class="flex flex-col grow p-10 h-full overflow-hidden">
-  <div class="flex py-3 justify-end gap-3">
-    <app-button (click)="generateAllInventoriesState()">État de tous les stocks (PDF)</app-button>
-    <app-button type="primary" (click)="goToInventoryDetail(0)">Ajouter un stock</app-button>
+  <div class="flex py-3 justify-end gap-2">
+    <app-button [icon]="icons.pdf" (click)="generateAllInventoriesState()">État de tous les stocks</app-button>
+    <app-button type="primary" [icon]="icons.add" (click)="goToInventoryDetail(0)">Ajouter un stock</app-button>
   </div>
   <div class="relative overflow-auto shadow-md sm:rounded-lg max-h-[calc(100vh-200px)]">
     <table class="w-full text-sm text-left rtl:text-right text-gray-700">

@@ -1,3 +1,4 @@
+import { Icons } from '../../../../shared/icons';
 import { Component } from '@angular/core';
 import { SaleService } from '../../../../core/services/sale.service';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -22,6 +23,8 @@ import Decimal from 'decimal.js';
   styleUrl: './sale-detail.component.scss'
 })
 export class SaleDetailComponent {
+  readonly icons = Icons
+
 
   public id: number
   public saleSessionId: number

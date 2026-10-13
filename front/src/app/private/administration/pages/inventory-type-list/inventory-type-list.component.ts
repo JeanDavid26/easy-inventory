@@ -1,3 +1,4 @@
+import { Icons } from '../../../../shared/icons';
 import { Component } from '@angular/core';
 import { InventoryType } from '../../../../@models/entities/InventoryType.interface';
 import { InventoryTypeService } from '../../../../core/services/inventory-type.service';
@@ -10,6 +11,8 @@ import { BreadcrumbService } from '../../../../core/services/breadcrumb.service'
   styleUrl: './inventory-type-list.component.scss'
 })
 export class InventoryTypeListComponent {
+  readonly icons = Icons
+
   public tInventoryType : InventoryType[] = []
 
   constructor(

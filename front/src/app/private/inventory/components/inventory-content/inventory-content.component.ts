@@ -1,3 +1,5 @@
+import { compareForSort } from '../../../../shared/utils/compare-for-sort';
+import { Icons } from '../../../../shared/icons';
 import { Component, OnInit } from '@angular/core';
 import { Inventory } from '../../../../@models/entities/Inventory.interface';
 import { InventoryService } from '../../../../core/services/inventory.service';
@@ -20,6 +22,9 @@ import { DocumentService } from '../../../../core/services/document.service';
   styleUrl: './inventory-content.component.scss',
 })
 export class InventoryContentComponent implements OnInit {
+  readonly icons = Icons
+
+
   public inventory: Inventory;
   public tInventoryLine: InventoryLine[] = [];
   public filteredInventoryLines: InventoryLine[] = [];
@@ -134,9 +139,8 @@ export class InventoryContentComponent implements OnInit {
       this.filteredInventoryLines.sort((a, b) => {
         const valueA = this.getValueForSort(a, column);
         const valueB = this.getValueForSort(b, column);
-        if (valueA < valueB) return this.sortDirection === 'asc' ? -1 : 1;
-        if (valueA > valueB) return this.sortDirection === 'asc' ? 1 : -1;
-        return 0;
+        const result = compareForSort(valueA, valueB);
+        return this.sortDirection === 'asc' ? result : -result;
       });
     }
   }

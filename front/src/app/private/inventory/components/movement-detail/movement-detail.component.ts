@@ -1,3 +1,4 @@
+import { Icons } from '../../../../shared/icons';
 import { Component } from '@angular/core';
 import { AbstractControl, FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { InventoryMovementService } from '../../../../core/services/inventory-movement.service';
@@ -23,6 +24,8 @@ import { InventoryLine } from '../../../../@models/entities/InventoryLine.interf
   styleUrl: './movement-detail.component.scss'
 })
 export class MovementDetailComponent {
+  readonly icons = Icons
+
   public inventory : Inventory
   faXmark = faXmark
   public steps : {id : number, isValidated : boolean, onGoing: boolean, label : string, description : string}[] = [

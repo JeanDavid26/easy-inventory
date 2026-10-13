@@ -14,7 +14,7 @@
       </div>
     </form>
 
-    <app-button type="primary" (click)="goToMovementDetail(0)">Ajouter un mouvement de stock</app-button>
+    <app-button type="primary" [icon]="icons.add" (click)="goToMovementDetail(0)">Nouveau mouvement</app-button>
   </div>
 
   <!-- Tableau avec défilement -->
@@ -23,17 +23,17 @@
       <table class="w-full text-sm text-left rtl:text-right text-gray-700">
         <thead class="text-xs text-white uppercase bg-gray-700 sticky top-0 z-10">
           <tr>
-            <th scope="col" class="px-6 py-3 cursor-pointer" (click)="sortMovements('reference')">
-              Référence
-              <span class="ml-1">{{ sortColumn === 'reference' ? (sortDirection === 'asc' ? '▲' : sortDirection === 'desc' ? '▼' : '◆') : '◆' }}</span>
+            <th scope="col" class="px-6 py-3 cursor-pointer select-none group" (click)="sortMovements('reference')"
+              [attr.aria-sort]="sortColumn === 'reference' && sortDirection ? (sortDirection === 'asc' ? 'ascending' : 'descending') : null">
+              <span class="inline-flex items-center gap-1.5 whitespace-nowrap">Référence<app-sort-icon [direction]="sortColumn === 'reference' ? sortDirection : null"></app-sort-icon></span>
             </th>
-            <th scope="col" class="px-6 py-3 cursor-pointer" (click)="sortMovements('movementType')">
-              Type de mouvement
-              <span class="ml-1">{{ sortColumn === 'movementType' ? (sortDirection === 'asc' ? '▲' : sortDirection === 'desc' ? '▼' : '◆') : '◆' }}</span>
+            <th scope="col" class="px-6 py-3 cursor-pointer select-none group" (click)="sortMovements('movementType')"
+              [attr.aria-sort]="sortColumn === 'movementType' && sortDirection ? (sortDirection === 'asc' ? 'ascending' : 'descending') : null">
+              <span class="inline-flex items-center gap-1.5 whitespace-nowrap">Type de mouvement<app-sort-icon [direction]="sortColumn === 'movementType' ? sortDirection : null"></app-sort-icon></span>
             </th>
-            <th scope="col" class="px-6 py-3 cursor-pointer" (click)="sortMovements('destination')">
-              Destination
-              <span class="ml-1">{{ sortColumn === 'destination' ? (sortDirection === 'asc' ? '▲' : sortDirection === 'desc' ? '▼' : '◆') : '◆' }}</span>
+            <th scope="col" class="px-6 py-3 cursor-pointer select-none group" (click)="sortMovements('destination')"
+              [attr.aria-sort]="sortColumn === 'destination' && sortDirection ? (sortDirection === 'asc' ? 'ascending' : 'descending') : null">
+              <span class="inline-flex items-center gap-1.5 whitespace-nowrap">Destination<app-sort-icon [direction]="sortColumn === 'destination' ? sortDirection : null"></app-sort-icon></span>
             </th>
           </tr>
         </thead>

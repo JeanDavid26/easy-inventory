@@ -1,3 +1,4 @@
+import { Icons } from '../../../../shared/icons';
 import { Component } from '@angular/core';
 import { SaleSession } from '../../../../@models/entities/SaleSession.interface';
 import { SaleService } from '../../../../core/services/sale.service';
@@ -11,6 +12,8 @@ import { ToastService } from '../../../../shared/toast/toast.service';
   styleUrl: './sale-list.component.scss'
 })
 export class SaleListComponent {
+  readonly icons = Icons
+
 
   public tSaleSession : SaleSession[] = []
 
