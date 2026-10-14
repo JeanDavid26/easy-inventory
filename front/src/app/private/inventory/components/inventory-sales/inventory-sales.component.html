@@ -1,0 +1,65 @@
+<div class="flex flex-col h-full gap-4">
+  <!-- Période et export -->
+  <div class="flex flex-wrap items-end justify-between gap-4">
+    <div class="flex flex-wrap items-end gap-4">
+      <div>
+        <label for="sales-from" class="block mb-1 text-sm font-medium text-gray-800">Du</label>
+        <input id="sales-from" type="date" [(ngModel)]="fromDate" (ngModelChange)="onDateChange()"
+          class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5">
+      </div>
+      <div>
+        <label for="sales-to" class="block mb-1 text-sm font-medium text-gray-800">Au</label>
+        <input id="sales-to" type="date" [(ngModel)]="toDate" (ngModelChange)="onDateChange()"
+          class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5">
+      </div>
+      <div class="inline-flex bg-gray-100 rounded-lg p-1 gap-1">
+        <button
+          *ngFor="let period of tQuickPeriod"
+          type="button"
+          (click)="selectQuickPeriod(period.value)"
+          class="px-3 py-1.5 text-sm rounded-md transition-colors"
+          [ngClass]="period.value === activeQuickPeriod ? 'bg-white text-gray-900 shadow' : 'text-gray-600 hover:text-gray-900'">
+          {{ period.label }}
+        </button>
+      </div>
+    </div>
+    <app-button type="primary" [icon]="icons.pdf" [disabled]="isGeneratingPdf || !isPeriodValid" (click)="downloadPdf()">
+      Télécharger le relevé
+    </app-button>
+  </div>
+  <p *ngIf="fromDate && toDate && !isPeriodValid" class="text-sm text-red-600">La date de début doit être avant la date de fin.</p>
+
+  <!-- Ventes de la période -->
+  <div class="flex-grow overflow-auto shadow-md sm:rounded-lg">
+    <table class="w-full text-sm text-left text-gray-700">
+      <thead class="text-xs text-white uppercase bg-gray-700 sticky top-0 z-10">
+        <tr>
+          <th scope="col" class="px-6 py-3">Référence</th>
+          <th scope="col" class="px-6 py-3">Désignation</th>
+          <th scope="col" class="px-6 py-3 text-right">Prix unitaire</th>
+          <th scope="col" class="px-6 py-3 text-center">Quantité</th>
+          <th scope="col" class="px-6 py-3 text-right">Montant</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let line of oSales?.tLine" class="bg-white border-b hover:bg-gray-50">
+          <td class="px-6 py-3 font-medium text-gray-900">{{ line.referenceCode }}</td>
+          <td class="px-6 py-3">{{ line.label }}</td>
+          <td class="px-6 py-3 text-right whitespace-nowrap">{{ line.unitPrice | currency:'EUR' }}</td>
+          <td class="px-6 py-3 text-center">{{ line.quantity }}</td>
+          <td class="px-6 py-3 text-right whitespace-nowrap">{{ line.amount | currency:'EUR' }}</td>
+        </tr>
+        <tr *ngIf="oSales && oSales.tLine.length === 0" class="bg-white">
+          <td colspan="5" class="px-6 py-8 text-center text-gray-500">Aucune vente sur cette période</td>
+        </tr>
+      </tbody>
+      <tfoot *ngIf="oSales && oSales.tLine.length > 0" class="sticky bottom-0">
+        <tr class="bg-gray-100 font-semibold text-gray-900">
+          <td colspan="3" class="px-6 py-3">Total</td>
+          <td class="px-6 py-3 text-center">{{ oSales.totalQuantity }}</td>
+          <td class="px-6 py-3 text-right whitespace-nowrap">{{ oSales.totalAmount | currency:'EUR' }}</td>
+        </tr>
+      </tfoot>
+    </table>
+  </div>
+</div>

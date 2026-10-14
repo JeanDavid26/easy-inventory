@@ -10,6 +10,7 @@ import { InventoryDetailComponent } from './inventory/pages/inventory-detail/inv
 import { InventoryContentComponent } from './inventory/components/inventory-content/inventory-content.component';
 import { InventoryResolver } from './inventory/inventory.resolver';
 import { DocumentsComponent } from './inventory/components/documents/documents.component';
+import { InventorySalesComponent } from './inventory/components/inventory-sales/inventory-sales.component';
 import { ProductsNavComponent } from './products/pages/products-nav/products-nav.component';
 import { AdministrationComponent } from './administration/pages/administration/administration.component';
 import { MovementTypeListComponent } from './administration/pages/movement-type-list/movement-type-list.component';
@@ -43,6 +44,7 @@ const routes: Routes = [
       { path : 'movement', component : MovementListComponent},
       { path : 'movement/0', component : MovementDetailComponent},
       { path : 'movement/:idMovement', component : MovementDetailOverviewComponent},
+      { path : 'sales', component : InventorySalesComponent },
       { path : 'documents', component : DocumentsComponent },
       { path: 'settings', component : SettingsComponent}
     ] },

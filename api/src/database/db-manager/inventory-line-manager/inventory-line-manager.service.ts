@@ -75,24 +75,39 @@ export class InventoryLineManagerService extends DatabaseManager<InventoryLine> 
     return repo.save(stock)
   }
 
-  public async updateInventoryLine ({ articleId, quantity, isAdding = false, options = {} }: {articleId: number, quantity: number, isAdding?: boolean, options?: DatabaseManagerOptions }) : Promise<InventoryLine> {
+  // Retrouve la ligne de stock d'un article, en privilégiant le stock indiqué s'il contient l'article
+  public async findByArticleId ({ articleId, preferredInventoryId, options = {} }: { articleId: number, preferredInventoryId?: number, options?: DatabaseManagerOptions }): Promise<InventoryLine | null> {
     const repo = this._getRepo(options)
-    const oInventoryLine = await repo.findOne({
-      where : {
-        articleId
-      },
-      relations: [ 'oArticle', 'oInventory' ]
+    if (preferredInventoryId) {
+      const oPreferredLine = await repo.findOne({
+        where: { articleId, inventoryId: preferredInventoryId },
+        relations: [ 'oArticle', 'oInventory' ]
+      })
+      if (oPreferredLine) {
+        return oPreferredLine
+      }
+    }
+    return repo.findOne({
+      where: { articleId },
+      relations: [ 'oArticle', 'oInventory' ],
+      order: { id: 'ASC' }
     })
+  }
+
+  public async updateInventoryLine ({ articleId, quantity, isAdding = false, preferredInventoryId, options = {} }: {articleId: number, quantity: number, isAdding?: boolean, preferredInventoryId?: number, options?: DatabaseManagerOptions }) : Promise<InventoryLine> {
+    const repo = this._getRepo(options)
+    const oInventoryLine = await this.findByArticleId({ articleId, preferredInventoryId, options })
 
     if (!oInventoryLine) {
       throw new BadRequestException('Stock de quantité pour un article non trouvé')
     }
     
     if (isAdding) {
-      return repo.save({
+      await repo.save({
         id : oInventoryLine.id,
         quantity : oInventoryLine.quantity + quantity
       })
+      return { ...oInventoryLine, quantity: oInventoryLine.quantity + quantity }
     }
 
     if (oInventoryLine.quantity - quantity < 0) {
@@ -106,10 +121,11 @@ export class InventoryLineManagerService extends DatabaseManager<InventoryLine> 
       })
     }
      
-    return repo.save({
+    await repo.save({
       id : oInventoryLine.id,
       quantity : oInventoryLine.quantity - quantity
     })
+    return { ...oInventoryLine, quantity: oInventoryLine.quantity - quantity }
   }
 
   public async updateInventoryLineById ({ id, quantity, options = {} }: { id: number, quantity: number, options?: DatabaseManagerOptions }): Promise<InventoryLine> {

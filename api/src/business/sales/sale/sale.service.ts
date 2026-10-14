@@ -37,12 +37,15 @@ export class SaleService {
         saleSessionId: Number(data.saleSessionId)
       }, options : { entityTransactionManager } })
 
-      const tSaleLinePromises = data.tSaleLine.map((saleLinde) => {
+      const tSaleLinePromises = data.tSaleLine.map(async (saleLinde) => {
+        // Stock prévu pour le débit ; il est confirmé à la clôture de la session
+        const oInventoryLine = await this._inventoryLineManagerService.findByArticleId({ articleId: saleLinde.articleId, options : { entityTransactionManager } })
         return this._saleLineManagerService.insert({ data: {
           saleId: oSale.id,
           quantity: saleLinde.quantity,
           articleId: saleLinde.articleId,
-          salePrice: Number(saleLinde.salePrice)
+          salePrice: Number(saleLinde.salePrice),
+          inventoryId: oInventoryLine?.inventoryId ?? null
         }, options : { entityTransactionManager } })
       })
       const tUnpaidSalePromises = []
@@ -79,8 +82,12 @@ export class SaleService {
       const oSaleSession = await this._saleSessionManagerService.get({ id })
       const tPromise = []
       for (const oSale of oSaleSession.tSale) {
-        tPromise.push(...oSale.tSaleLine.map((saleLine) => {
-          return this._updateInventoryLine({ articleId: saleLine.articleId, quantity: saleLine.quantity, entityTransactionManager })
+        tPromise.push(...oSale.tSaleLine.map(async (saleLine) => {
+          const inventoryId = await this._updateInventoryLine({ articleId: saleLine.articleId, quantity: saleLine.quantity, preferredInventoryId: saleLine.inventoryId, entityTransactionManager })
+          // Historique : on garde le stock réellement débité
+          if (inventoryId !== saleLine.inventoryId) {
+            await this._saleLineManagerService.update({ id: saleLine.id, data: { inventoryId }, options: { entityTransactionManager } })
+          }
         }))
       }
       await Promise.all(tPromise)
@@ -106,17 +113,25 @@ export class SaleService {
   }
   private async _undoSale ({ sale, entityTransactionManager } :{sale: Sale, entityTransactionManager : EntityManager}): Promise<void> {
     await Promise.all(
-      sale.tSaleLine.map((saleLine) => {
-        return this._inventoryLineManagerService.updateInventoryLine({ articleId: saleLine.articleId, quantity: saleLine.quantity, isAdding: true, options : { entityTransactionManager } })
+      sale.tSaleLine.map(async (saleLine) => {
+        const oArticle = await this._articleManagerService.get({ id : saleLine.articleId, options:{ entityTransactionManager } })
+        if (oArticle.isNotStorable) {
+          return
+        }
+        // On recrédite le stock qui avait été débité à la clôture
+        await this._inventoryLineManagerService.updateInventoryLine({ articleId: saleLine.articleId, quantity: saleLine.quantity, isAdding: true, preferredInventoryId: saleLine.inventoryId, options : { entityTransactionManager } })
       })
     )
   }
 
-  private async _updateInventoryLine ({ articleId, quantity, entityTransactionManager }: { articleId: number, quantity: number, entityTransactionManager: EntityManager }): Promise<void> {
+  // Débite le stock de l'article et retourne l'id du stock débité (null pour un article non stockable)
+  private async _updateInventoryLine ({ articleId, quantity, preferredInventoryId, entityTransactionManager }: { articleId: number, quantity: number, preferredInventoryId?: number, entityTransactionManager: EntityManager }): Promise<number | null> {
     const oArticle = await this._articleManagerService.get({ id : articleId, options:{ entityTransactionManager } })
-    if (!oArticle.isNotStorable) {
-      await this._inventoryLineManagerService.updateInventoryLine({ articleId: articleId, quantity: quantity, options :{ entityTransactionManager } })
+    if (oArticle.isNotStorable) {
+      return null
     }
+    const oInventoryLine = await this._inventoryLineManagerService.updateInventoryLine({ articleId: articleId, quantity: quantity, preferredInventoryId, options :{ entityTransactionManager } })
+    return oInventoryLine.inventoryId
   }
 
   public async getRecentSales (): Promise<number[]> {

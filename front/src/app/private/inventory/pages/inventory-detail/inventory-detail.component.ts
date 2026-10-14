@@ -34,6 +34,7 @@ export class InventoryDetailComponent {
         this.linksData = [
           { label : 'Stock', link : ['private','inventory', inventory.id.toString()  , 'content']},
           { label : 'Mouvement de stock', link : ['private','inventory', inventory.id.toString(), 'movement']},
+          { label : 'Ventes', link : ['private','inventory', inventory.id.toString(), 'sales']},
           { label : 'Document', link : ['private','inventory', inventory.id.toString(), 'documents']},
           { label : 'Paramètres', link : ['private', 'inventory', inventory.id.toString(), 'settings']}
         ]

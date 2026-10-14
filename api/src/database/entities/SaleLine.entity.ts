@@ -2,6 +2,7 @@ import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm'
 import { BaseTable } from './BaseTable'
 import { Sale } from './Sale.entity'
 import { Article } from './Article.entity'
+import { Inventory } from './Inventory.entity'
 @Entity({ schema: 'easyinventory', name: 'saleline' })
 export class SaleLine extends BaseTable {
   @Column({ name: 'saleid' })
@@ -24,6 +25,14 @@ export class SaleLine extends BaseTable {
     to: (value: number) => value
   } })
   discount: number 
+
+  // Stock dans lequel l'article a été (ou sera, tant que la session est ouverte) débité
+  @Column({ name: 'inventoryid', nullable: true })
+  inventoryId: number
+
+  @ManyToOne(() => Inventory)
+  @JoinColumn({ name: 'inventoryid' })
+  oInventory: Inventory
 
   @ManyToOne(() => Article, (article) => article.id)
   @JoinColumn({ name: 'articleid' })

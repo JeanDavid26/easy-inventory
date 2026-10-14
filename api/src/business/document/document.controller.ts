@@ -6,8 +6,10 @@ import {
   Post,
   UploadedFile,
   UseInterceptors,
-  Res
+  Res,
+  Query
 } from '@nestjs/common'
+import { parsePeriod } from 'src/shared/utils/parse-period.util'
 import { DocumentService } from './document.service'
 import { Document } from 'src/database/entities/Document.entity'
 import { FileInterceptor } from '@nestjs/platform-express'
@@ -62,6 +64,12 @@ export class DocumentController {
   @Get('inventory-state/:inventoryId')
   async generateInventoryState (@Param('inventoryId') inventoryId: string, @Res() res: Response) :Promise<any> {
     return this._documentGenerationService.generateInventoryState(Number(inventoryId), res)
+  }
+
+  @Get('inventory-sales/:inventoryId')
+  async generateInventorySales (@Param('inventoryId') inventoryId: string, @Query('from') from: string, @Query('to') to: string, @Res() res: Response) :Promise<any> {
+    const period = parsePeriod(from, to)
+    return this._documentGenerationService.generateInventorySales(Number(inventoryId), period.from, period.to, res)
   }
 
   @Get('all-inventories-state')

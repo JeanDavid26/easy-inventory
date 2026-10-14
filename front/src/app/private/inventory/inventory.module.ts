@@ -10,6 +10,7 @@ import { MovementListComponent } from './components/movement-list/movement-list.
 import { MovementDetailComponent } from './components/movement-detail/movement-detail.component';
 import { MovementDetailOverviewComponent } from './components/movement-detail-overview/movement-detail-overview.component';
 import { SettingsComponent } from './components/settings/settings.component';
+import { InventorySalesComponent } from './components/inventory-sales/inventory-sales.component';
 @NgModule({
   declarations: [
     InventoryListComponent,
@@ -19,7 +20,8 @@ import { SettingsComponent } from './components/settings/settings.component';
     MovementListComponent,
     MovementDetailComponent,
     MovementDetailOverviewComponent,
-    SettingsComponent
+    SettingsComponent,
+    InventorySalesComponent
   ],
   imports: [
     CommonModule,

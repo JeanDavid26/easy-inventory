@@ -72,6 +72,32 @@ export class SaleLineManagerService extends DatabaseManager<SaleLine> {
     return rows.map(row => ({ categoryId: row.categoryId ? Number(row.categoryId) : null, label: row.label ?? 'Sans catégorie', quantity: Number(row.quantity) }))
   }
 
+  // Ventes d'un stock sur une période, regroupées par article (relevé des dépôts)
+  public async getSalesByInventory ({ inventoryId, from, to, options = {} }: { inventoryId: number, from?: Date, to?: Date, options?: DatabaseManagerOptions }): Promise<InventorySaleLine[]> {
+    const rows = await this._statsQuery({ from, to, options })
+      .andWhere('saleLine.inventoryId = :inventoryId', { inventoryId })
+      .select('article.id', 'articleId')
+      .addSelect('article.referenceCode', 'referenceCode')
+      .addSelect('article.label', 'label')
+      .addSelect('article.unitPrice', 'unitPrice')
+      .addSelect('SUM(saleLine.quantity)', 'quantity')
+      .addSelect('SUM(saleLine.salePrice)', 'amount')
+      .groupBy('article.id')
+      .addGroupBy('article.referenceCode')
+      .addGroupBy('article.label')
+      .addGroupBy('article.unitPrice')
+      .orderBy('article.referenceCode', 'ASC')
+      .getRawMany()
+    return rows.map(row => ({
+      articleId: Number(row.articleId),
+      referenceCode: row.referenceCode,
+      label: row.label,
+      unitPrice: Number(row.unitPrice),
+      quantity: Number(row.quantity),
+      amount: Number(row.amount)
+    }))
+  }
+
   // Lignes de vente prises en compte dans les statistiques : sessions ouvertes ou clôturées, impayés inclus,
   // en excluant tout ce qui est supprimé (session, vente, ligne). Les articles et catégories supprimés depuis
   // restent comptés car leurs ventes ont bien eu lieu. La période porte sur la date de la session.
@@ -94,4 +120,14 @@ export class SaleLineManagerService extends DatabaseManager<SaleLine> {
     }
     return qb
   }
+}
+
+export type InventorySaleLine = {
+  articleId: number
+  referenceCode: string
+  label: string
+  unitPrice: number
+  quantity: number
+  // Montant réellement encaissé (remises déduites)
+  amount: number
 }

@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Relevé des ventes - {{inventoryLabel}}</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: Arial, sans-serif; font-size: 11px; padding: 20px; color: #111; background: #fff; }
+    .header { display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 2px solid #000; padding-bottom: 12px; margin-bottom: 18px; }
+    .header img { height: 60px; }
+    .header .title { text-align: right; }
+    .header h1 { font-size: 18px; margin-bottom: 6px; }
+    .info { display: flex; gap: 40px; margin-bottom: 16px; }
+    .info .label { color: #555; font-size: 10px; }
+    .info .value { font-size: 12px; font-weight: bold; }
+    table { width: 100%; border-collapse: collapse; }
+    th { background: #f0f0f0; border: 1px solid #000; padding: 7px; text-align: left; font-size: 10px; }
+    td { border: 1px solid #ccc; padding: 7px; }
+    tbody tr:nth-child(even) { background: #f9f9f9; }
+    .num { text-align: right; white-space: nowrap; }
+    .center { text-align: center; }
+    tfoot td { border: 1px solid #000; font-weight: bold; background: #f0f0f0; }
+    .empty { padding: 20px; text-align: center; color: #555; }
+    .note { margin-top: 10px; font-size: 9px; color: #555; }
+    .signature { display: flex; justify-content: space-between; margin-top: 40px; }
+    .signature > div { width: 40%; text-align: center; font-size: 10px; }
+    .signature p { font-weight: bold; margin-bottom: 40px; }
+    .signature .line { border-top: 1px solid #000; padding-top: 4px; font-size: 9px; }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <div>
+      {{#if logo}}<img src="{{logo}}" alt="Logo">{{/if}}
+      <div><strong>{{companyName}}</strong></div>
+    </div>
+    <div class="title">
+      <h1>RELEVÉ DES VENTES</h1>
+      <div>Édité le {{currentDate}}</div>
+    </div>
+  </div>
+
+  <div class="info">
+    <div><div class="label">Stock / dépôt</div><div class="value">{{inventoryLabel}}</div></div>
+    <div><div class="label">Période</div><div class="value">{{period}}</div></div>
+  </div>
+
+  <table>
+    <thead>
+      <tr>
+        <th style="width: 14%">Référence</th>
+        <th>Désignation</th>
+        <th class="num" style="width: 13%">Prix unitaire</th>
+        <th class="center" style="width: 10%">Quantité</th>
+        <th class="num" style="width: 15%">Montant</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#each lines}}
+      <tr>
+        <td>{{this.referenceCode}}</td>
+        <td>{{this.label}}</td>
+        <td class="num">{{this.unitPrice}}</td>
+        <td class="center">{{this.quantity}}</td>
+        <td class="num">{{this.amount}}</td>
+      </tr>
+      {{else}}
+      <tr><td colspan="5" class="empty">Aucune vente sur cette période</td></tr>
+      {{/each}}
+    </tbody>
+    <tfoot>
+      <tr>
+        <td colspan="3">Total</td>
+        <td class="center">{{totalQuantity}}</td>
+        <td class="num">{{totalAmount}}</td>
+      </tr>
+    </tfoot>
+  </table>
+  <p class="note">Montants issus des ventes enregistrées, remises éventuelles déduites. Prix unitaire : prix catalogue actuel de l'article.</p>
+
+  <div class="signature">
+    <div><p>Pour {{companyName}}</p><div class="line">Signature et date</div></div>
+    <div><p>Pour le déposant</p><div class="line">Signature et date</div></div>
+  </div>
+</body>
+</html>

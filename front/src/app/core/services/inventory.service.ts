@@ -3,6 +3,7 @@ import { Injectable } from "@angular/core"
 import { Inventory } from "../../@models/entities/Inventory.interface"
 import { environment } from "../../../environments/environment"
 import { BehaviorSubject, lastValueFrom } from "rxjs"
+import { InventorySales } from "../../@models/interfaces/inventory-sales.interface"
 
 @Injectable({
   providedIn: 'root'
@@ -26,6 +27,11 @@ export class InventoryService {
       this.inventory.next(inventory)
       return inventory
     })
+  }
+
+  public getSales(id: number, from: Date, to: Date): Promise<InventorySales> {
+    const route = environment.urlApi + `inventory/${id}/sales`
+    return lastValueFrom(this._httpClient.get<InventorySales>(route, { params: { from: from.toISOString(), to: to.toISOString() } }))
   }
 
   public insert(data: Inventory): Promise<Inventory> {

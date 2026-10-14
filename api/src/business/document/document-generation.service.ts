@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common'
+import { Injectable, NotFoundException } from '@nestjs/common'
 import { Response } from 'express'
 import { Decimal } from 'decimal.js'
 import { SaleSessionManagerService } from 'src/database/db-manager/sale-session-manager/sale-session-manager.service'
@@ -8,6 +8,7 @@ import { PaymentMethodEnum } from 'src/database/@models/payment-method.enum'
 import { SaleSession } from 'src/database/entities/SaleSession.entity'
 import { PdfGeneratorService } from './pdf-generator/pdf-generator.service'
 import { ImageConverterUtil } from 'src/shared/utils/image-converter.util'
+import { SaleLineManagerService } from 'src/database/db-manager/sale-line-manager/sale-line-manager.service'
 
 @Injectable()
 export class DocumentGenerationService {
@@ -15,7 +16,8 @@ export class DocumentGenerationService {
   constructor (
     private _saleSessionManagerService : SaleSessionManagerService,
     private _inventoryManagerService : InventoryManagerService,
-    private _pdfGeneratorService : PdfGeneratorService
+    private _pdfGeneratorService : PdfGeneratorService,
+    private _saleLineManagerService : SaleLineManagerService
   ) {}
 
   async generateSaleSessionReport (saleSessionId : number, res: Response) : Promise<void> {
@@ -39,6 +41,46 @@ export class DocumentGenerationService {
 
     res.setHeader('Content-Type', 'application/pdf')
     res.setHeader('Content-Disposition', `attachment; filename="etat-stock-${oInventory.id}.pdf"`)
+    res.send(pdfBuffer)
+  }
+
+  // Relevé des ventes d'un stock sur une période (facture des dépôts)
+  async generateInventorySales (inventoryId : number, from : Date | undefined, to : Date | undefined, res: Response) : Promise<void> {
+    const oInventory = await this._inventoryManagerService.get({ id : inventoryId })
+    if (!oInventory) {
+      throw new NotFoundException('Stock introuvable.')
+    }
+    const tLine = await this._saleLineManagerService.getSalesByInventory({ inventoryId, from, to })
+
+    const formatAmount = (amount : Decimal | number) => `${new Decimal(amount).toFixed(2).replace('.', ',')} €`
+    const formatDate = (date : Date) => date.toLocaleDateString('fr-FR')
+    const period = from && to ? `du ${formatDate(from)} au ${formatDate(to)}`
+      : from ? `depuis le ${formatDate(from)}`
+        : to ? `jusqu'au ${formatDate(to)}`
+          : 'toutes les ventes'
+
+    const now = new Date()
+    const dataset = {
+      logo: ImageConverterUtil.encodeImageToBase64('src/assets/logo.png'),
+      companyName: 'Église Montplaisir',
+      inventoryLabel: oInventory.label,
+      period,
+      currentDate: `${formatDate(now)} à ${now.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })}`,
+      lines: tLine.map(line => ({
+        referenceCode: line.referenceCode,
+        label: line.label,
+        unitPrice: formatAmount(line.unitPrice),
+        quantity: line.quantity,
+        amount: formatAmount(line.amount)
+      })),
+      totalQuantity: tLine.reduce((acc, line) => acc + line.quantity, 0),
+      totalAmount: formatAmount(tLine.reduce((acc, line) => acc.plus(line.amount), new Decimal(0)))
+    }
+
+    const pdfBuffer = await this._pdfGeneratorService.generatePdf('inventory-sales', dataset)
+
+    res.setHeader('Content-Type', 'application/pdf')
+    res.setHeader('Content-Disposition', `attachment; filename="releve-ventes-stock-${oInventory.id}.pdf"`)
     res.send(pdfBuffer)
   }
 

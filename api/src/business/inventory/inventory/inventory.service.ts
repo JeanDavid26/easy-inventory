@@ -1,11 +1,24 @@
-import { Injectable } from '@nestjs/common'
+import { Injectable, NotFoundException } from '@nestjs/common'
 import { InventoryLineManagerService } from 'src/database/db-manager/inventory-line-manager/inventory-line-manager.service'
 import { InventoryManagerService } from 'src/database/db-manager/inventory-manager/inventory-manager.service'
 import { Inventory } from 'src/database/entities/Inventory.entity'
 import { Decimal } from 'decimal.js'
+import { InventorySaleLine, SaleLineManagerService } from 'src/database/db-manager/sale-line-manager/sale-line-manager.service'
+
+export type InventorySales = {
+  inventoryId: number
+  inventoryLabel: string
+  tLine: InventorySaleLine[]
+  totalQuantity: number
+  totalAmount: number
+}
 @Injectable()
 export class InventoryService {
-  constructor (private _inventoryManagerService: InventoryManagerService, private _inventoryLineManagerService: InventoryLineManagerService) { }
+  constructor (
+    private _inventoryManagerService: InventoryManagerService,
+    private _inventoryLineManagerService: InventoryLineManagerService,
+    private _saleLineManagerService: SaleLineManagerService
+  ) { }
 
   public async list (): Promise<Inventory[]> {
     const tInventory = (await this._inventoryManagerService.list({})).map(inventory => {
@@ -24,6 +37,21 @@ export class InventoryService {
   public async get (id: number): Promise<Inventory> {
     const inventory = await this._inventoryManagerService.get({ id })
     return inventory
+  }
+
+  public async getSales (id: number, from?: Date, to?: Date): Promise<InventorySales> {
+    const oInventory = await this._inventoryManagerService.get({ id })
+    if (!oInventory) {
+      throw new NotFoundException('Stock introuvable.')
+    }
+    const tLine = await this._saleLineManagerService.getSalesByInventory({ inventoryId: id, from, to })
+    return {
+      inventoryId: id,
+      inventoryLabel: oInventory.label,
+      tLine,
+      totalQuantity: tLine.reduce((acc, line) => acc + line.quantity, 0),
+      totalAmount: tLine.reduce((acc, line) => new Decimal(acc).plus(line.amount), new Decimal(0)).toNumber()
+    }
   }
 
   public async delete (id: number): Promise<void> {

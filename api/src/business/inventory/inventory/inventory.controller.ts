@@ -1,8 +1,9 @@
-import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common'
+import { Body, Controller, Delete, Get, Param, Post, Put, Query } from '@nestjs/common'
+import { parsePeriod } from 'src/shared/utils/parse-period.util'
 import { InventoryManagerService } from 'src/database/db-manager/inventory-manager/inventory-manager.service'
 import { Inventory } from 'src/database/entities/Inventory.entity'
 import { UpsertInventoryDto } from '../dto/upsert-inventory.dto'
-import { InventoryService } from './inventory.service'
+import { InventoryService, InventorySales } from './inventory.service'
 
 @Controller('inventory')
 export class InventoryController {
@@ -14,6 +15,12 @@ export class InventoryController {
   @Get()
   public list (): Promise<Inventory[]> {
     return this._inventoryService.list()
+  }
+
+  @Get(':id/sales')
+  public getSales (@Param('id') id: number, @Query('from') from?: string, @Query('to') to?: string): Promise<InventorySales> {
+    const period = parsePeriod(from, to)
+    return this._inventoryService.getSales(Number(id), period.from, period.to)
   }
 
   @Get(':id')

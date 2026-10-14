@@ -100,6 +100,14 @@ export class DocumentService {
       })
   }
 
+  public generateInventorySales (inventoryId: number, from: Date, to: Date): Promise<string> {
+    const route = Location.joinWithSlash(environment.urlApi, `document/inventory-sales/${inventoryId}`)
+    return lastValueFrom(this._httpClient.get(route, {
+      params: { from: from.toISOString(), to: to.toISOString() },
+      responseType: 'blob'
+    })).then(blob => URL.createObjectURL(new Blob([ blob ], { type: 'application/pdf' })))
+  }
+
    public generateInventoryState (inventoryId: number): Promise<{ fileURL : string, contentType : string }> {
     let route = Location.joinWithSlash(environment.urlApi, `document/inventory-state/${inventoryId}`)
 
