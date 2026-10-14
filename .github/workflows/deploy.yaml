@@ -18,6 +18,10 @@ jobs:
         username: ${{ secrets.VPS_USER }}
         key: ${{ secrets.VPS_SSH_KEY }}
         port: ${{ secrets.VPS_PORT }}
+        # Le build complet (npm install + build API et front) peut dépasser les 10 min par défaut
+        command_timeout: 30m
+        # Arrête le déploiement à la première commande en échec
+        script_stop: true
         script: |
 
           cd easy-inventory
@@ -37,6 +41,9 @@ jobs:
           echo "TEMPLATES_PATH=/usr/src/app/dist/templates" >> .env
           echo "STORAGE_PATH=/usr/src/app/storage" >> .env
           
-          docker compose up -d --build
+          # Builds l'un après l'autre : le VPS (2 Go de RAM) ne tient pas les deux en parallèle
+          docker compose build api
+          docker compose build front
+          docker compose up -d
 
           docker image prune -a -f
